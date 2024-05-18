@@ -1,2 +1,3 @@
-fantasy-tournament-bot/target/classes/
-fantasy-tournament-bot/target/test-classes/
+fantasy-tournament-bot/target/*
+
+config.json

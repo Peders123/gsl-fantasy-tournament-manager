@@ -13,7 +13,7 @@ public class MessageListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
 
-        handler.execute(null);
+        handler.execute(new Ping(event));
 
     }
 

@@ -37,6 +37,11 @@ public class App {
         commands.addCommands(
             Commands.slash("test", "testing the bot")
                 .addOption(STRING, "content", "TEST", true)
+                .addOption(STRING, "test", "test", false)
+        );
+
+        commands.addCommands(
+            Commands.slash("button", "testing buttons")
         );
 
         commands.queue();

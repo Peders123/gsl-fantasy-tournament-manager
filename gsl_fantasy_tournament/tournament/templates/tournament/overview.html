@@ -7,6 +7,7 @@
 
     <body>
         <h1>{{ tournament.title }}</h1><br>
-        <p>{{ tournament.description }}</p>
+        <a href="{% url 'auction' date=tournament.url_id %}">Auction</a>
+        <a href="{% url 'players' date=tournament.url_id %}">Players</a>
     </body>
 </html>

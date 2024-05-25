@@ -24,11 +24,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='tournament',
             name='date',
-            field=models.DateField(default=datetime.datetime(2024, 5, 25, 16, 25, 39, 74349, tzinfo=datetime.timezone.utc)),
+            field=models.DateField(default=datetime.datetime(2024, 5, 25, 16, 25, 39, 74349,
+                                                             tzinfo=datetime.timezone.utc)),
         ),
         migrations.AlterField(
             model_name='tournament',
             name='time',
-            field=models.TimeField(default=datetime.datetime(2024, 5, 25, 16, 25, 39, 74349, tzinfo=datetime.timezone.utc)),
+            field=models.TimeField(default=datetime.datetime(2024, 5, 25, 16, 25, 39, 74349,
+                                                             tzinfo=datetime.timezone.utc)),
         ),
     ]

@@ -2,7 +2,8 @@ from django.shortcuts import render
 
 from datetime import datetime
 
-from tournament.models import Tournament, User, Player
+from tournament.models import Tournament, Player
+
 
 def overview(request, date):
 

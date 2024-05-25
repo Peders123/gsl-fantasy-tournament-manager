@@ -1,11 +1,21 @@
 from django.db import models
 
+from django.utils import timezone
+
+from datetime import datetime
+
 class Tournament(models.Model):
 
     tournament_id = models.IntegerField(primary_key=True)
-    date = models.DateField()
+    date = models.DateField(default=timezone.now())
+    time = models.TimeField(default=timezone.now())
     title = models.CharField(max_length=64, default="Glaeria Smite League")
     description = models.CharField(max_length=256, default="None")
+
+    @property
+    def url_id(self):
+
+        return self.date.strftime('%Y%m%d')
 
 
 class User(models.Model):

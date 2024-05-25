@@ -5,15 +5,12 @@
 </head>
 
 <body>
-    <ul>
-        <li>Hunter</li>
-        <li>Guardian</li>
-        <li>Mid</li>
-        <li>Jungle</li>
-        <li>Warrior</li>
-    </ul>
 
-    {{ test_context }}
+    {% for tournament in tournaments %}
+
+        <a href="{% url 'tournament_overview' date=tournament.url_id %}">{{ tournament.title }}</a>
+
+    {% endfor %}
 
 </body>
 

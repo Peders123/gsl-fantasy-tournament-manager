@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+<head>
+    <title>GSL</title>
+</head>
+
+<body>
+
+    {% for tournament in tournaments %}
+
+        <a href="{% url 'tournament_overview' date=tournament.url_id %}">{{ tournament.title }}</a>
+
+    {% endfor %}
+
+</body>
+

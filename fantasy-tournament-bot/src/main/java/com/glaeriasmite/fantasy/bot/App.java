@@ -51,16 +51,6 @@ public class App {
 
         CommandListUpdateAction commands = jda.updateCommands();
 
-        /* commands.addCommands(
-            Commands.slash("test", "testing the bot")
-                .addOption(STRING, "content", "TEST", true)
-                .addOption(STRING, "test", "test", false)
-        );
-
-        commands.addCommands(
-            Commands.slash("button", "testing buttons")
-        ); */
-
         JsonNode arrayNode = objectMapper.readTree(new File(
             "src/main/java/com/glaeriasmite/fantasy/bot/commands/slashCommands.json"
         ));

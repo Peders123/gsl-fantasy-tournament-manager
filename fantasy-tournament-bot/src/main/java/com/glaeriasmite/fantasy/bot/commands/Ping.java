@@ -2,13 +2,13 @@ package com.glaeriasmite.fantasy.bot.commands;
 
 import com.glaeriasmite.fantasy.bot.handlers.Action;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class Ping implements Command {
 
-    private MessageReceivedEvent event;
+    private SlashCommandInteractionEvent event;
 
-    public Ping(MessageReceivedEvent event) {
+    public Ping(SlashCommandInteractionEvent event) {
 
         this.event = event;
 
@@ -17,7 +17,7 @@ public class Ping implements Command {
     @Override
     public void execute() {
 
-        Action.sendMessage(event.getChannel(), "PING");
+        Action.sendMessage(event.getChannel(), "ping");
 
     }
 

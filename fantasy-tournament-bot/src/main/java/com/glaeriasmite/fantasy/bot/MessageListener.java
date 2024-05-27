@@ -17,7 +17,7 @@ public class MessageListener extends ListenerAdapter {
 
         if (event.getMessage().getContentRaw().equals("!ping")) {
 
-            handler.execute(new Ping(event));
+            // handler.execute(new Ping(event));
         
         }
 
@@ -34,6 +34,10 @@ public class MessageListener extends ListenerAdapter {
 
             case "button":
                 handler.execute(new ButtonTest(event));
+                break;
+
+            case "ping":
+                handler.execute(new Ping(event));
                 break;
 
         }

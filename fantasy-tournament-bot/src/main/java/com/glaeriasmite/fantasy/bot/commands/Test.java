@@ -17,7 +17,13 @@ public class Test implements Command {
     @Override
     public void execute() {
 
-        Action.replyToMessage(event, event.getOption("content").getAsString());
+        String replyString = "";
+
+        for (int i = 0; i < event.getOption("iterations").getAsInt(); i++) {
+            replyString += event.getOption("content").getAsString() + "\n";
+        }
+
+        Action.replyToMessage(event, replyString);
 
     }
 

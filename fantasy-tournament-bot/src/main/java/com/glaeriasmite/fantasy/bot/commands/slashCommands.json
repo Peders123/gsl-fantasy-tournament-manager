@@ -1,0 +1,36 @@
+[
+    {
+        "name": "test",
+        "description": "Testing the bot",
+        "options": [
+            {
+                "type": 3,
+                "name": "content",
+                "description": "Message that is send by the bot",
+                "required": true
+            },
+            {
+                "type": 4,
+                "name": "iterations",
+                "description": "Number of times the message is sent",
+                "required": true
+            }
+        ],
+        "guildOnly": true,
+        "adminOnly": false
+    },
+    {
+        "name": "button",
+        "description": "Testing buttons",
+        "options": [],
+        "guildOnly": false,
+        "adminOnly": false
+    },
+    {
+        "name": "ping",
+        "description": "Testing new slash command method",
+        "options": [],
+        "guildOnly": true,
+        "adminOnly": true
+    }
+]

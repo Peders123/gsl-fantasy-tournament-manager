@@ -7,7 +7,9 @@ import com.glaeriasmite.fantasy.bot.handlers.Action;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
 public class Embed implements Command {
     
@@ -32,11 +34,13 @@ public class Embed implements Command {
 
         RestAction<InteractionHook> action = Action.replyWithEmbeds(event, embed.build());
 
+        action = Action.addActionRow((ReplyCallbackAction)action,  Button.secondary(event.getUser().getId() + ":test", "TESTING"));
+
         this.queue(action);
 
     }
 
-    
+    @Override
     public <R> void queue(RestAction<R> request) {
 
         request.queue();

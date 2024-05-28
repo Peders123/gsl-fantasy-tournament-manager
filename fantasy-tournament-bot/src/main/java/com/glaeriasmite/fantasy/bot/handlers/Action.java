@@ -1,25 +1,43 @@
 package com.glaeriasmite.fantasy.bot.handlers;
 
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.requests.FluentRestAction;
+import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
+import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
 public class Action {
 
-    public static void sendMessage(MessageChannel channel, String message) {
+    /* public static MessageCreateRequest<MessageCreateAction> sendMessage(MessageChannel channel, String message) {
 
-        channel.sendMessage(message).queue();
+        // channel.sendMessage(message).queue();
+
+        return channel.sendMessage(message);
+
+    } */
+
+    public static FluentRestAction<Message, MessageCreateAction> sendMessage(MessageChannel channel, String message) {
+
+        return channel.sendMessage(message);
 
     }
 
-    public static void replyToMessage(SlashCommandInteractionEvent event, String message) {
+    /* public static MessageCreateRequest<ReplyCallbackAction> replyWithMessage(SlashCommandInteractionEvent event, String message) {
 
-        event.reply(message).queue();
+        return event.reply(message);
+
+    } */
+
+    public static FluentRestAction<InteractionHook, ReplyCallbackAction> replyWithMessage(SlashCommandInteractionEvent event, String message) {
+
+        return event.reply(message);
 
     }
 
-    public static void replyWithButton(SlashCommandInteractionEvent event, String message) {
+    /* public static void replyWithButton(SlashCommandInteractionEvent event, String message) {
 
         event.reply(message)
             .addActionRow(
@@ -27,11 +45,11 @@ public class Action {
                 Button.danger(event.getUser().getId() + ":bad", "BAD"))
             .queue();
 
-    }
+    } */
 
-    public static void replyWithEmbeds(SlashCommandInteractionEvent event, MessageEmbed embed) {
+    public static FluentRestAction<InteractionHook, ReplyCallbackAction> replyWithEmbeds(SlashCommandInteractionEvent event, MessageEmbed embed) {
 
-        event.replyEmbeds(embed).queue();
+        return event.replyEmbeds(embed);
 
     }
 

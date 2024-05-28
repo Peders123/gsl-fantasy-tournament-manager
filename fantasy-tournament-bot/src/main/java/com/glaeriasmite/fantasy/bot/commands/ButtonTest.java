@@ -3,6 +3,7 @@ package com.glaeriasmite.fantasy.bot.commands;
 import com.glaeriasmite.fantasy.bot.handlers.Action;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.requests.RestAction;
 
 public class ButtonTest implements Command {
 
@@ -21,8 +22,15 @@ public class ButtonTest implements Command {
 
         System.out.println("Hello World");
 
-        Action.replyWithButton(event, "Testing Buttons");
+        // Action.replyWithButton(event, "Testing Buttons");
 
+    }
+
+    @Override
+    public <R> void queue(RestAction<R> request) {
+    
+        request.queue();
+        
     }
 
 }

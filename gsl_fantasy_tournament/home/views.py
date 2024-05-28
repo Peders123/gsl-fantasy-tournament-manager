@@ -21,13 +21,13 @@ def index(request):
 @api_view(['GET', 'POST', 'DELETE'])
 def user_list(request):
 
-    #get all Users, serialize and return them in json.
+    # get all Users, serialize and return them in json.
     if request.method == 'GET':
         user = User.objects.all()
         serializer = UserSerializer(user, many=True)
         return Response(serializer.data)
 
-    #get the data sent 
+    # get the data sent
     if request.method == 'POST':
         serializer = UserSerializer(data=request.data, many=True)
         if serializer.is_valid():
@@ -64,7 +64,8 @@ def user_detail(request, user_id):
 
     elif request.method == 'DELETE':
         user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT) 
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 @api_view(['GET', 'POST', 'DELETE'])
 def tournament_list(request):
@@ -97,8 +98,8 @@ def tournament_detail(request, tournament_id):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer=TournamentSerializer(tournament)
-        return Response (serializer.data)
+        serializer = TournamentSerializer(tournament)
+        return Response(serializer.data)
 
     elif request.method == 'PUT':
         serializer = TournamentSerializer(tournament, data=request.data)
@@ -108,7 +109,7 @@ def tournament_detail(request, tournament_id):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method =='DELETE' :
+    elif request.method =='DELETE':
         tournament.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -135,14 +136,14 @@ def captain_list(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def captain_detail(request,captain_id):
+def captain_detail(request, captain_id):
     try:
         captain = Captain.objects.get(pk=captain_id)
     except Captain.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer=CaptainSerializer(captain)
+        serializer = CaptainSerializer(captain)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
@@ -155,7 +156,7 @@ def captain_detail(request,captain_id):
 
 
 @api_view(['GET', 'POST', 'DELETE'])
-def player_list (request):
+def player_list(request):
 
     if request.method == 'GET':
         player = Player.objects.all()
@@ -167,7 +168,7 @@ def player_list (request):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:  
+        else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     if request.method == 'DELETE':
         player = Player.objects.all()
@@ -176,7 +177,7 @@ def player_list (request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def player_detail(request,player_id):
+def player_detail(request, player_id):
     try:
         player = Player.objects.get(pk=player_id)
     except Player.DoesNotExist:

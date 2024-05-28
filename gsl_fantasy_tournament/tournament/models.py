@@ -18,7 +18,6 @@ class Tournament(models.Model):
 
 
 class User(models.Model):
-
     user_id = models.IntegerField(primary_key=True)
     discord_name = models.CharField(max_length=32)
     smite_name = models.CharField(max_length=32)

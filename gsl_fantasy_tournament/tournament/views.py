@@ -2,7 +2,8 @@ from django.shortcuts import render
 
 from datetime import datetime
 
-from tournament.models import Tournament, Player
+from tournament.models import Tournament, Player 
+
 
 
 def overview(request, date):
@@ -33,3 +34,4 @@ def players(request, date):
         "tournament": tournament,
         "players": tournament_players
     })
+

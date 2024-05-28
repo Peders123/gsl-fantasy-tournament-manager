@@ -1,5 +1,6 @@
 package com.glaeriasmite.fantasy.bot.handlers;
 
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
@@ -25,6 +26,12 @@ public class Action {
                 Button.secondary(event.getUser().getId() + ":test", "TESTING"),
                 Button.danger(event.getUser().getId() + ":bad", "BAD"))
             .queue();
+
+    }
+
+    public static void replyWithEmbeds(SlashCommandInteractionEvent event, MessageEmbed embed) {
+
+        event.replyEmbeds(embed).queue();
 
     }
 

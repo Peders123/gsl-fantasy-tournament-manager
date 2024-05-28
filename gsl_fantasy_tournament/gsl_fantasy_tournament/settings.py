@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'home.apps.HomeConfig',
     'tournament.apps.TournamentConfig',
     'django.contrib.admin',

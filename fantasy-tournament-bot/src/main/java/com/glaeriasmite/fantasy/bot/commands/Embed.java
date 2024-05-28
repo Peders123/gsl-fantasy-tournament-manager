@@ -1,18 +1,21 @@
 package com.glaeriasmite.fantasy.bot.commands;
 
+import java.awt.Color;
+
 import com.glaeriasmite.fantasy.bot.handlers.Action;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
-public class ButtonTest implements Command {
-
+public class Embed implements Command {
+    
     private SlashCommandInteractionEvent event;
 
-    public ButtonTest(SlashCommandInteractionEvent event) {
+    public Embed(SlashCommandInteractionEvent event) {
 
         this.event = event;
 
@@ -23,14 +26,15 @@ public class ButtonTest implements Command {
 
         event.getMessageChannel();
 
-        System.out.println("Hello World");
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setTitle("Embed testing command");
+        embed.setDescription("GLAERIA SMITE LEAGUE FANTASY TOURNAMENT\n @peders");
+        embed.setColor(new Color(28, 19, 31, 255));
+        embed.setFooter("June 14th");
 
-        RestAction<InteractionHook> action = Action.replyWithMessage(event, "Testing Buttons");
+        RestAction<InteractionHook> action = Action.replyWithEmbeds(event, embed.build());
 
-        action = Action.addActionRow((ReplyCallbackAction)action,
-            Button.secondary(event.getUser().getId() + ":test", "TESTING"),
-            Button.danger(event.getUser().getId() + ":bad", "BAD")
-        );
+        action = Action.addActionRow((ReplyCallbackAction)action,  Button.secondary(event.getUser().getId() + ":test", "TESTING"));
 
         this.queue(action);
 
@@ -40,7 +44,7 @@ public class ButtonTest implements Command {
     public <R> void queue(RestAction<R> request) {
 
         request.queue();
-        
+
     }
 
 }

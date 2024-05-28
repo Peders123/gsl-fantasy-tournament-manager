@@ -40,6 +40,10 @@ public class MessageListener extends ListenerAdapter {
                 handler.execute(new Ping(event));
                 break;
 
+            case "embed":
+                handler.execute(new Embed(event));
+                break;
+
         }
 
     }

@@ -32,5 +32,12 @@
         "options": [],
         "guildOnly": true,
         "adminOnly": true
+    },
+    {
+        "name": "embed",
+        "description": "Testing discord embeds",
+        "options": [],
+        "guildOnly": false,
+        "adminOnly": false
     }
 ]

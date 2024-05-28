@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Players - {{ tournament.title }}</title>
+    </head>
+
+    <body>
+        <h1>{{ tournament.title }}</h1><br>
+        <table>
+            <tr>
+                <th>Player</th>
+                <th>Role 1</th>
+                <th>Role 2</th>
+                <th>Estimated Value</th>
+            </tr>
+            {% for player in players %}
+                <tr>
+                    <td>{{ player.user_id.smite_name }}</td>
+                    <td>{{ player.role_1 }}</td>
+                    <td>{{ player.role_2 }}</td>
+                    <td>{{ player.estimated_value }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

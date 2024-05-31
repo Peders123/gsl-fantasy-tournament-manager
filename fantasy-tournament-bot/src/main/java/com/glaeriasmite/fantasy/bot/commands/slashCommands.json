@@ -43,7 +43,14 @@
     {
         "name": "user",
         "description": "Test command for creating a user",
-        "options":  [],
+        "options":  [
+            {
+                "type": 3,
+                "name": "method",
+                "description": "The http method.",
+                "required": true
+            }
+        ],
         "guildOnly": true,
         "adminOnly": false
     }

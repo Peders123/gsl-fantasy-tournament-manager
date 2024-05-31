@@ -3,6 +3,7 @@ package com.glaeriasmite.fantasy.bot;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -35,6 +36,24 @@ public class HttpHandler {
         } else {
             return null;
         }
+
+    }
+
+    public int sendPost(JSONArray json) throws IOException {
+
+        this.conn.setRequestMethod("POST");
+        this.conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+        this.conn.setRequestProperty("Content-Type", "application/json");
+
+        this.conn.setDoOutput(true);
+        OutputStream os = this.conn.getOutputStream();
+        os.write(json.toString().getBytes());
+        os.flush();
+        os.close();
+
+        int responseCode = this.conn.getResponseCode();
+
+        return responseCode;
 
     }
 

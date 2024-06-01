@@ -26,8 +26,6 @@ public class User implements Command {
     @Override
     public void execute() {
 
-        // System.out.println("GET Response Code :: " + responseCode);
-
         String message;
         RestAction<Message> action;
         RestAction<InteractionHook> hookAction;

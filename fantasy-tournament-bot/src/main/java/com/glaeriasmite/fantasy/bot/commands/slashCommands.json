@@ -53,5 +53,19 @@
         ],
         "guildOnly": true,
         "adminOnly": false
+    },
+    {
+        "name": "signup",
+        "description": "Test command to create a user instance in the database.",
+        "options": [
+            {
+                "type": 3,
+                "name": "smite-name",
+                "description": "The smite username.",
+                "required": true
+            }
+        ],
+        "guildOnly": true,
+        "adminOnly": false
     }
 ]

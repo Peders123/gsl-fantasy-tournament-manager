@@ -48,6 +48,10 @@ public class MessageListener extends ListenerAdapter {
                 handler.execute(new User(event));
                 break;
 
+            case "signup":
+                handler.execute(new Signup(event));
+                break;
+
         }
 
     }

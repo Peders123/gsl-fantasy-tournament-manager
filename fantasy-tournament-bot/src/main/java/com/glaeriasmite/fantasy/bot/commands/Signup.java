@@ -28,7 +28,7 @@ public class Signup implements Command {
         String message;
         RestAction<InteractionHook> action;
 
-        JSONObject user = new JSONObject();
+        /* JSONObject user = new JSONObject();
         user.put("user_id", event.getUser().getId());
         user.put("discord_name", event.getUser().getName());
         user.put("smite_name", event.getOption("smite-name").getAsString());
@@ -40,6 +40,29 @@ public class Signup implements Command {
             System.out.println(responseCode);
             if (responseCode == 201) {
                 message = "Successfully created user";
+                action = Action.replyWithMessage(event, message);
+                this.queue(action);
+            }
+        } catch(IOException e) {
+            message = "Error";
+            action = Action.replyWithMessage(event, message);
+            this.queue(action);
+        } */
+
+        JSONObject player = new JSONObject();
+        player.put("tournament_id", 1);
+        player.put("user_id", event.getUser().getId());
+        player.put("role_1", "adc");
+        player.put("role_2", "support");
+        player.put("estimated_value", 10);
+        JSONArray player_json = new JSONArray();
+        player_json.put(player);
+        try {
+            HttpHandler handler = new HttpHandler("http://127.0.0.1:8000/Players/");
+            int responseCode = handler.sendPost(player_json);
+            System.out.println(responseCode);
+            if (responseCode == 201) {
+                message = "Successfully created player";
                 action = Action.replyWithMessage(event, message);
                 this.queue(action);
             }

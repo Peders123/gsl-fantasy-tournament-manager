@@ -34,7 +34,7 @@ class Captain(models.Model):
 
 class Player(models.Model):
 
-    player_id = models.IntegerField(primary_key=True)
+    player_id = models.AutoField(primary_key=True)
     tournament_id = models.ForeignKey(Tournament, on_delete=models.CASCADE, default=1)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     captain_id = models.ForeignKey(Captain, on_delete=models.CASCADE, null=True)

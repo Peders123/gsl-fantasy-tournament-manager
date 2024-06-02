@@ -44,6 +44,14 @@ public class MessageListener extends ListenerAdapter {
                 handler.execute(new Embed(event));
                 break;
 
+            case "user":
+                handler.execute(new User(event));
+                break;
+
+            case "signup":
+                handler.execute(new Signup(event));
+                break;
+
         }
 
     }

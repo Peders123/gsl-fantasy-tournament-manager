@@ -30,9 +30,13 @@ public class Action {
 
     }
 
-    public static FluentRestAction<InteractionHook, ReplyCallbackAction> addActionRow(ReplyCallbackAction action, ItemComponent... components) {
+    public static FluentRestAction<InteractionHook, ReplyCallbackAction> addActionRow(FluentRestAction<InteractionHook, ReplyCallbackAction> action, ItemComponent... components) {
 
-        return action.addActionRow(components);
+        if (action instanceof ReplyCallbackAction) {
+            return ((ReplyCallbackAction) action).addActionRow(components);
+        }
+        
+        throw new IllegalArgumentException("The action must be a ReplyCallbackAction");
 
     }
 

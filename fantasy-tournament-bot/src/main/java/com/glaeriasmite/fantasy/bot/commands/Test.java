@@ -4,7 +4,8 @@ import com.glaeriasmite.fantasy.bot.handlers.Action;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.FluentRestAction;
+import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
 public class Test implements Command {
 
@@ -25,14 +26,14 @@ public class Test implements Command {
             replyString += event.getOption("content").getAsString() + "\n";
         }
 
-        RestAction<InteractionHook> action = Action.replyWithMessage(event, replyString);
+        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, replyString);
 
         this.queue(action);
 
     }
 
     @Override
-    public <R> void queue(RestAction<R> request) {
+    public <R> void queue(FluentRestAction<R, ?> request) {
         
         request.queue();
         

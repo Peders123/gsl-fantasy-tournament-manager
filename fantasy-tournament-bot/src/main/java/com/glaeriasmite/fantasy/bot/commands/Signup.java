@@ -10,7 +10,8 @@ import com.glaeriasmite.fantasy.bot.handlers.Action;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.FluentRestAction;
+import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
 public class Signup implements Command {
 
@@ -26,7 +27,7 @@ public class Signup implements Command {
     public void execute() {
 
         String message;
-        RestAction<InteractionHook> action;
+        FluentRestAction<InteractionHook, ReplyCallbackAction> action;
 
         /* JSONObject user = new JSONObject();
         user.put("user_id", event.getUser().getId());
@@ -75,7 +76,7 @@ public class Signup implements Command {
     }
 
     @Override
-    public <R> void queue(RestAction<R> request) {
+    public <R> void queue(FluentRestAction<R, ?> request) {
 
         request.queue();
 

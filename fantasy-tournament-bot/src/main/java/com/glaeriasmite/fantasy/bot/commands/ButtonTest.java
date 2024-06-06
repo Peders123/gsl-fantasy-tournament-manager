@@ -5,7 +5,7 @@ import com.glaeriasmite.fantasy.bot.handlers.Action;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
-import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.FluentRestAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
 public class ButtonTest implements Command {
@@ -25,7 +25,7 @@ public class ButtonTest implements Command {
 
         System.out.println("Hello World");
 
-        RestAction<InteractionHook> action = Action.replyWithMessage(event, "Testing Buttons");
+        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, "Testing Buttons");
 
         action = Action.addActionRow((ReplyCallbackAction)action,
             Button.secondary(event.getUser().getId() + ":test", "TESTING"),
@@ -37,7 +37,7 @@ public class ButtonTest implements Command {
     }
 
     @Override
-    public <R> void queue(RestAction<R> request) {
+    public <R> void queue(FluentRestAction<R, ?> request) {
 
         request.queue();
         

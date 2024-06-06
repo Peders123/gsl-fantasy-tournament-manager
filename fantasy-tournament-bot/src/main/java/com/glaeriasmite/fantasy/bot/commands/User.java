@@ -6,7 +6,9 @@ import com.glaeriasmite.fantasy.bot.handlers.Action;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.FluentRestAction;
+import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
+import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
 import java.io.IOException;
 
@@ -27,8 +29,8 @@ public class User implements Command {
     public void execute() {
 
         String message;
-        RestAction<Message> action;
-        RestAction<InteractionHook> hookAction;
+        FluentRestAction<Message, MessageCreateAction> action;
+        FluentRestAction<InteractionHook, ReplyCallbackAction> hookAction;
 
         System.out.println(event.getOption("method").getAsString());
 
@@ -89,7 +91,7 @@ public class User implements Command {
     }
 
     @Override
-    public <R> void queue(RestAction<R> request) {
+    public <R> void queue(FluentRestAction<R, ?> request) {
 
         request.queue();
 

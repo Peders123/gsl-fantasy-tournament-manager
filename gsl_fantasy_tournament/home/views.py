@@ -2,7 +2,7 @@ from .serializers import UserSerializer, TournamentSerializer, CaptainSerializer
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from rest_framework.authentication import  SessionAuthentication, TokenAuthentication
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.shortcuts import render
@@ -20,17 +20,19 @@ def index(request):
 
     return render(request, 'home/home.html', context)
 
+
 @api_view(['POST'])
 def login(request):
     User, created = models.User.objects.get_or_create(username='r')
-    if 'Pedro'== request.data['username'] or 'Danza' == request.data['password']:
+    if 'Pedro' == request.data['username'] or 'Danza' == request.data['password']:
         token, created = Token.objects.get_or_create(user=User)
         return Response({"token": token.key})
 
-    return Response({"detail":"No Comprende"}, status=status.HTTP_404_NOT_FOUND)
+    return Response({"detail": "No Comprende"}, status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(['GET', 'POST', 'DELETE'])
-@authentication_classes([SessionAuthentication,TokenAuthentication])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def user_list(request):
 
@@ -56,7 +58,7 @@ def user_list(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@authentication_classes([SessionAuthentication,TokenAuthentication])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def user_detail(request, user_id):
 
@@ -83,7 +85,7 @@ def user_detail(request, user_id):
 
 
 @api_view(['GET', 'POST', 'DELETE'])
-@authentication_classes([SessionAuthentication,TokenAuthentication])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def tournament_list(request):
 
@@ -107,7 +109,7 @@ def tournament_list(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@authentication_classes([SessionAuthentication,TokenAuthentication])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def tournament_detail(request, tournament_id):
 
@@ -134,7 +136,7 @@ def tournament_detail(request, tournament_id):
 
 
 @api_view(['GET', 'POST', 'DELETE'])
-@authentication_classes([SessionAuthentication,TokenAuthentication])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def captain_list(request):
 
@@ -157,7 +159,7 @@ def captain_list(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@authentication_classes([SessionAuthentication,TokenAuthentication])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def captain_detail(request, captain_id):
     try:
@@ -179,7 +181,7 @@ def captain_detail(request, captain_id):
 
 
 @api_view(['GET', 'POST', 'DELETE'])
-@authentication_classes([SessionAuthentication,TokenAuthentication])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def player_list(request):
 
@@ -203,7 +205,7 @@ def player_list(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@authentication_classes([SessionAuthentication,TokenAuthentication])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def player_detail(request, player_id):
     try:

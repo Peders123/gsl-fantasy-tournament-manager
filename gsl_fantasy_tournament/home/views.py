@@ -24,7 +24,7 @@ def index(request):
 @api_view(['POST'])
 def login(request):
     User, created = models.User.objects.get_or_create(username='r')
-    if 'Pedro' == request.data['username'] or 'Danza' == request.data['password']:
+    if 'Pedro' == request.data['username'] and 'Danza' == request.data['password']:
         token, created = Token.objects.get_or_create(user=User)
         return Response({"token": token.key})
 

@@ -12,5 +12,6 @@ urlpatterns = [
     path('Captains/', views.captain_list),
     path('Captain/<int:captain_id>', views.captain_detail),
     path('Players/', views.player_list),
-    path('Players/<int:player_id>', views.player_detail)
+    path('Players/<int:player_id>', views.player_detail),
+    path('Login/', views.login)
 ]

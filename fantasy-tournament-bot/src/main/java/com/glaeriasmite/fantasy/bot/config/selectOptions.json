@@ -1,0 +1,39 @@
+{
+    "role1": [
+        {
+            "label": "Hunter",
+            "value": "ADC",
+            "description": null,
+            "isDefault": false,
+            "emoji": "<:Hunter:846799331042525215>"
+        },
+        {
+            "label": "Guardian",
+            "value": "SUPPORT",
+            "description": null,
+            "isDefault": false,
+            "emoji": "<:Guardian:846799331549249586>"
+        },
+        {
+            "label": "Mage",
+            "value": "MID",
+            "description": null,
+            "isDefault": false,
+            "emoji": "<:Mage:846799331490922516>"
+        },
+        {
+            "label": "Assassin",
+            "value": "JUNGLE",
+            "description": null,
+            "isDefault": false,
+            "emoji": "<:Assassin:846799331482664980>"
+        },
+        {
+            "label": "Warrior",
+            "value": "SOLO",
+            "description": null,
+            "isDefault": false,
+            "emoji": "<:Warrior:846799331523690546>"
+        }
+    ]
+}

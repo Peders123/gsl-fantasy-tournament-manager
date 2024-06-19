@@ -18,7 +18,7 @@ public class Ping implements Command {
     }
 
     @Override
-    public void execute() {
+    public void execute(Context context) {
 
         // RestAction<Message> action = Action.sendMessage(event.getChannel(), "ping");
 

@@ -18,7 +18,7 @@ public class Test implements Command {
     }
 
     @Override
-    public void execute() {
+    public void execute(Context context) {
 
         String replyString = "";
 

@@ -5,6 +5,7 @@ import com.glaeriasmite.fantasy.bot.handlers.*;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -75,6 +76,21 @@ public class MessageListener extends ListenerAdapter {
 
             case "bad":
                 System.out.println("BAD");
+                break;
+
+        }
+
+    }
+
+    @Override
+    public void onStringSelectInteraction(StringSelectInteractionEvent event) {
+
+        String id = event.getComponentId();
+
+        switch (id) {
+
+            case "role1":
+                System.out.println(this.handler.getContext().getUserSignupData(event.getUser().getId()));
                 break;
 
         }

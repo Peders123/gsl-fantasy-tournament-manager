@@ -22,7 +22,7 @@ public class Embed implements Command {
     }
 
     @Override
-    public void execute() {
+    public void execute(Context context) {
 
         event.getMessageChannel();
 

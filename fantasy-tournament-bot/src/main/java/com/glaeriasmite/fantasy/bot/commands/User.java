@@ -26,7 +26,7 @@ public class User implements Command {
     }
 
     @Override
-    public void execute() {
+    public void execute(Context context) {
 
         String message;
         FluentRestAction<Message, MessageCreateAction> action;

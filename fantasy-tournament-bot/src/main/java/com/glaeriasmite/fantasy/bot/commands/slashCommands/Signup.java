@@ -1,21 +1,21 @@
-package com.glaeriasmite.fantasy.bot.commands;
+package com.glaeriasmite.fantasy.bot.commands.slashCommands;
 
-import java.io.IOException;
+import java.lang.reflect.Method;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.glaeriasmite.fantasy.bot.HttpHandler;
 import com.glaeriasmite.fantasy.bot.Role;
 import com.glaeriasmite.fantasy.bot.SignupData;
+import com.glaeriasmite.fantasy.bot.commands.Command;
+import com.glaeriasmite.fantasy.bot.commands.Context;
 import com.glaeriasmite.fantasy.bot.handlers.Action;
 import com.glaeriasmite.fantasy.bot.handlers.Components;
 
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.requests.FluentRestAction;
+import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
 public class Signup implements Command {
@@ -31,7 +31,7 @@ public class Signup implements Command {
     @Override
     public void execute(Context context) {
 
-        SignupData data = new SignupData();
+        SignupData data = new SignupData(this);
 
         data.setRole1(Role.ADC);
         data.setRole2(Role.SUPPORT);
@@ -48,6 +48,14 @@ public class Signup implements Command {
 
         this.queue(action);
  
+    }
+
+    @Override
+    public void executeMethod(String methodName, Context context, Object... params) throws Exception {
+
+        Method method = Signup.class.getDeclaredMethod(methodName, Context.class, Object[].class);
+        method.invoke(this, context, new Object[] {params});
+
     }
 
     @Override

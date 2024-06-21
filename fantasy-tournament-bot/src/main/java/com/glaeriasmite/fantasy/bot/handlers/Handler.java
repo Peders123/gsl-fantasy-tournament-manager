@@ -19,6 +19,12 @@ public class Handler {
 
     }
 
+    public void executeMethod(Command command, String methodName, Object... params) throws Exception {
+
+        command.executeMethod(methodName, this.context, params);
+
+    }
+
     public Context getContext() {
 
         return this.context;

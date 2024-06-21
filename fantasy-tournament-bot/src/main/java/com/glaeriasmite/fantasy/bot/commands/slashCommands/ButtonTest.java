@@ -1,5 +1,9 @@
-package com.glaeriasmite.fantasy.bot.commands;
+package com.glaeriasmite.fantasy.bot.commands.slashCommands;
 
+import java.lang.reflect.Method;
+
+import com.glaeriasmite.fantasy.bot.commands.Command;
+import com.glaeriasmite.fantasy.bot.commands.Context;
 import com.glaeriasmite.fantasy.bot.handlers.Action;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -33,6 +37,14 @@ public class ButtonTest implements Command {
         );
 
         this.queue(action);
+
+    }
+
+    @Override
+    public void executeMethod(String methodName, Context context, Object... params) throws Exception {
+
+        Method method = ButtonTest.class.getDeclaredMethod(methodName, Context.class, Object[].class);
+        method.invoke(this, context, new Object[] {params});
 
     }
 

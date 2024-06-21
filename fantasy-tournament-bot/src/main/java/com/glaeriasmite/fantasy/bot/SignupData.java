@@ -1,11 +1,18 @@
 package com.glaeriasmite.fantasy.bot;
 
+import com.glaeriasmite.fantasy.bot.commands.slashCommands.Signup;
+
 public class SignupData {
 
     private Role role1;
     private Role role2;
+    private Signup signUpSession;
 
-    public SignupData() {}
+    public SignupData(Signup currentSession) {
+
+        this.signUpSession = currentSession;
+
+    }
 
     public Role getRole1() {
         return this.role1;
@@ -21,6 +28,10 @@ public class SignupData {
 
     public void setRole2(Role role2) {
         this.role2 = role2;
+    }
+
+    public Signup getSignUpSession() {
+        return this.signUpSession;
     }
     
     @Override

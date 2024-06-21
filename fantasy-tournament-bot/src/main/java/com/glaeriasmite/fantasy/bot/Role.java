@@ -5,5 +5,6 @@ public enum Role {
     SUPPORT,
     MID,
     JUNGLE,
-    SOLO
+    SOLO,
+    FILL
 }

@@ -1,6 +1,11 @@
 package com.glaeriasmite.fantasy.bot;
 
-import com.glaeriasmite.fantasy.bot.commands.*;
+import com.glaeriasmite.fantasy.bot.commands.slashCommands.ButtonTest;
+import com.glaeriasmite.fantasy.bot.commands.slashCommands.Embed;
+import com.glaeriasmite.fantasy.bot.commands.slashCommands.Ping;
+import com.glaeriasmite.fantasy.bot.commands.slashCommands.Signup;
+import com.glaeriasmite.fantasy.bot.commands.slashCommands.Test;
+import com.glaeriasmite.fantasy.bot.commands.slashCommands.User;
 import com.glaeriasmite.fantasy.bot.handlers.*;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -86,11 +91,30 @@ public class MessageListener extends ListenerAdapter {
     public void onStringSelectInteraction(StringSelectInteractionEvent event) {
 
         String id = event.getComponentId();
+        String userId = event.getUser().getId();
+        String result = event.getValues().get(0);
+        Signup signUpSession = this.handler.getContext().getUserSignupData(userId).getSignUpSession();
+        SignupData data = this.handler.getContext().getUserSignupData(userId);
+
+        // signUpSession.testMethod(data);
 
         switch (id) {
 
             case "role1":
-                System.out.println(this.handler.getContext().getUserSignupData(event.getUser().getId()));
+                this.handler.getContext().getUserSignupData(userId).setRole1(Role.valueOf(result));
+                try {
+                    this.handler.executeMethod(
+                        signUpSession,
+                        "testMethod",
+                        data
+                    );
+                } catch (Exception e) {
+                    System.out.println("ERROR");
+                    System.out.println(e);
+                }
+                break;
+
+            case "role2":
                 break;
 
         }

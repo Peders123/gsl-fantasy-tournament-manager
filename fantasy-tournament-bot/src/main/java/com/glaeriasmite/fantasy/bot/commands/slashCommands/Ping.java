@@ -1,5 +1,9 @@
-package com.glaeriasmite.fantasy.bot.commands;
+package com.glaeriasmite.fantasy.bot.commands.slashCommands;
 
+import java.lang.reflect.Method;
+
+import com.glaeriasmite.fantasy.bot.commands.Command;
+import com.glaeriasmite.fantasy.bot.commands.Context;
 import com.glaeriasmite.fantasy.bot.handlers.Action;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -18,7 +22,7 @@ public class Ping implements Command {
     }
 
     @Override
-    public void execute() {
+    public void execute(Context context) {
 
         // RestAction<Message> action = Action.sendMessage(event.getChannel(), "ping");
 
@@ -29,6 +33,14 @@ public class Ping implements Command {
         FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, message);
 
         action.queue();
+
+    }
+
+    @Override
+    public void executeMethod(String methodName, Context context, Object... params) throws Exception {
+
+        Method method = Ping.class.getDeclaredMethod(methodName, Context.class, Object[].class);
+        method.invoke(this, context, new Object[] {params});
 
     }
 

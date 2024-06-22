@@ -52,7 +52,7 @@ public class App {
         CommandListUpdateAction commands = jda.updateCommands();
 
         JsonNode arrayNode = objectMapper.readTree(new File(
-            "src/main/java/com/glaeriasmite/fantasy/bot/commands/slashCommands.json"
+            "src/main/java/com/glaeriasmite/fantasy/bot/config/slashCommands.json"
         ));
 
         SlashCommandData slash_command;

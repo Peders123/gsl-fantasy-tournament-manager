@@ -1,7 +1,10 @@
-package com.glaeriasmite.fantasy.bot.commands;
+package com.glaeriasmite.fantasy.bot.commands.slashCommands;
 
 import java.awt.Color;
+import java.lang.reflect.Method;
 
+import com.glaeriasmite.fantasy.bot.commands.Command;
+import com.glaeriasmite.fantasy.bot.commands.Context;
 import com.glaeriasmite.fantasy.bot.handlers.Action;
 
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -22,7 +25,7 @@ public class Embed implements Command {
     }
 
     @Override
-    public void execute() {
+    public void execute(Context context) {
 
         event.getMessageChannel();
 
@@ -36,6 +39,14 @@ public class Embed implements Command {
         action = Action.addActionRow(action,  Button.secondary(event.getUser().getId() + ":test", "TESTING"));
 
         this.queue(action);
+
+    }
+
+    @Override
+    public void executeMethod(String methodName, Context context, Object... params) throws Exception {
+
+        Method method = Embed.class.getDeclaredMethod(methodName, Context.class, Object[].class);
+        method.invoke(this, context, new Object[] {params});
 
     }
 

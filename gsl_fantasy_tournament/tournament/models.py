@@ -1,13 +1,14 @@
 from django.db import models
 
-from django.utils import timezone
 
 
+
+from datetime import datetime
 class Tournament(models.Model):
 
     tournament_id = models.IntegerField(primary_key=True)
-    date = models.DateField(default=timezone.now())
-    time = models.TimeField(default=timezone.now())
+    date = models.DateField(default=datetime(2001,11,5,0,0))
+    time = models.TimeField(default=datetime(1,1,1,12,0))
     title = models.CharField(max_length=64, default="Glaeria Smite League")
     description = models.CharField(max_length=256, default="None")
 

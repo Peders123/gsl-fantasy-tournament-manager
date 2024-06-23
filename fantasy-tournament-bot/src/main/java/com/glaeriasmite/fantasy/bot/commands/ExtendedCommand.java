@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 import net.dv8tion.jda.api.requests.FluentRestAction;
 
-public class BaseCommand implements Command {
+public class ExtendedCommand implements Command {
 
     @Override
     public void execute(Context context) {}

@@ -5,10 +5,10 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.modals.Modal;
 import net.dv8tion.jda.api.requests.FluentRestAction;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ModalCallbackAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
@@ -45,13 +45,15 @@ public class Action {
 
     }
 
-    public static FluentRestAction<InteractionHook, ReplyCallbackAction> addActionRow(FluentRestAction<InteractionHook, ReplyCallbackAction> action, ItemComponent... components) {
+    public static RestAction<Message> editMessage(MessageChannel channel, String messageId, String message) {
 
-        if (action instanceof ReplyCallbackAction) {
-            return ((ReplyCallbackAction) action).addActionRow(components);
-        }
-        
-        throw new IllegalArgumentException("The action must be a ReplyCallbackAction");
+        return channel.editMessageById(messageId, message);
+
+    }
+
+    public static RestAction<Message> editEmbed(MessageChannel channel, String messageId, MessageEmbed embed) {
+
+        return channel.editMessageEmbedsById(messageId, embed);
 
     }
 

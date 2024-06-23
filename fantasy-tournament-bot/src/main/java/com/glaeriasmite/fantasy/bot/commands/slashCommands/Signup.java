@@ -44,7 +44,7 @@ public class Signup implements Command {
 
         FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, "TESTING");
 
-        Action.addActionRow(action, selection);
+        Components.addActionRowReply(action, selection);
 
         this.queue(action);
  

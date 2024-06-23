@@ -67,5 +67,12 @@
         ],
         "guildOnly": true,
         "adminOnly": false
+    },
+    {
+        "name": "edit",
+        "description": "Testing message edits.",
+        "options": [],
+        "guildOnly": false,
+        "adminOnly": false
     }
 ]

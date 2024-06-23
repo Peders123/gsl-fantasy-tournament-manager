@@ -1,11 +1,6 @@
 package com.glaeriasmite.fantasy.bot;
 
-import com.glaeriasmite.fantasy.bot.commands.slashCommands.ButtonTest;
-import com.glaeriasmite.fantasy.bot.commands.slashCommands.Embed;
-import com.glaeriasmite.fantasy.bot.commands.slashCommands.Ping;
-import com.glaeriasmite.fantasy.bot.commands.slashCommands.Signup;
-import com.glaeriasmite.fantasy.bot.commands.slashCommands.Test;
-import com.glaeriasmite.fantasy.bot.commands.slashCommands.User;
+import com.glaeriasmite.fantasy.bot.commands.slashCommands.*;
 import com.glaeriasmite.fantasy.bot.handlers.*;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -58,12 +53,18 @@ public class MessageListener extends ListenerAdapter {
                 handler.execute(new Signup(event));
                 break;
 
+            case "edit":
+                handler.execute(new Edit(event));
+                break;
+
         }
 
     }
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
+
+        System.out.println(event.getMessageChannel());
 
         String[] id = event.getComponentId().split(":");
         String authorId = id[0];
@@ -81,6 +82,20 @@ public class MessageListener extends ListenerAdapter {
 
             case "bad":
                 System.out.println("BAD");
+                break;
+
+            case "edit":
+                try{
+                    this.handler.executeMethod(
+                        new Edit(null),
+                        "editMessage",
+                        event.getMessageChannel(),
+                        event.getMessageId()
+                    );
+                } catch (Exception e) {
+                    System.out.println("ERROR");
+                    System.out.println(e);
+                }
                 break;
 
         }

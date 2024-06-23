@@ -1,23 +1,24 @@
 package com.glaeriasmite.fantasy.bot.commands.slashCommands;
 
-import java.lang.reflect.Method;
-
-import com.glaeriasmite.fantasy.bot.commands.Command;
+import com.glaeriasmite.fantasy.bot.commands.ExtendedCommand;
 import com.glaeriasmite.fantasy.bot.commands.Context;
 import com.glaeriasmite.fantasy.bot.handlers.Action;
 import com.glaeriasmite.fantasy.bot.handlers.Components;
 
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.FluentRestAction;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
+import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 
-public class ButtonTest implements Command {
+public class Edit extends ExtendedCommand {
 
     private SlashCommandInteractionEvent event;
 
-    public ButtonTest(SlashCommandInteractionEvent event) {
+    public Edit(SlashCommandInteractionEvent event) {
 
         this.event = event;
 
@@ -28,28 +29,38 @@ public class ButtonTest implements Command {
 
         FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, "Testing Buttons");
 
-        action = Components.addActionRowReply((ReplyCallbackAction)action,
-            Button.secondary(event.getUser().getId() + ":test", "TESTING"),
-            Button.danger(event.getUser().getId() + ":bad", "BAD")
+        action = Components.addActionRowReply(action,
+            Button.primary(event.getUser().getId() + ":edit", "EDIT")
         );
 
         this.queue(action);
-
+ 
     }
 
-    @Override
-    public void executeMethod(String methodName, Context context, Object... params) throws Exception {
-
-        Method method = ButtonTest.class.getDeclaredMethod(methodName, Context.class, Object[].class);
-        method.invoke(this, context, new Object[] {params});
-
-    }
 
     @Override
     public <R> void queue(FluentRestAction<R, ?> request) {
 
         request.queue();
-        
+
+    }
+
+    public void editMessage(Context context, TextChannelImpl channel, String id) {
+
+        System.out.println("IN");
+
+        try {
+
+            String message = "SUCCESS!";
+
+            RestAction<Message> action = Action.editMessage(channel, id, message);
+
+            action.queue();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
     }
 
 }

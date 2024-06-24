@@ -17,7 +17,6 @@ public class ExtendedCommand implements Command {
 
         for (int i = 1; i < paramTypes.length; i++) {
 
-            System.out.println((params[i-1].getClass()));
             paramTypes[i] = params[i - 1].getClass();
 
         }

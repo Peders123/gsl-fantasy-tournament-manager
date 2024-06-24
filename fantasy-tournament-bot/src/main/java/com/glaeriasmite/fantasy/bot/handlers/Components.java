@@ -22,8 +22,6 @@ public class Components {
 
     private static SelectOption createSelectOptionFromJson(JsonNode data) {
 
-        System.out.println(data);
-
         SelectOption option = SelectOption.of(data.get("label").asText(), data.get("value").asText())
             .withDefault(data.get("isDefault").asBoolean())
             .withDescription(data.get("description").asText())

@@ -30,7 +30,8 @@ public class Edit extends ExtendedCommand {
         FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, "Testing Buttons");
 
         action = Components.addActionRowReply(action,
-            Button.primary(event.getUser().getId() + ":edit", "EDIT")
+            Button.primary(event.getUser().getId() + ":edit", "EDIT"),
+            Button.danger(event.getUser().getId() + ":delete", "DELETE")
         );
 
         this.queue(action);
@@ -45,15 +46,27 @@ public class Edit extends ExtendedCommand {
 
     }
 
-    public void editMessage(Context context, TextChannelImpl channel, String id) {
-
-        System.out.println("IN");
+    protected void editMessage(Context context, TextChannelImpl channel, String id) {
 
         try {
 
             String message = "SUCCESS!";
 
             RestAction<Message> action = Action.editMessage(channel, id, message);
+
+            action.queue();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }
+
+    protected void deleteMessage(Context context, TextChannelImpl channel, String id) {
+
+        try {
+
+            RestAction<Void> action = Action.deleteMessage(channel, id);
 
             action.queue();
 

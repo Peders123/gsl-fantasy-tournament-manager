@@ -57,6 +57,12 @@ public class Action {
 
     }
 
+    public static RestAction<Void> deleteMessage(MessageChannel channel, String messageId) {
+
+        return channel.deleteMessageById(messageId);
+
+    }
+
     public static Modal createModal(String id, String title, TextInput... components) {
 
         Modal.Builder modal = Modal.create(id, title);

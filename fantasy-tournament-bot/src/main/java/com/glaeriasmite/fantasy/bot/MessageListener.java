@@ -64,15 +64,12 @@ public class MessageListener extends ListenerAdapter {
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
 
-        System.out.println(event.getMessageChannel());
-
         String[] id = event.getComponentId().split(":");
-        String authorId = id[0];
         String type = id[1];
 
-        event.deferEdit().queue();
+        System.out.println(event.getMessageId());
 
-        System.out.println(authorId);
+        event.deferEdit().queue();
 
         switch (type) {
 
@@ -85,10 +82,24 @@ public class MessageListener extends ListenerAdapter {
                 break;
 
             case "edit":
-                try{
+                try {
                     this.handler.executeMethod(
                         new Edit(null),
                         "editMessage",
+                        event.getMessageChannel(),
+                        event.getMessageId()
+                    );
+                } catch (Exception e) {
+                    System.out.println("ERROR");
+                    System.out.println(e);
+                }
+                break;
+
+            case "delete":
+                try {
+                    this.handler.executeMethod(
+                        new Edit(null),
+                        "deleteMessage",
                         event.getMessageChannel(),
                         event.getMessageId()
                     );

@@ -74,5 +74,12 @@
         "options": [],
         "guildOnly": false,
         "adminOnly": false
+    },
+    {
+        "name": "create-signups",
+        "description": "Create signups using select menu.",
+        "options": [],
+        "guildOnly": true,
+        "adminOnly": true
     }
 ]

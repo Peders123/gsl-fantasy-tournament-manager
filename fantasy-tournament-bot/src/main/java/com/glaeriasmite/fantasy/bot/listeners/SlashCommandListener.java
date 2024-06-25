@@ -1,6 +1,7 @@
 package com.glaeriasmite.fantasy.bot.listeners;
 
 import com.glaeriasmite.fantasy.bot.commands.slashCommands.ButtonTest;
+import com.glaeriasmite.fantasy.bot.commands.slashCommands.CreateSignups;
 import com.glaeriasmite.fantasy.bot.commands.slashCommands.Edit;
 import com.glaeriasmite.fantasy.bot.commands.slashCommands.Embed;
 import com.glaeriasmite.fantasy.bot.commands.slashCommands.Ping;
@@ -48,6 +49,10 @@ public class SlashCommandListener extends BaseListener {
 
             case "edit":
                 handler.execute(new Edit(event));
+                break;
+
+            case "create-signups":
+                handler.execute(new CreateSignups(event));
                 break;
 
         }

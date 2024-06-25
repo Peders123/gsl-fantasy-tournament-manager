@@ -1,8 +1,10 @@
 package com.glaeriasmite.fantasy.bot.listeners;
 
+import com.glaeriasmite.fantasy.bot.commands.slashCommands.CreateSignups;
 import com.glaeriasmite.fantasy.bot.commands.slashCommands.Edit;
 import com.glaeriasmite.fantasy.bot.handlers.Handler;
 
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 public class ButtonListener extends BaseListener {
@@ -16,8 +18,6 @@ public class ButtonListener extends BaseListener {
 
         String[] id = event.getComponentId().split(":");
         String type = id[1];
-
-        event.deferEdit().queue();
 
         switch (type) {
 
@@ -35,6 +35,18 @@ public class ButtonListener extends BaseListener {
 
             case "delete":
                 this.delete(event);
+                break;
+
+            case "player-signup":
+                this.signup(event, false);
+                break;
+
+            case "captain-signup":
+                this.signup(event, true);
+                break;
+
+            case "players":
+                this.notImplemented(event.getChannel());
                 break;
 
         }
@@ -69,6 +81,37 @@ public class ButtonListener extends BaseListener {
         } catch (Exception e) {
             System.out.println("ERROR");
             System.out.println(e);
+        }
+
+    }
+
+    private void signup(ButtonInteractionEvent event, boolean captain) {
+
+        try {
+            this.handler.executeMethod(
+                new CreateSignups(null),
+                "createModal",
+                event,
+                captain
+            );
+        } catch (Exception e) {
+            System.out.println("ERROR");
+            e.printStackTrace();
+        }
+
+    }
+
+    private void notImplemented(MessageChannel channel) {
+
+        try {
+            this.handler.executeMethod(
+                new CreateSignups(null),
+                "sendTestMessage",
+                channel
+            );
+        } catch (Exception e) {
+            System.out.println("ERROR");
+            e.printStackTrace();
         }
 
     }

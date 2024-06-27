@@ -6,10 +6,14 @@ import com.glaeriasmite.fantasy.bot.commands.Context;
 import com.glaeriasmite.fantasy.bot.commands.ExtendedCommand;
 import com.glaeriasmite.fantasy.bot.handlers.Action;
 import com.glaeriasmite.fantasy.bot.handlers.Components;
+import com.glaeriasmite.fantasy.bot.signup.CaptainSignupData;
+import com.glaeriasmite.fantasy.bot.signup.PlayerSignupData;
+import com.glaeriasmite.fantasy.bot.signup.SignupData;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -64,9 +68,18 @@ public class CreateSignups extends ExtendedCommand {
 
     }
 
+    // RENAME TO BE MORE DESCRIPTIVE OF THE FULL FUNCTION
     protected void createModal(Context context, ButtonInteractionEvent buttonEvent, Boolean captain) {
 
-        String modalId = captain ? "captain-signup" : "player-signup";
+        if (captain) {
+            context.putUserSignupData(buttonEvent.getUser().getId(), new CaptainSignupData(this), CaptainSignupData.class);
+        } else {
+            context.putUserSignupData(buttonEvent.getUser().getId(), new CaptainSignupData(this), PlayerSignupData.class);
+        }
+
+        String modalId = buttonEvent.getUser().getId() + ":signup-modal";
+
+        modalId += captain ? ":captain-signup" : ":player-signup";
         String title = captain ? "Captain Signup" : "Player signup";
         TextInput[] inputs = new TextInput[2];
 
@@ -96,6 +109,23 @@ public class CreateSignups extends ExtendedCommand {
         Modal modal = Action.createModal(modalId, title, inputs);
         FluentRestAction<Void, ModalCallbackAction> action = Action.replyWithModal(buttonEvent, modal);
         this.queue(action);
+
+    }
+
+    protected void submitModal(Context context, ModalInteractionEvent modalEvent) {
+
+        String[] id = modalEvent.getId().split(":");
+        SignupData data;
+
+        if (id[2] == "captain-signup") {
+            data = context.getUserSignupData(modalEvent.getUser().getId(), CaptainSignupData.class);
+            CaptainSignupData.class.cast(data).setReason(modalEvent.getValue("reason").getAsString());
+        } else if (id[2] == "player-signup") {
+            data = context.getUserSignupData(modalEvent.getUser().getId(), PlayerSignupData.class);
+            PlayerSignupData.class.cast(data).setSmiteGuru(modalEvent.getValue("guru").getAsString());
+        }
+
+        modalEvent.reply("TEST MESSAGE").setEphemeral(true).queue();
 
     }
 

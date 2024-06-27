@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.modals.Modal;
 import net.dv8tion.jda.api.requests.FluentRestAction;
@@ -28,7 +29,7 @@ public class Action {
 
     }
 
-    public static FluentRestAction<InteractionHook, ReplyCallbackAction> replyWithMessage(SlashCommandInteractionEvent event, String message) {
+    public static FluentRestAction<InteractionHook, ReplyCallbackAction> replyWithMessage(IReplyCallback event, String message) {
 
         return event.reply(message);
 

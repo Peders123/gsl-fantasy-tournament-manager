@@ -1,9 +1,10 @@
 package com.glaeriasmite.fantasy.bot.listeners;
 
 import com.glaeriasmite.fantasy.bot.Role;
-import com.glaeriasmite.fantasy.bot.SignupData;
-import com.glaeriasmite.fantasy.bot.commands.slashCommands.Signup;
+import com.glaeriasmite.fantasy.bot.commands.slashCommands.CreateSignups;
 import com.glaeriasmite.fantasy.bot.handlers.Handler;
+import com.glaeriasmite.fantasy.bot.signup.PlayerSignupData;
+import com.glaeriasmite.fantasy.bot.signup.SignupData;
 
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 
@@ -19,13 +20,13 @@ public class StringSelectListener extends BaseListener {
         String id = event.getComponentId();
         String userId = event.getUser().getId();
         String result = event.getValues().get(0);
-        Signup signUpSession = this.handler.getContext().getUserSignupData(userId).getSignUpSession();
-        SignupData data = this.handler.getContext().getUserSignupData(userId);
+        CreateSignups signUpSession = this.handler.getContext().getUserSignupData(userId, PlayerSignupData.class).getSignupRoot();
+        SignupData data = this.handler.getContext().getUserSignupData(userId, PlayerSignupData.class);
 
         switch (id) {
 
             case "role1":
-                this.handler.getContext().getUserSignupData(userId).setRole1(Role.valueOf(result));
+                data.setRole1(Role.valueOf(result));
                 try {
                     this.handler.executeMethod(
                         signUpSession,

@@ -3,7 +3,6 @@ package com.glaeriasmite.fantasy.bot.commands.slashCommands;
 import java.lang.reflect.Method;
 
 import com.glaeriasmite.fantasy.bot.Role;
-import com.glaeriasmite.fantasy.bot.SignupData;
 import com.glaeriasmite.fantasy.bot.commands.Command;
 import com.glaeriasmite.fantasy.bot.commands.Context;
 import com.glaeriasmite.fantasy.bot.handlers.Action;
@@ -29,7 +28,7 @@ public class Signup implements Command {
     @Override
     public void execute(Context context) {
 
-        SignupData data = new SignupData(this);
+        /* SignupData data = new SignupData(this);
 
         data.setRole1(Role.ADC);
         data.setRole2(Role.SUPPORT);
@@ -44,7 +43,7 @@ public class Signup implements Command {
 
         Components.addActionRowReply(action, selection);
 
-        this.queue(action);
+        this.queue(action); */
  
     }
 

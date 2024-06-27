@@ -52,6 +52,7 @@ public class App {
         Handler handler = new Handler();
         jda.addEventListener(new ButtonListener(handler));
         jda.addEventListener(new MessageListener(handler));
+        jda.addEventListener(new ModalListener(handler));
         jda.addEventListener(new SlashCommandListener(handler));
         jda.addEventListener(new StringSelectListener(handler));
 

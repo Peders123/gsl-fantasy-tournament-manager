@@ -1,7 +1,6 @@
 package com.glaeriasmite.fantasy.bot.listeners;
 
 import com.glaeriasmite.fantasy.bot.handlers.Handler;
-import com.glaeriasmite.fantasy.bot.signup.CaptainSignupData;
 
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 
@@ -15,7 +14,6 @@ public class ModalListener extends BaseListener {
     public void onModalInteraction(ModalInteractionEvent event) {
 
         String[] id = event.getModalId().split(":");
-        String userId = id[0];
         String type = id[1];
 
         switch (type) {
@@ -25,24 +23,24 @@ public class ModalListener extends BaseListener {
                 if (id[2] == "captain-signup") {
                     try {
                         this.handler.executeMethod(
-                            this.handler.getContext().getUserSignupData(userId, CaptainSignupData.class).getSignupRoot(),
+                            this.handler.getContext().getSignupRoot(),
                             "submitModal",
                             event
                         );
                     } catch (Exception e) {
                         System.out.println("ERROR");
-                        System.out.println(e);
+                        e.printStackTrace();
                     }
                 } else {
                     try {
                         this.handler.executeMethod(
-                            this.handler.getContext().getUserSignupData(userId, CaptainSignupData.class).getSignupRoot(),
+                            this.handler.getContext().getSignupRoot(),
                             "submitModal",
                             event
                         );
                     } catch (Exception e) {
                         System.out.println("ERROR");
-                        System.out.println(e);
+                        e.printStackTrace();
                     }
                 }
                 break;

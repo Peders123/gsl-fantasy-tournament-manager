@@ -19,6 +19,9 @@ public abstract class SignupData {
 
     protected SignupData(CreateSignups currentSession) {
 
+        System.out.println("CREATING");
+        System.out.println(currentSession);
+
         this.signupRoot = currentSession;
 
         this.ign = null;
@@ -68,7 +71,7 @@ public abstract class SignupData {
     @Override
     public String toString() {
 
-        String str = this.role1.name() + " " + this.role2.name();
+        String str = this.signupRoot.toString();
 
         return str;
 

@@ -31,7 +31,13 @@ public class Action {
 
     public static FluentRestAction<InteractionHook, ReplyCallbackAction> replyWithMessage(IReplyCallback event, String message) {
 
-        return event.reply(message);
+        return Action.replyWithMessage(event, message, false);
+
+    }
+
+    public static FluentRestAction<InteractionHook, ReplyCallbackAction> replyWithMessage(IReplyCallback event, String message, boolean ephemeral) {
+
+        return event.reply(message).setEphemeral(ephemeral);
 
     }
 

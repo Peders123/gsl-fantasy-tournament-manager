@@ -89,7 +89,7 @@ public class ButtonListener extends BaseListener {
 
         try {
             this.handler.executeMethod(
-                new CreateSignups(null),
+                this.handler.getContext().getSignupRoot(),
                 "createModal",
                 event,
                 captain

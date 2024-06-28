@@ -2,6 +2,7 @@ package com.glaeriasmite.fantasy.bot.commands.slashCommands;
 
 import java.awt.Color;
 
+import com.glaeriasmite.fantasy.bot.Role;
 import com.glaeriasmite.fantasy.bot.commands.Context;
 import com.glaeriasmite.fantasy.bot.commands.ExtendedCommand;
 import com.glaeriasmite.fantasy.bot.handlers.Action;
@@ -16,8 +17,11 @@ import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
@@ -26,14 +30,19 @@ import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ModalCallbackAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
+import net.dv8tion.jda.internal.requests.restaction.MessageCreateActionImpl;
 
 public class CreateSignups extends ExtendedCommand {
 
     private SlashCommandInteractionEvent event;
+    private String signupRootId;
+    private String recentMessageId;
 
     public CreateSignups(SlashCommandInteractionEvent event) {
 
         this.event = event;
+        this.signupRootId = "TESTING ROOT ID";
+        this.recentMessageId = null;
 
     }
 
@@ -44,12 +53,13 @@ public class CreateSignups extends ExtendedCommand {
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("Embed testing command");
-        embed.setDescription("GLAERIA SMITE LEAGUE FANTASY TOURNAMENT\n @peders");
+        embed.setDescription("TANUKI SMITE LEAGUE FANTASY TOURNAMENT\n <@365588450881306630>");
         embed.setColor(new Color(28, 19, 31, 255));
         embed.setFooter("August 10th");
 
         FluentRestAction<InteractionHook, ReplyCallbackAction> response = Action.replyWithMessage(event, "Created!");
         FluentRestAction<Message, MessageCreateAction> action = Action.sendMessageWithEmbed(channel, embed.build());
+
         action = Components.addActionRowMessage(action,
             Button.primary(event.getUser().getId() + ":player-signup", "Signup"),
             Button.primary(event.getUser().getId() + ":captain-signup", "Signup (Captain)"),
@@ -58,23 +68,41 @@ public class CreateSignups extends ExtendedCommand {
 
         this.queue(response);
         this.queue(action);
+
+        context.setSignupRoot(this);
  
     }
 
     @Override
     public <R> void queue(FluentRestAction<R, ?> request) {
 
-        request.queue();
+        if (request instanceof MessageCreateActionImpl) {
+            request.queue((R message) -> {
+                if (message instanceof Message) {
+                    String msgId = ((Message) message).getId();
+                    if (this.recentMessageId == null) {
+                        this.signupRootId = msgId;
+                    }
+                    this.recentMessageId = msgId;
+                }
+            });
+        } else {
+            request.queue();
+        }
 
     }
 
     // RENAME TO BE MORE DESCRIPTIVE OF THE FULL FUNCTION
     protected void createModal(Context context, ButtonInteractionEvent buttonEvent, Boolean captain) {
 
+        System.out.println("BUTTON ID: " + buttonEvent.getUser().getId());
+
+        System.out.println(this.signupRootId);
+
         if (captain) {
             context.putUserSignupData(buttonEvent.getUser().getId(), new CaptainSignupData(this), CaptainSignupData.class);
         } else {
-            context.putUserSignupData(buttonEvent.getUser().getId(), new CaptainSignupData(this), PlayerSignupData.class);
+            context.putUserSignupData(buttonEvent.getUser().getId(), new PlayerSignupData(this), PlayerSignupData.class);
         }
 
         String modalId = buttonEvent.getUser().getId() + ":signup-modal";
@@ -83,7 +111,7 @@ public class CreateSignups extends ExtendedCommand {
         String title = captain ? "Captain Signup" : "Player signup";
         TextInput[] inputs = new TextInput[2];
 
-        inputs[0] = TextInput.create("username", "Smite IGN", TextInputStyle.SHORT)
+        inputs[0] = TextInput.create("ign", "Smite IGN", TextInputStyle.SHORT)
                 .setPlaceholder("Peders")
                 .setMinLength(4)
                 .setMaxLength(15)
@@ -114,18 +142,54 @@ public class CreateSignups extends ExtendedCommand {
 
     protected void submitModal(Context context, ModalInteractionEvent modalEvent) {
 
-        String[] id = modalEvent.getId().split(":");
-        SignupData data;
+        String[] id = modalEvent.getModalId().split(":");
 
-        if (id[2] == "captain-signup") {
-            data = context.getUserSignupData(modalEvent.getUser().getId(), CaptainSignupData.class);
-            CaptainSignupData.class.cast(data).setReason(modalEvent.getValue("reason").getAsString());
-        } else if (id[2] == "player-signup") {
-            data = context.getUserSignupData(modalEvent.getUser().getId(), PlayerSignupData.class);
-            PlayerSignupData.class.cast(data).setSmiteGuru(modalEvent.getValue("guru").getAsString());
+        for (String i : id) {
+            System.out.println(i);
         }
 
-        modalEvent.reply("TEST MESSAGE").setEphemeral(true).queue();
+        SignupData data = null;
+
+        if (id[2].equals("captain-signup")) {
+
+            data = context.getUserSignupData(modalEvent.getUser().getId(), CaptainSignupData.class);
+            CaptainSignupData.class.cast(data).setReason(modalEvent.getValue("reason").getAsString());
+
+            FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(modalEvent, "SUBMITTED", true);
+            this.queue(action);
+
+        } else if (id[2].equals("player-signup")) {
+
+            data = context.getUserSignupData(modalEvent.getUser().getId(), PlayerSignupData.class);
+            PlayerSignupData.class.cast(data).setSmiteGuru(modalEvent.getValue("guru").getAsString());
+
+            SelectOption[] options = Components.createSelectOptions("role1");
+            StringSelectMenu selection = Components.createSelectMenu("role1", options);
+            FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(modalEvent, "TESTING", true);
+            Components.addActionRowReply(action, selection);
+    
+            this.queue(action);
+
+        }
+
+        data.setIGN(modalEvent.getValue("ign").getAsString());
+
+    }
+
+    protected void submitFirstRole(Context context, StringSelectInteractionEvent selectEvent) {
+
+        SignupData data = context.getUserSignupData(selectEvent.getUser().getId(), PlayerSignupData.class);
+        data.setRole1(Role.valueOf(selectEvent.getValues().get(0)));
+
+        FluentRestAction<Message, MessageCreateAction> action = MessageCreateAction.class.cast(Action.sendMessage(selectEvent.getMessageChannel(), "Hello World!")).setMessageReference(this.signupRootId);
+        this.queue(action);
+
+    }
+
+    protected void submitSecondRole(Context context, StringSelectInteractionEvent selectEvent) {
+
+        SignupData data = context.getUserSignupData(selectEvent.getUser().getId(), PlayerSignupData.class);
+        data.setRole2(Role.valueOf(selectEvent.getValues().get(0)));
 
     }
 
@@ -139,6 +203,12 @@ public class CreateSignups extends ExtendedCommand {
         } catch (Exception e) {
             System.out.println(e);
         }
+
+    }
+
+    public String toString() {
+
+        return this.signupRootId;
 
     }
 

@@ -13,6 +13,7 @@ import com.glaeriasmite.fantasy.bot.signup.SignupData;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -172,6 +173,8 @@ public class CreateSignups extends ExtendedCommand {
 
         }
 
+        data.setId(modalEvent.getUser().getId());
+        data.setDiscord(modalEvent.getUser().getName());
         data.setIGN(modalEvent.getValue("ign").getAsString());
 
     }
@@ -182,6 +185,21 @@ public class CreateSignups extends ExtendedCommand {
         data.setRole1(Role.valueOf(selectEvent.getValues().get(0)));
 
         FluentRestAction<Message, MessageCreateAction> action = MessageCreateAction.class.cast(Action.sendMessage(selectEvent.getMessageChannel(), "Hello World!")).setMessageReference(this.signupRootId);
+        StringSelectMenu selection = Components.createSelectMenu("role2", Components.createSelectOptions("role2"));
+        Components.addActionRowMessage(action, selection);
+
+        selectEvent.deferReply(true).queue(
+            hook -> {
+                hook.deleteOriginal().queue(
+                    success -> {
+                        selectEvent.getMessage().delete().queue();
+                    },
+                    error -> System.out.println("ERROR HANDLING")
+                );
+            },
+            error -> System.out.println("OUT ERROR HANDLING")
+        );
+
         this.queue(action);
 
     }
@@ -190,6 +208,30 @@ public class CreateSignups extends ExtendedCommand {
 
         SignupData data = context.getUserSignupData(selectEvent.getUser().getId(), PlayerSignupData.class);
         data.setRole2(Role.valueOf(selectEvent.getValues().get(0)));
+
+        this.submitData(context, selectEvent.getUser().getId());
+
+        selectEvent.deferReply(true).queue(
+            hook -> {
+                hook.deleteOriginal().queue(
+                    success -> {
+                        selectEvent.getMessage().delete().queue();
+                    },
+                    error -> System.out.println("ERROR HANDLING")
+                );
+            },
+            error -> System.out.println("OUT ERROR HANDLING")
+        );
+
+    }
+
+    private void submitData(Context context, String userId) {
+
+        SignupData data = context.getUserSignupData(userId, PlayerSignupData.class);
+        MessageEmbed embed = data.toEmbed();
+        FluentRestAction<Message, MessageCreateAction> action = Action.sendMessageWithEmbed(this.event.getMessageChannel(), embed);
+
+        this.queue(action);
 
     }
 

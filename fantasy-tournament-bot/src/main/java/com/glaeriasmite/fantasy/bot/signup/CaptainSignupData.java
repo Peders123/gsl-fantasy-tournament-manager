@@ -1,6 +1,11 @@
 package com.glaeriasmite.fantasy.bot.signup;
 
+import java.awt.Color;
+
 import com.glaeriasmite.fantasy.bot.commands.slashCommands.CreateSignups;
+
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 
 public class CaptainSignupData extends SignupData {
 
@@ -23,8 +28,16 @@ public class CaptainSignupData extends SignupData {
     }
 
     @Override
-    public void customMethod() {
-        System.out.println("CaptainSignupData specific method");
+    public MessageEmbed toEmbed() {
+        
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setTitle("Embed testing command");
+        embed.setDescription("GLAERIA SMITE LEAGUE FANTASY TOURNAMENT\n @peders");
+        embed.setColor(new Color(28, 19, 31, 255));
+        embed.setFooter("June 14th");
+
+        return embed.build();
+
     }
 
 }

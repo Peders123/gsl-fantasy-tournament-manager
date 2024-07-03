@@ -3,10 +3,13 @@ package com.glaeriasmite.fantasy.bot.signup;
 import com.glaeriasmite.fantasy.bot.Role;
 import com.glaeriasmite.fantasy.bot.commands.slashCommands.CreateSignups;
 
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;
 
 public abstract class SignupData {
 
+    protected String id;
+    protected String discord;
     protected String ign;
     protected Role role1;
     protected Role role2;
@@ -28,6 +31,22 @@ public abstract class SignupData {
         this.role1 = null;
         this.role2 = null;
 
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getDiscord() {
+        return this.discord;
+    }
+
+    public void setDiscord(String discord) {
+        this.discord = discord;
     }
 
     public String getIGN() {
@@ -66,7 +85,7 @@ public abstract class SignupData {
         this.signupSession = signupSession;
     }
 
-    public abstract void customMethod();
+    public abstract MessageEmbed toEmbed();
     
     @Override
     public String toString() {

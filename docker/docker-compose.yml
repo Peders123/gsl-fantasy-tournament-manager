@@ -15,3 +15,5 @@ services:
       target: terra
     entrypoint: /data/terra/startTerra.sh
     image: terra:1.0
+    ports:
+      - "8000:8000"

@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.glaeriasmite.fantasy.bot.handlers.Handler;
+import com.glaeriasmite.fantasy.bot.listeners.*;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -47,7 +49,12 @@ public class App {
         JDA jda = build.enableIntents(GatewayIntent.MESSAGE_CONTENT)
             .build();
 
-        jda.addEventListener(new MessageListener()); 
+        Handler handler = new Handler();
+        jda.addEventListener(new ButtonListener(handler));
+        jda.addEventListener(new MessageListener(handler));
+        jda.addEventListener(new ModalListener(handler));
+        jda.addEventListener(new SlashCommandListener(handler));
+        jda.addEventListener(new StringSelectListener(handler));
 
         CommandListUpdateAction commands = jda.updateCommands();
 

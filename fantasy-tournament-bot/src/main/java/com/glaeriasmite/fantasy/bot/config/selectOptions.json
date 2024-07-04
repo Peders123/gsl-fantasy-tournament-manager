@@ -3,35 +3,72 @@
         {
             "label": "Hunter",
             "value": "ADC",
-            "description": null,
+            "description": "The ADC role.",
             "isDefault": false,
             "emoji": "<:Hunter:846799331042525215>"
         },
         {
             "label": "Guardian",
             "value": "SUPPORT",
-            "description": null,
+            "description": "The support role.",
             "isDefault": false,
             "emoji": "<:Guardian:846799331549249586>"
         },
         {
             "label": "Mage",
             "value": "MID",
-            "description": null,
+            "description": "The mid role.",
             "isDefault": false,
             "emoji": "<:Mage:846799331490922516>"
         },
         {
             "label": "Assassin",
             "value": "JUNGLE",
-            "description": null,
+            "description": "The jungle role.",
             "isDefault": false,
             "emoji": "<:Assassin:846799331482664980>"
         },
         {
             "label": "Warrior",
             "value": "SOLO",
-            "description": null,
+            "description": "The solo role.",
+            "isDefault": false,
+            "emoji": "<:Warrior:846799331523690546>"
+        }
+    ],
+    "role2": [
+        {
+            "label": "Hunter",
+            "value": "ADC",
+            "description": "The ADC role.",
+            "isDefault": false,
+            "emoji": "<:Hunter:846799331042525215>"
+        },
+        {
+            "label": "Guardian",
+            "value": "SUPPORT",
+            "description": "The support role.",
+            "isDefault": false,
+            "emoji": "<:Guardian:846799331549249586>"
+        },
+        {
+            "label": "Mage",
+            "value": "MID",
+            "description": "The mid role.",
+            "isDefault": false,
+            "emoji": "<:Mage:846799331490922516>"
+        },
+        {
+            "label": "Assassin",
+            "value": "JUNGLE",
+            "description": "The jungle role.",
+            "isDefault": false,
+            "emoji": "<:Assassin:846799331482664980>"
+        },
+        {
+            "label": "Warrior",
+            "value": "SOLO",
+            "description": "The solo role.",
             "isDefault": false,
             "emoji": "<:Warrior:846799331523690546>"
         }

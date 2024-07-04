@@ -67,5 +67,19 @@
         ],
         "guildOnly": true,
         "adminOnly": false
+    },
+    {
+        "name": "edit",
+        "description": "Testing message edits.",
+        "options": [],
+        "guildOnly": false,
+        "adminOnly": false
+    },
+    {
+        "name": "create-signups",
+        "description": "Create signups using select menu.",
+        "options": [],
+        "guildOnly": true,
+        "adminOnly": true
     }
 ]

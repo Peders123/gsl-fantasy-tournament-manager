@@ -3,19 +3,16 @@ package com.glaeriasmite.fantasy.bot.commands.slashCommands;
 import java.lang.reflect.Method;
 
 import com.glaeriasmite.fantasy.bot.Role;
-import com.glaeriasmite.fantasy.bot.SignupData;
 import com.glaeriasmite.fantasy.bot.commands.Command;
 import com.glaeriasmite.fantasy.bot.commands.Context;
 import com.glaeriasmite.fantasy.bot.handlers.Action;
 import com.glaeriasmite.fantasy.bot.handlers.Components;
 
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.requests.FluentRestAction;
-import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
 public class Signup implements Command {
@@ -31,7 +28,7 @@ public class Signup implements Command {
     @Override
     public void execute(Context context) {
 
-        SignupData data = new SignupData(this);
+        /* SignupData data = new SignupData(this);
 
         data.setRole1(Role.ADC);
         data.setRole2(Role.SUPPORT);
@@ -44,9 +41,9 @@ public class Signup implements Command {
 
         FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, "TESTING");
 
-        Action.addActionRow(action, selection);
+        Components.addActionRowReply(action, selection);
 
-        this.queue(action);
+        this.queue(action); */
  
     }
 

@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import com.glaeriasmite.fantasy.bot.commands.Command;
 import com.glaeriasmite.fantasy.bot.commands.Context;
 import com.glaeriasmite.fantasy.bot.handlers.Action;
+import com.glaeriasmite.fantasy.bot.handlers.Components;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -36,7 +37,7 @@ public class Embed implements Command {
         embed.setFooter("June 14th");
 
         FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithEmbeds(event, embed.build());
-        action = Action.addActionRow(action,  Button.secondary(event.getUser().getId() + ":test", "TESTING"));
+        action = Components.addActionRowReply(action,  Button.secondary(event.getUser().getId() + ":test", "TESTING"));
 
         this.queue(action);
 

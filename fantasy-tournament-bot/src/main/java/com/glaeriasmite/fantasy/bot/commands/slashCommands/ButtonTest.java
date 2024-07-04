@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import com.glaeriasmite.fantasy.bot.commands.Command;
 import com.glaeriasmite.fantasy.bot.commands.Context;
 import com.glaeriasmite.fantasy.bot.handlers.Action;
+import com.glaeriasmite.fantasy.bot.handlers.Components;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -25,13 +26,9 @@ public class ButtonTest implements Command {
     @Override
     public void execute(Context context) {
 
-        event.getMessageChannel();
-
-        System.out.println("Hello World");
-
         FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, "Testing Buttons");
 
-        action = Action.addActionRow((ReplyCallbackAction)action,
+        action = Components.addActionRowReply((ReplyCallbackAction)action,
             Button.secondary(event.getUser().getId() + ":test", "TESTING"),
             Button.danger(event.getUser().getId() + ":bad", "BAD")
         );

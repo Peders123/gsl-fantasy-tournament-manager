@@ -2,13 +2,11 @@ FROM maven:3.9.8-eclipse-temurin-22 AS java-builder
 
 WORKDIR /data
 
-# Copy the source code and configuration files
 COPY fantasy-tournament-bot /data/janus/fantasy-tournament-bot
 COPY config.json /data/janus/config.json
 
 WORKDIR /data/janus/fantasy-tournament-bot
 
-# Build the project using Maven
 RUN mvn clean package
 
 
@@ -27,20 +25,14 @@ COPY gsl_fantasy_tournament/python-requirements.txt .
 RUN pip install -r python-requirements.txt
 
 
-# Use a smaller image for the runtime
 FROM eclipse-temurin:22-jre as janus
 
 WORKDIR /data/janus/fantasy-tournament-bot
 
-# Copy the built JAR file from the java-builder stage
 COPY --from=java-builder /data/janus/fantasy-tournament-bot/target/fantasy-tournament-bot-1.0-SNAPSHOT.jar .
-
-# Copy the configuration file
 COPY --from=java-builder /data/janus/config.json ../
-
 COPY fantasy-tournament-bot/src /data/janus/fantasy-tournament-bot/src
 
-# Run the application
 ENTRYPOINT ["java", "-cp", "fantasy-tournament-bot-1.0-SNAPSHOT.jar", "com.glaeriasmite.fantasy.bot.App"]
 
 

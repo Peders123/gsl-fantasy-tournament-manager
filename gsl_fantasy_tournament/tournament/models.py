@@ -1,9 +1,8 @@
 from django.db import models
 
-
-
-
 from datetime import datetime
+
+
 class Tournament(models.Model):
 
     tournament_id = models.IntegerField(primary_key=True)

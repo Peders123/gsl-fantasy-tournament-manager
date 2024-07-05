@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  janus:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+      target: janus
+    image: janus:1.0
+
+  terra:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+      target: terra
+    entrypoint: /data/terra/startTerra.sh
+    image: terra:1.0
+    ports:
+      - "8000:8000"

@@ -97,8 +97,6 @@ DATABASES = {
     }
 }
 
-DATABASE_ROUTERS = ['mercury.routers.EnvironmentRouter']
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

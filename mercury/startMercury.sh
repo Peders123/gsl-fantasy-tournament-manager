@@ -12,12 +12,12 @@ if [ $BUILD_TYPE = "dev" ]; then
     echo "RUNNING DEV"
     python3 manage.py populate_database
     expect -c "
-    spawn python manage.py createsuperuser --database=dev --username=Peders --email=admin@example.com
-    expect \"Password:\"
-    send \"Pa55we1rd\r\"
-    expect \"Password (again):\"
-    send \"Pa55we1rd\r\"
-    expect eof
+        spawn python manage.py createsuperuser --database=dev --username=Peders --email=admin@example.com
+        expect \"Password:\"
+        send \"Pa55we1rd\r\"
+        expect \"Password (again):\"
+        send \"Pa55we1rd\r\"
+        expect eof
     "
 fi
 

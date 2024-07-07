@@ -1,3 +1,6 @@
+"""
+Defines the serializers for all models defined in Talaria.
+"""
 import os
 
 from rest_framework import serializers
@@ -53,7 +56,7 @@ class UserSerializer(serializers.ModelSerializer):
 class CaptainGetSerializer(serializers.ModelSerializer):
 
     class Meta:
-        
+
         model = Captain
         fields = ['captain_id', 'user_id', 'team_name', 'reason', 'captain_budget']
 
@@ -81,7 +84,8 @@ class PlayerGetSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Player
-        fields = ['player_id', 'tournament_id', 'user_id', 'captain_id', 'role_1', 'role_2', 'smite_guru']
+        fields = ['player_id', 'tournament_id', 'user_id', 'captain_id', 'role_1', 'role_2',
+                  'smite_guru']
 
 
 class PlayerPostSerializer(serializers.ModelSerializer):

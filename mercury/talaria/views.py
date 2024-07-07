@@ -13,7 +13,7 @@ from .serializers import (
 class TournamentViewSet(viewsets.ModelViewSet):
 
     queryset = Tournament.objects.using(os.environ['BUILD_TYPE']).all()
-    
+
     def get_serializer_class(self):
         if self.action == 'create':
             return TournamentPostSerializer
@@ -39,7 +39,7 @@ class CaptainViewSet(viewsets.ModelViewSet):
 class PlayerViewSet(viewsets.ModelViewSet):
 
     queryset = Player.objects.using(os.environ['BUILD_TYPE']).all()
-    
+
     def get_serializer_class(self):
         if self.action == 'create':
             return PlayerPostSerializer

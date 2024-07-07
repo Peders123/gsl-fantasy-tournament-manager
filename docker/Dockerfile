@@ -58,6 +58,9 @@ FROM python:3.12-slim-bookworm as mercury
 
 RUN mkdir -p /data/mercury
 
+RUN apt-get update
+RUN apt-get install -y expect
+
 COPY --from=python-builder /opt/venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"

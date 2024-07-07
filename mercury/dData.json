@@ -1,0 +1,241 @@
+[
+    {
+        "model": "talaria.User",
+        "fields": {
+          "user_id": 1,
+          "discord_name": "revilokid",
+          "smite_name": "revilokid"
+        }
+    },
+    {
+        "model": "talaria.User",
+        "fields": {
+          "user_id": 2,
+          "discord_name": "AwesomeGamer",
+          "smite_name": "SmitePro9000"
+        }
+    },
+    {
+        "model": "talaria.User",
+        "fields": {
+          "user_id": 3,
+          "discord_name": "LuckyLlama",
+          "smite_name": "Lucky_Llama_88"
+        }
+    },
+    {
+        "model": "talaria.User",
+        "fields": {
+          "user_id": 4,
+          "discord_name": "SneakySnake",
+          "smite_name": "HissingDanger"
+        }
+    },
+    {
+        "model": "talaria.User",
+        "fields": {
+          "user_id": 5,
+          "discord_name": "KeyboardWarrior",
+          "smite_name": "ButtonMasher"
+        }
+    },
+    {
+        "model": "talaria.User",
+        "fields": {
+          "user_id": 6,
+          "discord_name": "ChillChampion",
+          "smite_name": "Relaxed_Reigns"
+        }
+    },
+    {
+        "model": "talaria.User",
+        "fields": {
+          "user_id": 7,
+          "discord_name": "MemeMaster",
+          "smite_name": "TheJokester"
+        }
+    },
+    {
+        "model": "talaria.User",
+        "fields": {
+          "user_id": 8,
+          "discord_name": "CoffeeClutch",
+          "smite_name": "Energized_Eagle"
+        }
+    },
+    {
+        "model": "talaria.User",
+        "fields": {
+          "user_id": 9,
+          "discord_name": "NightHawk",
+          "smite_name": "Nocturnal_Nightmare"
+        }
+    },
+    {
+        "model": "talaria.Tournament",
+        "fields": {
+            "tournament_id": 12,
+            "title":"pohl smite league"
+       }
+    },
+    {
+        "model": "talaria.Tournament",
+        "fields": {
+          "tournament_id": 1,
+          "title": "Jordan Smite League"
+        }
+    },
+    {
+        "model": "talaria.Tournament",
+        "fields": {
+          "tournament_id": 2,
+          "title": "Jackson Smite League"
+        }
+    },
+    {
+        "model": "talaria.Tournament",
+        "fields": {
+          "tournament_id": 3,
+          "title": "Williams Smite League"
+        }
+    },
+    {
+        "model": "talaria.Tournament",
+        "fields": {
+          "tournament_id": 4,
+          "title": "Ali Smite League"
+        }
+    },
+    {
+        "model": "talaria.Tournament",
+        "fields": {
+          "tournament_id": 5,
+          "title": "Einstein Smite League"
+        }
+    },
+    {
+        "model": "talaria.Tournament",
+        "fields": {
+          "tournament_id": 6,
+          "title": "Curie Smite League"
+        }
+    },
+    {
+        "model": "talaria.Tournament",
+        "fields": {
+          "tournament_id": 7,
+          "title": "Tesla Smite League"
+        }
+    },
+    {
+        "model": "talaria.Tournament",
+        "fields": {
+          "tournament_id": 8,
+          "title": "Hawking Smite League"
+        }
+    },
+    {
+        "model": "talaria.Tournament",
+        "fields": {
+          "tournament_id": 9,
+          "title": "Newton Smite League"
+        }
+    },
+    {
+        "model": "talaria.Tournament",
+        "fields": {
+          "tournament_id": 10,
+          "title": "Darwin Smite League"
+        }
+    },
+    {
+        "model": "talaria.Tournament",
+        "fields": {
+          "tournament_id": 11,
+          "description" : "Title subject to change after recent circumstances"  
+        }
+    },
+    {
+        "model": "talaria.Captain",
+        "fields": {
+          "captain_id": 1,
+          "user_id": 1,
+          "team_name": "The Kintes",
+          "captain_budget": 5000
+        }
+    },
+    {
+        "model": "talaria.Captain",
+        "fields": {
+          "captain_id": 2,
+          "user_id": 2,
+          "team_name": "Cleopatra's Cobras",
+          "captain_budget": 4800
+        }
+    },
+    {
+        "model": "talaria.Captain",
+        "fields": {
+          "captain_id": 3,
+          "user_id": 3,
+          "team_name": "The Dream Weavers",
+          "captain_budget": 4500
+        }
+    },
+    {
+        "model": "talaria.Captain",
+        "fields": {
+          "captain_id": 4,
+          "user_id": 4,
+          "team_name": "The Freedom Fighters",
+          "captain_budget": 4200
+        }
+    },
+    {
+        "model": "talaria.Player",
+        "fields": {
+          "player_id": 1,
+          "tournament_id": 3, 
+          "captain_id":4,
+          "user_id": 5,
+          "estimated_value": 850
+        }
+    },
+    {
+        "model": "talaria.Player",
+        "fields": {
+          "player_id": 2,
+          "tournament_id": 7,  
+          "user_id": 6,
+          "estimated_value": 720
+        }
+    },
+    {
+        "model": "talaria.Player",
+        "fields": {
+          "player_id": 3,
+          "tournament_id": 2,  
+          "user_id": 7,
+          "estimated_value": 600
+        }
+    },
+    {
+        "model": "talaria.Player",
+        "fields": {
+          "player_id": 4,
+          "tournament_id": 5,  
+          "user_id": 8,
+          "estimated_value": 500
+        }
+    },
+    {
+        "model": "talaria.Player",
+        "fields": {
+          "player_id": 5,
+          "tournament_id": 10, 
+          "captain_id":3,
+          "user_id": 9,
+          "estimated_value": 420
+        }
+    }
+]

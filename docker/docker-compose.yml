@@ -1,12 +1,6 @@
 version: '3.8'
 
 services:
-  janus:
-    build:
-      context: ../
-      dockerfile: docker/Dockerfile
-      target: janus
-    image: janus:1.0
 
   terra:
     build:
@@ -17,3 +11,20 @@ services:
     image: terra:1.0
     ports:
       - "8000:8000"
+
+  mercury:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+      target: mercury
+    entrypoint: /data/mercury/startMercury.sh
+    image: mercury:1.0
+    ports:
+      - "8001:8001"
+
+  janus:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+      target: janus
+    image: janus:1.0

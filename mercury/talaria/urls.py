@@ -1,7 +1,14 @@
-from django.urls import path
+from django.urls import include, path
 
-from . import views
+from rest_framework.routers import DefaultRouter
+from .views import TournamentViewSet, UserViewSet, CaptainViewSet, PlayerViewSet
+
+router = DefaultRouter()
+router.register('tournaments', TournamentViewSet)
+router.register('users', UserViewSet)
+router.register('captains', CaptainViewSet)
+router.register('players', PlayerViewSet)
 
 urlpatterns = [
-    path("users", views.index, name="index")
+    path('', include(router.urls))
 ]

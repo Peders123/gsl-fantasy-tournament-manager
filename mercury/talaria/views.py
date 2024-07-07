@@ -1,30 +1,46 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+import os
 
-from django.db import router
+from rest_framework import viewsets
+from .models import Tournament, User, Captain, Player
+from .serializers import (
+    TournamentGetSerializer, TournamentPostSerializer,
+    UserSerializer,
+    CaptainGetSerializer, CaptainPostSerializer,
+    PlayerGetSerializer, PlayerPostSerializer
+)
 
-from datetime import datetime
 
-from .models import Tournament, Player, User
-from .serializers import UserSerializer
+class TournamentViewSet(viewsets.ModelViewSet):
 
-from rest_framework import generics
+    queryset = Tournament.objects.using(os.environ['BUILD_TYPE']).all()
+    
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return TournamentPostSerializer
+        return TournamentGetSerializer
 
 
-class UserListView(generics.ListAPIView):
+class UserViewSet(viewsets.ModelViewSet):
 
-    queryset = User.objects.all()
+    queryset = User.objects.using(os.environ['BUILD_TYPE']).all()
     serializer_class = UserSerializer
 
 
-def index(request):
+class CaptainViewSet(viewsets.ModelViewSet):
 
-    t1 = Tournament()
-    t1.save(using='dev')
+    queryset = Captain.objects.using(os.environ['BUILD_TYPE']).all()
 
-    t2 = Tournament(title="TSL")
-    t2.save(using='default')
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CaptainPostSerializer
+        return CaptainGetSerializer
 
-    title = Tournament.objects.using('default').all()[0]
 
-    return HttpResponse(f"Hello World {title.title}")
+class PlayerViewSet(viewsets.ModelViewSet):
+
+    queryset = Player.objects.using(os.environ['BUILD_TYPE']).all()
+    
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return PlayerPostSerializer
+        return PlayerGetSerializer

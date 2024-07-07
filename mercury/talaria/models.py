@@ -39,7 +39,8 @@ class Captain(models.Model):
     captain_id = models.IntegerField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     team_name = models.CharField(max_length=32)
-    captain_budget = models.IntegerField()
+    reason = models.CharField(max_length=256)
+    captain_budget = models.IntegerField(default=0)
 
 
 class Player(models.Model):
@@ -51,4 +52,4 @@ class Player(models.Model):
     role_1 = models.CharField(max_length=16, default="Fill")
     role_2 = models.CharField(max_length=16, default="Fill")
     smite_guru = models.CharField(max_length=128)
-    estimated_value = models.IntegerField()
+    estimated_value = models.IntegerField(default=0)

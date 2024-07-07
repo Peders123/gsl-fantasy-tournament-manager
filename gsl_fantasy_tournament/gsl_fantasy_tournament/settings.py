@@ -32,8 +32,6 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
-    'rest_framework',
-    'rest_framework.authtoken',
     'home.apps.HomeConfig',
     'tournament.apps.TournamentConfig',
     'django.contrib.admin',

@@ -42,6 +42,8 @@ public class App {
         JsonNode jsonNode = objectMapper.readTree(new File("../config.json"));
         String token = jsonNode.get("discord_token").asText();
 
+        MercuryCommunicator communicator = new MercuryCommunicator("Peders", "Pedro123");
+
         JDABuilder build = JDABuilder.createDefault(token);
         build.setActivity(Activity.watching("playing Donkey Kong Country"));
         build.setStatus(OnlineStatus.ONLINE);

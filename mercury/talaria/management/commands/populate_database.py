@@ -11,7 +11,7 @@ from talaria.models import Tournament, User, Captain, Player
 class Command(BaseCommand):
     help = "Does some magical work"
 
-    def handle(self):
+    def handle(self, *args, **kwargs):
 
         db_alias = router.db_for_write(Tournament)
         Tournament.objects.using(db_alias).all().delete()

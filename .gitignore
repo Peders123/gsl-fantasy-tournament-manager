@@ -6,4 +6,7 @@ fantasy-tournament-bot/target/*
 
 config.json
 
-/.vscode
+.vscode
+.venv
+.pylintrc
+environment.sh

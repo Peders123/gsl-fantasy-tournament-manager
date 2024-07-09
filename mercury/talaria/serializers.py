@@ -25,7 +25,7 @@ class TournamentPostSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-        tournament = Tournament.objects.using(os.environ['BUILD_TYPE']).create(
+        tournament = Tournament.objects.create(
             date=validated_data['date'],
             time=validated_data['time'],
             title=validated_data['title'],
@@ -44,7 +44,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-        user = User.objects.using(os.environ['BUILD_TYPE']).create(
+        user = User.objects.create(
             user_id=validated_data['user_id'],
             discord_name=validated_data['discord_name'],
             smite_name=validated_data['smite_name']
@@ -70,7 +70,7 @@ class CaptainPostSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-        captain = Captain.objects.using(os.environ['BUILD_TYPE']).create(
+        captain = Captain.objects.create(
             user_id=validated_data['user_id'],
             team_name=validated_data['team_name'],
             reason=validated_data['reason']
@@ -97,7 +97,7 @@ class PlayerPostSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-        player = Player.objects.using(os.environ['BUILD_TYPE']).create(
+        player = Player.objects.create(
             tournament_id=validated_data['tournament_id'],
             user_id=validated_data['user_id'],
             captain_id=validated_data['captain_id'],

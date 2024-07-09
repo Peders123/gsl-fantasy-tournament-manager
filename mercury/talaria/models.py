@@ -22,10 +22,8 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         instance (_type_, optional): User that was created. Defaults to None.
         created (bool, optional): Whether or not the user was created. Defaults to False.
     """
-    print(sender)
-
     if created:
-        Token.objects.using(os.environ['BUILD_TYPE']).create(user=instance)
+        Token.objects.create(user=instance)
 
 
 class Tournament(models.Model):

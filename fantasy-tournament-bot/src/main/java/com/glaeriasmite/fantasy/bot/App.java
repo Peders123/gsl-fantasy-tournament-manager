@@ -2,6 +2,9 @@ package com.glaeriasmite.fantasy.bot;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,8 +44,6 @@ public class App {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(new File("../config.json"));
         String token = jsonNode.get("discord_token").asText();
-
-        MercuryCommunicator communicator = new MercuryCommunicator("Peders", "Pedro123");
 
         JDABuilder build = JDABuilder.createDefault(token);
         build.setActivity(Activity.watching("playing Donkey Kong Country"));
@@ -92,6 +93,14 @@ public class App {
         commands.queue();
 
         System.out.println("Commands created");
+
+        Dictionary<String, String> headers = new Hashtable<String, String>();
+        headers.put("User-Agent", "Mozilla/5.0");
+        headers.put("Authorization", "Token " + handler.getCommunicator().getToken());
+
+        JsonNode response = MercuryCommunicator.HttpGet(new URL("http://192.168.64.1:8001/api/users/"), headers);
+
+        System.out.println(response.toString());
 
     }
 

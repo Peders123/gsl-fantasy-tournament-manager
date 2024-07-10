@@ -21,7 +21,25 @@ public class MercuryCommunicator {
 
     public MercuryCommunicator(String username, String password) throws IOException {
 
-        System.out.println("HELLO WORLD");
+        Dictionary<String, String> headers = new Hashtable<String, String>();
+        headers.put("User-Agent", "Mozilla/5.0");
+        headers.put("Content-Type", "application/json");
+
+        HttpHandler tokenGrabber = new HttpHandler("http://192.168.64.1:8001/api-authentication/", "POST", headers);
+
+        Map<String, String> inputMap = new HashMap<>();
+        inputMap.put("username", username);
+        inputMap.put("password", password);
+
+        tokenGrabber.writeFromJson(inputMap);
+
+        JsonNode response = tokenGrabber.readToJson();
+
+        System.out.println(response.get("token").asText());
+
+        this.token = response.get("token").asText();
+
+        /* System.out.println("HELLO WORLD");
 
         URL url = new URL("http://192.168.64.1:8001/api-authentication/");
 
@@ -38,7 +56,7 @@ public class MercuryCommunicator {
 
         JsonNode response = MercuryCommunicator.HttpPost(url, headers, input);
 
-        this.token = response.get("token").asText();
+        this.token = response.get("token").asText(); */
 
         /*try {
             URL url = new URL("http://192.168.64.1:8001/api-authentication/");
@@ -96,6 +114,20 @@ public class MercuryCommunicator {
         } catch (Exception e) {
             e.printStackTrace();
         }*/
+
+    }
+
+    public JsonNode getUsers() throws IOException {
+
+        Dictionary<String, String> headers = new Hashtable<String, String>();
+        headers.put("User-Agent", "Mozilla/5.0");
+        headers.put("Authorization", "Token " + this.token);
+
+        HttpHandler userGetter = new HttpHandler("http://192.168.64.1:8001/api/users/", "GET", headers);
+
+        JsonNode response = userGetter.readToJson();
+
+        return response;
 
     }
 

@@ -98,8 +98,7 @@ public class App {
         headers.put("User-Agent", "Mozilla/5.0");
         headers.put("Authorization", "Token " + handler.getCommunicator().getToken());
 
-        JsonNode response = MercuryCommunicator.HttpGet(new URL("http://192.168.64.1:8001/api/users/"), headers);
-
+        JsonNode response = handler.getCommunicator().getUsers();
         System.out.println(response.toString());
 
     }

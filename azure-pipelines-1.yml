@@ -23,5 +23,5 @@ steps:
     azureSubscription: 'Azure subscription 1(2)(73d53848-bb3c-4d47-a43d-8ed52ad3956d)'
     azureContainerRegistry: '{"loginServer":"tanukismiteleague.azurecr.io", "id" : "/subscriptions/73d53848-bb3c-4d47-a43d-8ed52ad3956d/resourceGroups/Django/providers/Microsoft.ContainerRegistry/registries/TanukiSmiteLeague"}'
     dockerComposeFile: '**/docker/docker-compose.yml'
-    projectName: 'TSL'
+    projectName: 'tsl'
     action: 'Run a Docker Compose command'

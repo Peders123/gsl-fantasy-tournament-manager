@@ -25,4 +25,4 @@ steps:
     dockerComposeFile: '**/docker/docker-compose.yml'
     projectName: 'tsl'
     action: 'Run a Docker Compose command'
-    dockerComposeCommand: 'up --build --no-start'
+    dockerComposeCommand: 'up --build'

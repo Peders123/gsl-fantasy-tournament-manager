@@ -1,1 +1,1 @@
-export BUILD_TYPE= # set depending on deployment: either 'dev' or 'ops'
+export BUILD_TYPE= 'dev' # set depending on deployment: either 'dev' or 'ops'

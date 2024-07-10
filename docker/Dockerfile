@@ -32,8 +32,8 @@ RUN python -m venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-COPY python-requirements.txt .
-RUN pip install -r python-requirements.txt
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
 
 FROM python:3.12-slim-bookworm as terra

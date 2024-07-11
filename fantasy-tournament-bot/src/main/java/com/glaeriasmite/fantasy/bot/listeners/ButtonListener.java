@@ -1,5 +1,8 @@
 package com.glaeriasmite.fantasy.bot.listeners;
 
+import java.io.IOException;
+
+import com.fasterxml.jackson.databind.JsonNode;
 import com.glaeriasmite.fantasy.bot.commands.slashCommands.CreateSignups;
 import com.glaeriasmite.fantasy.bot.commands.slashCommands.Edit;
 import com.glaeriasmite.fantasy.bot.handlers.Handler;
@@ -86,6 +89,33 @@ public class ButtonListener extends BaseListener {
     }
 
     private void signup(ButtonInteractionEvent event, boolean captain) {
+
+        boolean exists = CreateSignups.checkUserExists(this.handler.getCommunicator(), Long.parseLong(event.getUser().getId()));
+
+        try {
+            JsonNode response = this.handler.getCommunicator().getUsers();
+            System.out.println(response.toString());
+        } catch (IOException e) {
+            System.out.println("HANDLE ERROR GET");
+            return;
+        }
+
+        if (exists == false) {
+            try {
+                this.handler.getCommunicator().postUser(Long.parseLong(event.getUser().getId()), event.getUser().getName());
+            } catch (IOException e) {
+                System.out.println("HANDLE ERROR");
+                return;
+            }
+        }
+
+        try {
+            JsonNode response = this.handler.getCommunicator().getUsers();
+            System.out.println(response.toString());
+        } catch (IOException e) {
+            System.out.println("HANDLE ERROR GET");
+            return;
+        }
 
         try {
             this.handler.executeMethod(

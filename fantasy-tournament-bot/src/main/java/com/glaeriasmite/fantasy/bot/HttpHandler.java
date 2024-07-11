@@ -34,7 +34,7 @@ public class HttpHandler {
 
     }
 
-    public void writeFromJson(Map<String, String> inputMap) throws IOException {
+    public void writeFromMap(Map<String, Object> inputMap) throws IOException {
 
         ObjectMapper mapper = new ObjectMapper();
         String input = mapper.writeValueAsString(inputMap);
@@ -45,6 +45,12 @@ public class HttpHandler {
             os.flush();
         }
         
+    }
+
+    public int getResponseCode() throws IOException {
+
+        return this.conn.getResponseCode();
+
     }
 
     public JsonNode readToJson() throws IOException {
@@ -68,6 +74,7 @@ public class HttpHandler {
             return unwrappedResponse;
 
         } else {
+
             BufferedReader errorInput = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
             String inputLine;
             StringBuilder errorResponse = new StringBuilder();

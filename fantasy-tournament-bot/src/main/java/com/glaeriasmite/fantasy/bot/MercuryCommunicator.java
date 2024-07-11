@@ -27,11 +27,11 @@ public class MercuryCommunicator {
 
         HttpHandler tokenGrabber = new HttpHandler("http://192.168.64.1:8001/api-authentication/", "POST", headers);
 
-        Map<String, String> inputMap = new HashMap<>();
+        Map<String, Object> inputMap = new HashMap<>();
         inputMap.put("username", username);
         inputMap.put("password", password);
 
-        tokenGrabber.writeFromJson(inputMap);
+        tokenGrabber.writeFromMap(inputMap);
 
         JsonNode response = tokenGrabber.readToJson();
 
@@ -125,10 +125,90 @@ public class MercuryCommunicator {
 
         HttpHandler userGetter = new HttpHandler("http://192.168.64.1:8001/api/users/", "GET", headers);
 
+        int responseCode = userGetter.getResponseCode();
+
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+
+            System.out.println("ERROR - NOT SUCCESSFUL GET");
+
+            userGetter.readToJson();
+
+            return null;
+
+        }
+
         JsonNode response = userGetter.readToJson();
 
         return response;
 
+    }
+
+    public JsonNode getDetailedUser(long userId) throws IOException {
+
+        String url = "http://192.168.64.1:8001/api/users/" + Long.toString(userId);
+
+        Dictionary<String, String> headers = new Hashtable<String, String>();
+        headers.put("User-Agent", "Mozilla/5.0");
+        headers.put("Authorization", "Token " + this.token);
+
+        HttpHandler userGetter = new HttpHandler(url, "GET", headers);
+
+        int responseCode = userGetter.getResponseCode();
+
+        if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_NOT_FOUND){
+            JsonNode response = userGetter.readToJson();
+            return response;
+        } else {
+            System.out.println("ERROR - NOT SUCCESSFUL GET");
+            userGetter.readToJson();
+            return null;
+        }
+
+    }
+
+    public boolean postUser(long user_id, String discord_name) throws IOException {
+
+        Dictionary<String, String> headers = new Hashtable<String, String>();
+        headers.put("User-Agent", "Mozilla/5.0");
+        headers.put("Content-Type", "application/json");
+        headers.put("Authorization", "Token " + this.token);
+
+        HttpHandler userPoster = new HttpHandler("http://192.168.64.1:8001/api/users/", "POST", headers);
+
+        Map<String, Object> inputMap = new HashMap<>();
+        inputMap.put("user_id", user_id);
+        inputMap.put("discord_name", discord_name);
+
+        userPoster.writeFromMap(inputMap);
+
+        int responseCode = userPoster.getResponseCode();
+
+        if (responseCode != HttpURLConnection.HTTP_CREATED) {
+            System.out.println("ERROR - NOT SUCCESSFUL POST");
+            return false;
+        }
+        return true;
+    }
+
+    public boolean postPlayer(Map<String, Object> inputMap) throws IOException {
+
+        Dictionary<String, String> headers = new Hashtable<String, String>();
+        headers.put("User-Agent", "Mozilla/5.0");
+        headers.put("Content-Type", "application/json");
+        headers.put("Authorization", "Token " + this.token);
+
+        HttpHandler playerPoster = new HttpHandler("http://192.168.64.1:8001/api/players/", "POST", headers);
+
+        playerPoster.writeFromMap(inputMap);
+
+        int responseCode = playerPoster.getResponseCode();
+
+        if (responseCode != HttpURLConnection.HTTP_CREATED) {
+            System.out.println("ERROR - NOT SUCCESSFUL POST");
+            playerPoster.readToJson();
+            return false;
+        }
+        return true;
     }
 
     public static JsonNode HttpPost(URL url, Dictionary<String, String> headers, String input) throws IOException {

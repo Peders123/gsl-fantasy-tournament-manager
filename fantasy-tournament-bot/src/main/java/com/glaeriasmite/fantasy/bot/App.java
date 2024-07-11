@@ -101,6 +101,11 @@ public class App {
         JsonNode response = handler.getCommunicator().getUsers();
         System.out.println(response.toString());
 
+        handler.getCommunicator().postUser(123456, "peedly");
+
+        response = handler.getCommunicator().getUsers();
+        System.out.println(response.toString());
+
     }
 
 }

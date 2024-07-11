@@ -1,8 +1,6 @@
 """
 Defines the serializers for all models defined in Talaria.
 """
-import os
-
 from rest_framework import serializers
 
 from .models import User, Tournament, Captain, Player

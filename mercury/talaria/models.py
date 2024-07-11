@@ -1,8 +1,6 @@
 """
 Defines the database models for the Talaria app.
 """
-import os
-
 from datetime import datetime
 
 from django.conf import settings

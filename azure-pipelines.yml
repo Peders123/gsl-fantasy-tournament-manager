@@ -33,7 +33,7 @@ stages:
         dockerComposeFile: '**/docker/docker-compose.yml'
         projectName: 'ttsl'
         action: 'Run a Docker Compose command'
-        dockerComposeCommand: 'up --build --no-start janus'
+        dockerComposeCommand: 'up --build --no-start'
     - task: DockerCompose@1
       inputs:
         containerregistrytype: 'Azure Container Registry'

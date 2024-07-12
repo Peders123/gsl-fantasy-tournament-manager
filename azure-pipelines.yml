@@ -32,4 +32,4 @@ stages:
         dockerComposeFile: '**/docker/docker-compose.yml'
         projectName: 'ttsl'
         action: 'Run a Docker Compose command'
-        dockerComposeCommand: 'up --build mercury'
+        dockerComposeCommand: 'up --build Janus'

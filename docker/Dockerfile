@@ -45,7 +45,6 @@ COPY --from=python-builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 COPY terra/startTerra.sh /data/terra/.
-COPY terra/startTerra.sh /data/terra/.
 COPY terra/terra /data/terra/terra
 COPY terra/home /data/terra/home
 COPY terra/tournament /data/terra/tournament

@@ -45,13 +45,14 @@ COPY --from=python-builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 COPY terra/startTerra.sh /data/terra/.
-COPY terra/terra /data/terra/terra
-COPY terra/home /data/terra/home
-COPY terra/tournament /data/terra/tournament
-COPY terra/db.sqlite3 /data/terra/.
 COPY terra/manage.py /data/terra/.
+COPY terra/home /data/terra/home
+COPY terra/terra /data/terra/terra
+COPY terra/tournament /data/terra/tournament
 
 COPY docker/environment.sh /data/terra/.
+
+RUN apt-get update && apt-get install -y dos2unix && dos2unix /data/terra/startTerra.sh
 
 
 FROM python:3.12-slim-bookworm as mercury
@@ -72,3 +73,5 @@ COPY mercury/manage.py /data/mercury/.
 COPY mercury/dData.json /data/mercury/.
 
 COPY docker/environment.sh /data/mercury/.
+
+RUN apt-get update && apt-get install -y dos2unix && dos2unix /data/mercury/startMercury.sh

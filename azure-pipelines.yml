@@ -32,4 +32,11 @@ stages:
         dockerComposeFile: '**/docker/docker-compose.yml'
         projectName: 'ttsl'
         action: 'Run a Docker Compose command'
-        dockerComposeCommand: 'up --build janus'
+        dockerComposeCommand: 'up --build --no-start janus'
+    - task: DockerCompose@1
+      inputs:
+        containerregistrytype: 'Azure Container Registry'
+        azureContainerRegistry: '{"loginServer":"tanukismiteleague.azurecr.io", "id" : "/subscriptions/73d53848-bb3c-4d47-a43d-8ed52ad3956d/resourceGroups/Django/providers/Microsoft.ContainerRegistry/registries/TanukiSmiteLeague"}'
+        dockerComposeFile: '**/docker/docker-compose.yml'
+        projectName: 'ttsl'
+        action: 'Push services'

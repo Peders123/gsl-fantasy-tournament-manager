@@ -44,12 +44,12 @@ COPY --from=python-builder /opt/venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-COPY gsl_fantasy_tournament/startTerra.sh /data/terra/.
-COPY gsl_fantasy_tournament/gsl_fantasy_tournament /data/terra/gsl_fantasy_tournament
-COPY gsl_fantasy_tournament/home /data/terra/home
-COPY gsl_fantasy_tournament/tournament /data/terra/tournament
-COPY gsl_fantasy_tournament/db.sqlite3 /data/terra/.
-COPY gsl_fantasy_tournament/manage.py /data/terra/.
+COPY terra/startTerra.sh /data/terra/.
+COPY terra/terra /data/terra/terra
+COPY terra/home /data/terra/home
+COPY terra/tournament /data/terra/tournament
+COPY terra/db.sqlite3 /data/terra/.
+COPY terra/manage.py /data/terra/.
 
 COPY docker/environment.sh /data/terra/.
 
@@ -65,7 +65,7 @@ COPY --from=python-builder /opt/venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"
 
-COPY mercury/startMercury.sh /data/mercury/.
+COPY mercury/startMercury.sh /data/mercury
 COPY mercury/mercury /data/mercury/mercury
 COPY mercury/talaria /data/mercury/talaria
 COPY mercury/manage.py /data/mercury/.

@@ -1,5 +1,5 @@
 """
-WSGI config for gsl_fantasy_tournament project.
+WSGI config for terra project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'gsl_fantasy_tournament.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'terra.settings')
 
 application = get_wsgi_application()

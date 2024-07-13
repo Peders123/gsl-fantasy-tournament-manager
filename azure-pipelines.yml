@@ -28,11 +28,11 @@ stages:
     - task: DownloadSecureFile@1
       inputs:
         secureFile: 'config.json'
-    - task: PowerShell@2
+    - task: CopyFiles@2
       inputs:
-        targetType: 'inline'
-        script: |
-          Get-Content $(DownloadSecureFile.secureFilePath)
+        SourceFolder: '$(Agent.TempDirectory)'
+        Contents: 'config.json'
+        TargetFolder: '$(Agent.BuildDirectory)'
     - task: DockerCompose@1
       inputs:
         containerregistrytype: 'Azure Container Registry'

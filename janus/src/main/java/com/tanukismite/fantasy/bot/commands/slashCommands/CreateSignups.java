@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.tanukismite.fantasy.bot.MercuryCommunicator;
 import com.tanukismite.fantasy.bot.Role;
 import com.tanukismite.fantasy.bot.commands.Context;
 import com.tanukismite.fantasy.bot.commands.ExtendedCommand;
+import com.tanukismite.fantasy.bot.communicators.MercuryCommunicator;
 import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Components;
 import com.tanukismite.fantasy.bot.signup.CaptainSignupData;
@@ -264,7 +264,7 @@ public class CreateSignups extends ExtendedCommand {
         JsonNode response;
 
         try {
-            response = communicator.getDetailedUser(user_id);
+            response = communicator.getDetailed(user_id);
         } catch (IOException e) {
             System.out.println("Could not communicate, please try later.");
             return false;

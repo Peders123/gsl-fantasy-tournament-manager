@@ -2,7 +2,6 @@ package com.tanukismite.fantasy.bot;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Dictionary;
 import java.util.Hashtable;
 

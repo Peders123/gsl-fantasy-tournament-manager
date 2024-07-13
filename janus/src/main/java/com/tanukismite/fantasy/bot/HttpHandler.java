@@ -18,9 +18,9 @@ public class HttpHandler {
     private URL url;
     private HttpURLConnection conn;
 
-    public HttpHandler(URL url, String requestMethod, Dictionary<String, String> headers) throws IOException {
+    public HttpHandler(String url, String requestMethod, Dictionary<String, String> headers) throws IOException {
 
-        this.url = url;
+        this.url = new URL(url);
         this.conn = (HttpURLConnection) this.url.openConnection();
         this.conn.setRequestMethod(requestMethod);
 
@@ -73,33 +73,24 @@ public class HttpHandler {
 
             return unwrappedResponse;
 
+        } else {
+
+            BufferedReader errorInput = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+            String inputLine;
+            StringBuilder errorResponse = new StringBuilder();
+
+            while ((inputLine = errorInput.readLine()) != null) {
+                errorResponse.append(inputLine);
+            }
+            errorInput.close();
+
+            System.out.println("POST request not worked");
+            System.out.println("Response Code: " + responseCode);
+            System.out.println("Error Response: " + errorResponse.toString());
         }
 
         return null;
 
-    }
-
-    public void readError() throws IOException {
-
-        int responseCode = this.conn.getResponseCode();
-
-        BufferedReader errorInput = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-        String inputLine;
-        StringBuilder errorResponse = new StringBuilder();
-
-        while ((inputLine = errorInput.readLine()) != null) {
-            errorResponse.append(inputLine);
-        }
-        errorInput.close();
-
-        System.out.println("POST request not worked");
-        System.out.println("Response Code: " + responseCode);
-        System.out.println("Error Response: " + errorResponse.toString());
-
-    }
-
-    public HttpURLConnection getConn() {
-        return this.conn;
     }
 
 }

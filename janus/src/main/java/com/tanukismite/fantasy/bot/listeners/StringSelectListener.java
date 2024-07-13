@@ -36,7 +36,7 @@ public class StringSelectListener extends BaseListener {
                     this.handler.executeMethod(
                         signUpSession,
                         "submitSecondRole",
-                        this.handler.getCommunicator("user"),
+                        this.handler.getCommunicator(),
                         event
                     );
                 } catch (Exception e) {

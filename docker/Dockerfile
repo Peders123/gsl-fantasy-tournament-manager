@@ -2,22 +2,23 @@ FROM maven:3.9.8-eclipse-temurin-22 AS java-builder
 
 WORKDIR /data
 
-COPY janus /data/janus
+COPY fantasy-tournament-bot /data/janus/fantasy-tournament-bot
+COPY config.json /data/janus/config.json
 
-WORKDIR /data/janus
+WORKDIR /data/janus/fantasy-tournament-bot
 
 RUN mvn clean package
 
 
 FROM eclipse-temurin:22-jre as janus
 
-WORKDIR /data/janus
+WORKDIR /data/janus/fantasy-tournament-bot
 
-COPY --from=java-builder /data/janus/target/janus-1.0-SNAPSHOT.jar .
-COPY --from=java-builder /data/janus/config.json .
-COPY janus/src /data/janus/src
+COPY --from=java-builder /data/janus/fantasy-tournament-bot/target/fantasy-tournament-bot-1.0-SNAPSHOT.jar .
+COPY --from=java-builder /data/janus/config.json ../
+COPY fantasy-tournament-bot/src /data/janus/fantasy-tournament-bot/src
 
-ENTRYPOINT ["java", "-cp", "janus-1.0-SNAPSHOT.jar", "com.tanukismite.fantasy.bot.App"]
+ENTRYPOINT ["java", "-cp", "fantasy-tournament-bot-1.0-SNAPSHOT.jar", "com.glaeriasmite.fantasy.bot.App"]
 
 
 FROM python:3.12 AS python-builder

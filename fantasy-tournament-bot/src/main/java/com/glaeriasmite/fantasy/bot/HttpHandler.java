@@ -6,54 +6,90 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONTokener;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class HttpHandler {
 
     private URL url;
     private HttpURLConnection conn;
 
-    public HttpHandler(String url) throws IOException {
+    public HttpHandler(String url, String requestMethod, Dictionary<String, String> headers) throws IOException {
 
         this.url = new URL(url);
         this.conn = (HttpURLConnection) this.url.openConnection();
+        this.conn.setRequestMethod(requestMethod);
 
-    }
+        Enumeration<String> keys = headers.keys();
+        String key;
 
-    public JSONArray sendGet() throws IOException {
-
-        this.conn.setRequestMethod("GET");
-        this.conn.setRequestProperty("User-Agent", "Mozilla/5.0");
-        int responseCode = this.conn.getResponseCode();
-
-        if (responseCode == 200) {
-            BufferedReader input = new BufferedReader(new InputStreamReader(this.conn.getInputStream()));
-            JSONTokener tokener = new JSONTokener(input);
-            JSONArray response = new JSONArray(tokener);
-            return response;
-        } else {
-            return null;
+        while(keys.hasMoreElements()) {
+            key = (String) keys.nextElement();
+            conn.setRequestProperty(key, headers.get(key));
         }
 
     }
 
-    public int sendPost(JSONArray json) throws IOException {
+    public void writeFromMap(Map<String, Object> inputMap) throws IOException {
 
-        this.conn.setRequestMethod("POST");
-        this.conn.setRequestProperty("User-Agent", "Mozilla/5.0");
-        this.conn.setRequestProperty("Content-Type", "application/json");
+        ObjectMapper mapper = new ObjectMapper();
+        String input = mapper.writeValueAsString(inputMap);
 
         this.conn.setDoOutput(true);
-        OutputStream os = this.conn.getOutputStream();
-        os.write(json.toString().getBytes());
-        os.flush();
-        os.close();
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(input.getBytes());
+            os.flush();
+        }
+        
+    }
+
+    public int getResponseCode() throws IOException {
+
+        return this.conn.getResponseCode();
+
+    }
+
+    public JsonNode readToJson() throws IOException {
 
         int responseCode = this.conn.getResponseCode();
 
-        return responseCode;
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(this.conn.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+
+            while ((inputLine = reader.readLine()) != null) {
+                response.append(inputLine);
+            }
+            reader.close();
+
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode unwrappedResponse = mapper.readTree((response.toString()));
+
+            return unwrappedResponse;
+
+        } else {
+
+            BufferedReader errorInput = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+            String inputLine;
+            StringBuilder errorResponse = new StringBuilder();
+
+            while ((inputLine = errorInput.readLine()) != null) {
+                errorResponse.append(inputLine);
+            }
+            errorInput.close();
+
+            System.out.println("POST request not worked");
+            System.out.println("Response Code: " + responseCode);
+            System.out.println("Error Response: " + errorResponse.toString());
+        }
+
+        return null;
 
     }
 

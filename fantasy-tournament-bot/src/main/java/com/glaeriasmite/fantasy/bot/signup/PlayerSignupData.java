@@ -1,6 +1,7 @@
 package com.glaeriasmite.fantasy.bot.signup;
 
 import java.awt.Color;
+import java.util.Map;
 
 import com.glaeriasmite.fantasy.bot.commands.slashCommands.CreateSignups;
 
@@ -37,6 +38,16 @@ public class PlayerSignupData extends SignupData {
             .setFooter(this.smiteGuru);
 
         return embed.build();
+
+    }
+
+    @Override
+    public Map<String, Object> toMap() {
+
+        Map<String, Object> map = super.toMap();
+        map.put("smite_guru", this.smiteGuru);
+
+        return map;
 
     }
 

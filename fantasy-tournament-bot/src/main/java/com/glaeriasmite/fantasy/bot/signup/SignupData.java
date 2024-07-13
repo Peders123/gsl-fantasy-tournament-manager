@@ -1,5 +1,8 @@
 package com.glaeriasmite.fantasy.bot.signup;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.glaeriasmite.fantasy.bot.Role;
 import com.glaeriasmite.fantasy.bot.commands.slashCommands.CreateSignups;
 
@@ -93,6 +96,20 @@ public abstract class SignupData {
         String str = this.signupRoot.toString();
 
         return str;
+
+    }
+
+    public Map<String, Object> toMap() {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("tournament_id", 1);
+        map.put("user_id", Long.valueOf(this.id));
+        map.put("captain_id", null);
+        map.put("smite_name", this.ign);
+        map.put("role_1", this.role1.toString());
+        map.put("role_2", this.role2.toString());
+
+        return map;
 
     }
 

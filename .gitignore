@@ -2,7 +2,7 @@
 db.sqlite3
 __pycache__
 
-fantasy-tournament-bot/target/*
+janus/target/*
 
 config.json
 

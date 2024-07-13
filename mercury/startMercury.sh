@@ -7,7 +7,9 @@ source environment.sh
 python3 manage.py makemigrations
 python3 manage.py migrate
 
-if [ $BUILD_TYPE = "dev" ]; then
+export BUILD_TYPE="dev"
+
+if [[ $BUILD_TYPE = "dev" ]]; then
     python3 manage.py populate_database
     expect -c "
         spawn python3 manage.py createsuperuser --username=Peders --email=admin@example.com

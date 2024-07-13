@@ -25,6 +25,9 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
+    - task: DownloadSecureFile@1
+      inputs:
+        secureFile: 'config.json'
     - task: DockerCompose@1
       inputs:
         containerregistrytype: 'Azure Container Registry'

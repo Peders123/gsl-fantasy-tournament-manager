@@ -2,6 +2,9 @@ package com.glaeriasmite.fantasy.bot;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -90,6 +93,18 @@ public class App {
         commands.queue();
 
         System.out.println("Commands created");
+
+        Dictionary<String, String> headers = new Hashtable<String, String>();
+        headers.put("User-Agent", "Mozilla/5.0");
+        headers.put("Authorization", "Token " + handler.getCommunicator().getToken());
+
+        JsonNode response = handler.getCommunicator().getUsers();
+        System.out.println(response.toString());
+
+        handler.getCommunicator().postUser(123456, "peedly");
+
+        response = handler.getCommunicator().getUsers();
+        System.out.println(response.toString());
 
     }
 

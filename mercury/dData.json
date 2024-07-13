@@ -3,72 +3,63 @@
         "model": "talaria.User",
         "fields": {
           "user_id": 1,
-          "discord_name": "revilokid",
-          "smite_name": "revilokid"
+          "discord_name": "revilokid"
         }
     },
     {
         "model": "talaria.User",
         "fields": {
           "user_id": 2,
-          "discord_name": "AwesomeGamer",
-          "smite_name": "SmitePro9000"
+          "discord_name": "AwesomeGamer"
         }
     },
     {
         "model": "talaria.User",
         "fields": {
           "user_id": 3,
-          "discord_name": "LuckyLlama",
-          "smite_name": "Lucky_Llama_88"
+          "discord_name": "LuckyLlama"
         }
     },
     {
         "model": "talaria.User",
         "fields": {
           "user_id": 4,
-          "discord_name": "SneakySnake",
-          "smite_name": "HissingDanger"
+          "discord_name": "SneakySnake"
         }
     },
     {
         "model": "talaria.User",
         "fields": {
           "user_id": 5,
-          "discord_name": "KeyboardWarrior",
-          "smite_name": "ButtonMasher"
+          "discord_name": "KeyboardWarrior"
         }
     },
     {
         "model": "talaria.User",
         "fields": {
           "user_id": 6,
-          "discord_name": "ChillChampion",
-          "smite_name": "Relaxed_Reigns"
+          "discord_name": "ChillChampion"
         }
     },
     {
         "model": "talaria.User",
         "fields": {
           "user_id": 7,
-          "discord_name": "MemeMaster",
-          "smite_name": "TheJokester"
+          "discord_name": "MemeMaster"
         }
     },
     {
         "model": "talaria.User",
         "fields": {
           "user_id": 8,
-          "discord_name": "CoffeeClutch",
-          "smite_name": "Energized_Eagle"
+          "discord_name": "CoffeeClutch"
         }
     },
     {
         "model": "talaria.User",
         "fields": {
           "user_id": 9,
-          "discord_name": "NightHawk",
-          "smite_name": "Nocturnal_Nightmare"
+          "discord_name": "NightHawk"
         }
     },
     {
@@ -198,7 +189,8 @@
           "tournament_id": 3, 
           "captain_id":4,
           "user_id": 5,
-          "estimated_value": 850
+          "estimated_value": 850,
+          "smite_name": "revilokid"
         }
     },
     {
@@ -207,7 +199,8 @@
           "player_id": 2,
           "tournament_id": 7,  
           "user_id": 6,
-          "estimated_value": 720
+          "estimated_value": 720,
+          "smite_name": "SmitePro9000"
         }
     },
     {
@@ -216,7 +209,8 @@
           "player_id": 3,
           "tournament_id": 2,  
           "user_id": 7,
-          "estimated_value": 600
+          "estimated_value": 600,
+          "smite_name": "Lucky_Llama_88"
         }
     },
     {
@@ -225,7 +219,8 @@
           "player_id": 4,
           "tournament_id": 5,  
           "user_id": 8,
-          "estimated_value": 500
+          "estimated_value": 500,
+          "smite_name": "HissingDanger"
         }
     },
     {
@@ -235,7 +230,8 @@
           "tournament_id": 10, 
           "captain_id":3,
           "user_id": 9,
-          "estimated_value": 420
+          "estimated_value": 420,
+          "smite_name": "ButtonMasher"
         }
     }
 ]

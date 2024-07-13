@@ -1,7 +1,10 @@
 package com.glaeriasmite.fantasy.bot.commands.slashCommands;
 
 import java.awt.Color;
+import java.io.IOException;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.glaeriasmite.fantasy.bot.MercuryCommunicator;
 import com.glaeriasmite.fantasy.bot.Role;
 import com.glaeriasmite.fantasy.bot.commands.Context;
 import com.glaeriasmite.fantasy.bot.commands.ExtendedCommand;
@@ -204,12 +207,12 @@ public class CreateSignups extends ExtendedCommand {
 
     }
 
-    protected void submitSecondRole(Context context, StringSelectInteractionEvent selectEvent) {
+    protected void submitSecondRole(Context context, MercuryCommunicator communicator, StringSelectInteractionEvent selectEvent) {
 
         SignupData data = context.getUserSignupData(selectEvent.getUser().getId(), PlayerSignupData.class);
         data.setRole2(Role.valueOf(selectEvent.getValues().get(0)));
 
-        this.submitData(context, selectEvent.getUser().getId());
+        this.submitData(context, communicator, selectEvent.getUser().getId());
 
         selectEvent.deferReply(true).queue(
             hook -> {
@@ -225,11 +228,19 @@ public class CreateSignups extends ExtendedCommand {
 
     }
 
-    private void submitData(Context context, String userId) {
+    private void submitData(Context context, MercuryCommunicator communicator, String userId) {
 
         SignupData data = context.getUserSignupData(userId, PlayerSignupData.class);
         MessageEmbed embed = data.toEmbed();
         FluentRestAction<Message, MessageCreateAction> action = Action.sendMessageWithEmbed(this.event.getMessageChannel(), embed);
+
+        System.out.println(data.toMap().toString());
+
+        try {
+            communicator.postPlayer(data.toMap());
+        } catch (IOException e) {
+            System.out.println("FAILED TO WRITE PLAYER");
+        }
 
         this.queue(action);
 
@@ -245,6 +256,37 @@ public class CreateSignups extends ExtendedCommand {
         } catch (Exception e) {
             System.out.println(e);
         }
+
+    }
+
+    public static boolean checkUserExists(MercuryCommunicator communicator, long user_id) {
+
+        JsonNode response;
+
+        try {
+            response = communicator.getDetailedUser(user_id);
+        } catch (IOException e) {
+            System.out.println("Could not communicate, please try later.");
+            return false;
+        }
+
+        if (response == null) {
+            return false;
+        }
+
+        if (response.findValue("user_id") == null) {
+            return false;
+        }
+
+        System.out.println(response.toString());
+
+        int received = response.get("user_id").asInt();
+
+        if (received == user_id) {
+            return true;
+        }
+
+        return false;
 
     }
 

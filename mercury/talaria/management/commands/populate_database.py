@@ -13,14 +13,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
 
-        db_alias = router.db_for_write(Tournament)
-        Tournament.objects.using(db_alias).all().delete()
-        User.objects.using(db_alias).all().delete()
-        Captain.objects.using(db_alias).all().delete()
-        Player.objects.using(db_alias).all().delete()
+        Tournament.objects.all().delete()
+        User.objects.all().delete()
+        Captain.objects.all().delete()
+        Player.objects.all().delete()
 
         self.stdout.write(f"CWD: {os.getcwd()}")
-        print(db_alias)
 
         with open("dData.json", encoding="ascii") as data_file:
             data = json.load(data_file)
@@ -32,24 +30,24 @@ class Command(BaseCommand):
 
         for entry in user_entries:
             model = apps.get_model('talaria', 'User')
-            model.objects.using(db_alias).create(**entry['fields'])
+            model.objects.create(**entry['fields'])
 
         for entry in tournament_entries:
             model = apps.get_model('talaria', 'Tournament')
-            model.objects.using(db_alias).create(**entry['fields'])
+            model.objects.create(**entry['fields'])
 
         for entry in captain_entries:
             model = apps.get_model('talaria', 'Captain')
             fields = entry['fields']
-            fields['user_id'] = User.objects.using(db_alias).get(pk=fields['user_id'])
-            model.objects.using(db_alias).create(**fields)
+            fields['user_id'] = User.objects.get(pk=fields['user_id'])
+            model.objects.create(**fields)
 
         for entry in player_entries:
             model = apps.get_model('talaria', 'Player')
             fields = entry['fields']
-            fields['user_id'] = User.objects.using(db_alias).get(pk=fields['user_id'])
-            fields['tournament_id'] = Tournament.objects.using(db_alias).get(
+            fields['user_id'] = User.objects.get(pk=fields['user_id'])
+            fields['tournament_id'] = Tournament.objects.get(
                 pk=fields['tournament_id'])
             if 'captain_id' in fields and fields['captain_id'] is not None:
-                fields['captain_id'] = Captain.objects.using(db_alias).get(pk=fields['captain_id'])
-            model.objects.using(db_alias).create(**fields)
+                fields['captain_id'] = Captain.objects.get(pk=fields['captain_id'])
+            model.objects.create(**fields)

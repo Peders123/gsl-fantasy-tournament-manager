@@ -35,7 +35,7 @@ public class User implements Command {
         FluentRestAction<Message, MessageCreateAction> action;
         FluentRestAction<InteractionHook, ReplyCallbackAction> hookAction;
 
-        System.out.println(event.getOption("method").getAsString());
+        /* System.out.println(event.getOption("method").getAsString());
 
         if (event.getOption("method").getAsString().equals("get")) {
             try {
@@ -89,7 +89,7 @@ public class User implements Command {
                 action = Action.sendMessage(event.getChannel(), message);
                 this.queue(action);
             }
-        }
+        } */
 
     }
 

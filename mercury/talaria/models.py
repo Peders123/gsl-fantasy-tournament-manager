@@ -1,8 +1,6 @@
 """
 Defines the database models for the Talaria app.
 """
-import os
-
 from datetime import datetime
 
 from django.conf import settings
@@ -22,10 +20,8 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         instance (_type_, optional): User that was created. Defaults to None.
         created (bool, optional): Whether or not the user was created. Defaults to False.
     """
-    print(sender)
-
     if created:
-        Token.objects.using(os.environ['BUILD_TYPE']).create(user=instance)
+        Token.objects.create(user=instance)
 
 
 class Tournament(models.Model):
@@ -56,11 +52,9 @@ class User(models.Model):
     Attributes:
         user_id (IntegerField): Primary key. Same as the user's discord id.
         discord_name (CharField): Signed up user's discord name.
-        smite_name (CharField): Sign up user's smite ign.
     """
     user_id = models.IntegerField(primary_key=True)
     discord_name = models.CharField(max_length=32)
-    smite_name = models.CharField(max_length=32)
 
 
 class Captain(models.Model):
@@ -88,6 +82,7 @@ class Player(models.Model):
         tournament_id (ForeignKey): Relation to the 'Tournament' model.
         user_id (ForeignKey): Relation to the 'User' model.
         captain_id (ForeignKey): Relation to the 'Captain' model. Not assiged at creation, added later.
+        smite_name (CharField): Sign up user's smite ign.
         role_1 (CharField): Primary role the player wants to be.
         role_2 (CharField): Secondary role the player wants to be.
         smite_guru (CharField): Link to the player's smite guru profile. Optional.
@@ -97,6 +92,7 @@ class Player(models.Model):
     tournament_id = models.ForeignKey(Tournament, on_delete=models.CASCADE, default=1)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     captain_id = models.ForeignKey(Captain, on_delete=models.CASCADE, null=True)
+    smite_name = models.CharField(max_length=32)
     role_1 = models.CharField(max_length=16, default="Fill")
     role_2 = models.CharField(max_length=16, default="Fill")
     smite_guru = models.CharField(max_length=128)

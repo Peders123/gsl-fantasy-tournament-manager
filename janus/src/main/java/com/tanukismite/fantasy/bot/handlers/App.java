@@ -1,14 +1,12 @@
-package com.tanukismite.fantasy.bot;
+package com.tanukismite.fantasy.bot.handlers;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tanukismite.fantasy.bot.handlers.Handler;
 import com.tanukismite.fantasy.bot.listeners.*;
 
 import net.dv8tion.jda.api.JDA;

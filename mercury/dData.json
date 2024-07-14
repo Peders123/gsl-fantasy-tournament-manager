@@ -150,7 +150,7 @@
         "model": "talaria.Captain",
         "fields": {
           "captain_id": 1,
-          "tournament_id": 1,
+          "tournament_id": 2,
           "user_id": 1,
           "smite_name": "VestigialCode",
           "team_name": "The Kintes",
@@ -161,7 +161,7 @@
         "model": "talaria.Captain",
         "fields": {
           "captain_id": 2,
-          "tournament_id": 1,
+          "tournament_id": 2,
           "user_id": 2,
           "smite_name": "GeeToTheGee",
           "team_name": "Cleopatra's Cobras",

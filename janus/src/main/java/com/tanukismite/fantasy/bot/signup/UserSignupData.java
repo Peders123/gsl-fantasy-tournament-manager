@@ -14,6 +14,13 @@ public class UserSignupData implements PostData {
 
     public UserSignupData() {}
 
+    public UserSignupData(String id, String discord) {
+
+        this.id = id;
+        this.discord = discord;
+
+    }
+
     public String getId() {
         return this.id;
     }

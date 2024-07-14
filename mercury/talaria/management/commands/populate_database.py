@@ -40,6 +40,8 @@ class Command(BaseCommand):
             model = apps.get_model('talaria', 'Captain')
             fields = entry['fields']
             fields['user_id'] = User.objects.get(pk=fields['user_id'])
+            fields['tournament_id'] = Tournament.objects.get(
+                pk=fields['tournament_id'])
             model.objects.create(**fields)
 
         for entry in player_entries:

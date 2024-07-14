@@ -93,7 +93,7 @@ public class ButtonListener extends BaseListener {
 
         UserCommunicator userCommunicator = (UserCommunicator) this.handler.getCommunicator("user");
 
-        boolean exists = CreateSignups.checkUserExists(userCommunicator, Long.parseLong(event.getUser().getId()));
+        boolean exists = CreateSignups.checkUserExists(this.handler, Long.parseLong(event.getUser().getId()));
 
         try {
             JsonNode response = this.handler.getCommunicator("user").get();
@@ -105,7 +105,7 @@ public class ButtonListener extends BaseListener {
 
         if (exists == false) {
             try {
-                userCommunicator.postUser(Long.parseLong(event.getUser().getId()), event.getUser().getName());
+                userCommunicator.post(null);
             } catch (IOException e) {
                 System.out.println("HANDLE ERROR");
                 return;

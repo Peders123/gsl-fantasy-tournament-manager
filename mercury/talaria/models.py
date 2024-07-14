@@ -70,7 +70,7 @@ class Captain(models.Model):
         captain_budget (IntegerField): Budget the captain will begin the tournament with.
     """
     captain_id = models.IntegerField(primary_key=True)
-    tournament_id = models.IntegerField(Tournament, on_delete=models.CASCADE)
+    tournament_id = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     smite_name = models.CharField(max_length=32)
     team_name = models.CharField(max_length=32)

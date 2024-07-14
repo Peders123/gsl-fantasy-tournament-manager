@@ -13,14 +13,15 @@ public class Handler {
 
     public Handler() {
         this.context = new Context();
+        this.communicators = new HashMap<>();
     }
 
     public void execute(Command command) {
-        command.execute(this.context);
+        command.execute(this);
     }
 
     public void executeMethod(Command command, String methodName, Object... params) throws Exception {
-        command.executeMethod(methodName, this.context, params);
+        command.executeMethod(methodName, this, params);
     }
 
     public Context getContext() {

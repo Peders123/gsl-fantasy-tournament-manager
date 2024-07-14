@@ -8,15 +8,19 @@ import com.tanukismite.fantasy.bot.Role;
 import com.tanukismite.fantasy.bot.commands.Context;
 import com.tanukismite.fantasy.bot.commands.ExtendedCommand;
 import com.tanukismite.fantasy.bot.communicators.MercuryCommunicator;
+import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
 import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Components;
+import com.tanukismite.fantasy.bot.handlers.Handler;
 import com.tanukismite.fantasy.bot.signup.CaptainSignupData;
 import com.tanukismite.fantasy.bot.signup.PlayerSignupData;
 import com.tanukismite.fantasy.bot.signup.SignupData;
+import com.tanukismite.fantasy.bot.signup.UserSignupData;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -51,7 +55,9 @@ public class CreateSignups extends ExtendedCommand {
     }
 
     @Override
-    public void execute(Context context) {
+    public void execute(Handler handler) {
+
+        Context context = handler.getContext();
 
         MessageChannel channel = event.getMessageChannel();
 
@@ -97,10 +103,11 @@ public class CreateSignups extends ExtendedCommand {
     }
 
     // RENAME TO BE MORE DESCRIPTIVE OF THE FULL FUNCTION
-    protected void createModal(Context context, ButtonInteractionEvent buttonEvent, Boolean captain) {
+    protected void createModal(Handler handler, ButtonInteractionEvent buttonEvent, Boolean captain) {
+
+        Context context = handler.getContext();
 
         System.out.println("BUTTON ID: " + buttonEvent.getUser().getId());
-
         System.out.println(this.signupRootId);
 
         if (captain) {
@@ -142,9 +149,19 @@ public class CreateSignups extends ExtendedCommand {
         FluentRestAction<Void, ModalCallbackAction> action = Action.replyWithModal(buttonEvent, modal);
         this.queue(action);
 
+        UserSignupData data = new UserSignupData(buttonEvent.getUser().getId(), buttonEvent.getUser().getName());
+        try {
+            handler.getCommunicator("user").post(data);
+        } catch (IOException e) {
+            System.out.println("ERROR");
+            e.printStackTrace();
+        }
+
     }
 
-    protected void submitModal(Context context, ModalInteractionEvent modalEvent) {
+    protected void submitModal(Handler handler, ModalInteractionEvent modalEvent) {
+
+        Context context = handler.getContext();
 
         String[] id = modalEvent.getModalId().split(":");
 
@@ -177,14 +194,16 @@ public class CreateSignups extends ExtendedCommand {
         }
 
         data.setId(modalEvent.getUser().getId());
-        data.setDiscord(modalEvent.getUser().getName());
         data.setIGN(modalEvent.getValue("ign").getAsString());
+
 
     }
 
-    protected void submitFirstRole(Context context, StringSelectInteractionEvent selectEvent) {
+    protected void submitFirstRole(Handler handler, StringSelectInteractionEvent selectEvent) {
 
-        SignupData data = context.getUserSignupData(selectEvent.getUser().getId(), PlayerSignupData.class);
+        Context context = handler.getContext();
+
+        PlayerSignupData data = context.getUserSignupData(selectEvent.getUser().getId(), PlayerSignupData.class);
         data.setRole1(Role.valueOf(selectEvent.getValues().get(0)));
 
         FluentRestAction<Message, MessageCreateAction> action = MessageCreateAction.class.cast(Action.sendMessage(selectEvent.getMessageChannel(), "Hello World!")).setMessageReference(this.signupRootId);
@@ -207,12 +226,14 @@ public class CreateSignups extends ExtendedCommand {
 
     }
 
-    protected void submitSecondRole(Context context, MercuryCommunicator communicator, StringSelectInteractionEvent selectEvent) {
+    protected void submitSecondRole(Handler handler, StringSelectInteractionEvent selectEvent) {
 
-        SignupData data = context.getUserSignupData(selectEvent.getUser().getId(), PlayerSignupData.class);
+        Context context = handler.getContext();
+
+        PlayerSignupData data = context.getUserSignupData(selectEvent.getUser().getId(), PlayerSignupData.class);
         data.setRole2(Role.valueOf(selectEvent.getValues().get(0)));
 
-        this.submitData(context, communicator, selectEvent.getUser().getId());
+        this.submitData(handler, selectEvent.getUser().getId());
 
         selectEvent.deferReply(true).queue(
             hook -> {
@@ -228,16 +249,19 @@ public class CreateSignups extends ExtendedCommand {
 
     }
 
-    private void submitData(Context context, MercuryCommunicator communicator, String userId) {
+    private void submitData(Handler handler, String userId) {
 
-        SignupData data = context.getUserSignupData(userId, PlayerSignupData.class);
+        Context context = handler.getContext();
+        MercuryCommunicator communicator = handler.getCommunicator("player");
+
+        PlayerSignupData data = context.getUserSignupData(userId, PlayerSignupData.class);
         MessageEmbed embed = data.toEmbed();
         FluentRestAction<Message, MessageCreateAction> action = Action.sendMessageWithEmbed(this.event.getMessageChannel(), embed);
 
         System.out.println(data.toMap().toString());
 
         try {
-            communicator.postPlayer(data.toMap());
+            communicator.post(data);
         } catch (IOException e) {
             System.out.println("FAILED TO WRITE PLAYER");
         }
@@ -246,7 +270,7 @@ public class CreateSignups extends ExtendedCommand {
 
     }
 
-    protected void sendTestMessage(Context context, TextChannelImpl channel) {
+    protected void sendTestMessage(Handler handler, TextChannelImpl channel) {
 
         try {
 
@@ -259,7 +283,9 @@ public class CreateSignups extends ExtendedCommand {
 
     }
 
-    public static boolean checkUserExists(MercuryCommunicator communicator, long user_id) {
+    public static boolean checkUserExists(Handler handler, long user_id) {
+
+        MercuryCommunicator communicator = handler.getCommunicator("user");
 
         JsonNode response;
 

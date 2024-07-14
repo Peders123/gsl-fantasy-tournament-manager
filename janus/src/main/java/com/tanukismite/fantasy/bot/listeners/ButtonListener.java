@@ -5,7 +5,9 @@ import java.io.IOException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.tanukismite.fantasy.bot.commands.slashCommands.CreateSignups;
 import com.tanukismite.fantasy.bot.commands.slashCommands.Edit;
+import com.tanukismite.fantasy.bot.communicators.UserCommunicator;
 import com.tanukismite.fantasy.bot.handlers.Handler;
+import com.tanukismite.fantasy.bot.signup.UserSignupData;
 
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -90,10 +92,11 @@ public class ButtonListener extends BaseListener {
 
     private void signup(ButtonInteractionEvent event, boolean captain) {
 
-        boolean exists = CreateSignups.checkUserExists(this.handler.getCommunicator(), Long.parseLong(event.getUser().getId()));
+        UserCommunicator userCommunicator = (UserCommunicator) this.handler.getCommunicator("user");
+        boolean exists = CreateSignups.checkUserExists(this.handler, Long.parseLong(event.getUser().getId()));
 
         try {
-            JsonNode response = this.handler.getCommunicator().getUsers();
+            JsonNode response = this.handler.getCommunicator("user").get();
             System.out.println(response.toString());
         } catch (IOException e) {
             System.out.println("HANDLE ERROR GET");
@@ -102,7 +105,8 @@ public class ButtonListener extends BaseListener {
 
         if (exists == false) {
             try {
-                this.handler.getCommunicator().postUser(Long.parseLong(event.getUser().getId()), event.getUser().getName());
+                UserSignupData data = new UserSignupData(event.getUser().getId(), event.getUser().getName());
+                userCommunicator.post(data);
             } catch (IOException e) {
                 System.out.println("HANDLE ERROR");
                 return;
@@ -110,7 +114,7 @@ public class ButtonListener extends BaseListener {
         }
 
         try {
-            JsonNode response = this.handler.getCommunicator().getUsers();
+            JsonNode response = userCommunicator.get();
             System.out.println(response.toString());
         } catch (IOException e) {
             System.out.println("HANDLE ERROR GET");

@@ -1,9 +1,9 @@
 package com.tanukismite.fantasy.bot.commands.slashCommands;
 
 import com.tanukismite.fantasy.bot.commands.ExtendedCommand;
-import com.tanukismite.fantasy.bot.commands.Context;
 import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Components;
+import com.tanukismite.fantasy.bot.handlers.Handler;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -25,7 +25,7 @@ public class Edit extends ExtendedCommand {
     }
 
     @Override
-    public void execute(Context context) {
+    public void execute(Handler handler) {
 
         FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, "Testing Buttons");
 
@@ -46,7 +46,7 @@ public class Edit extends ExtendedCommand {
 
     }
 
-    protected void editMessage(Context context, TextChannelImpl channel, String id) {
+    protected void editMessage(Handler handler, TextChannelImpl channel, String id) {
 
         try {
 
@@ -62,7 +62,7 @@ public class Edit extends ExtendedCommand {
 
     }
 
-    protected void deleteMessage(Context context, TextChannelImpl channel, String id) {
+    protected void deleteMessage(Handler handler, TextChannelImpl channel, String id) {
 
         try {
 

@@ -2,14 +2,14 @@ package com.tanukismite.fantasy.bot;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Dictionary;
-import java.util.Hashtable;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
+import com.tanukismite.fantasy.bot.communicators.UserCommunicator;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 import com.tanukismite.fantasy.bot.listeners.*;
+import com.tanukismite.fantasy.bot.signup.UserSignupData;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -59,6 +59,9 @@ public class App {
         jda.addEventListener(new SlashCommandListener(handler));
         jda.addEventListener(new StringSelectListener(handler));
 
+        handler.addCommunicator("user", new UserCommunicator());
+        handler.addCommunicator("player", new PlayerCommunicator());
+
         CommandListUpdateAction commands = jda.updateCommands();
 
         JsonNode arrayNode = objectMapper.readTree(new File(
@@ -94,16 +97,14 @@ public class App {
 
         System.out.println("Commands created");
 
-        Dictionary<String, String> headers = new Hashtable<String, String>();
-        headers.put("User-Agent", "Mozilla/5.0");
-        headers.put("Authorization", "Token " + handler.getCommunicator().getToken());
+        UserSignupData data = new UserSignupData("123456", "peedly");
 
-        JsonNode response = handler.getCommunicator().getUsers();
+        JsonNode response = handler.getCommunicator("user").get();
         System.out.println(response.toString());
 
-        handler.getCommunicator().postUser(123456, "peedly");
+        handler.getCommunicator("user").post(data);
 
-        response = handler.getCommunicator().getUsers();
+        response = handler.getCommunicator("user").get();
         System.out.println(response.toString());
 
     }

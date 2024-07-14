@@ -55,7 +55,7 @@ class CaptainGetSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Captain
-        fields = ['captain_id', 'user_id', 'team_name', 'reason', 'captain_budget']
+        fields = ['captain_id', 'tournament_id', 'user_id', 'smite_name', 'team_name', 'reason', 'captain_budget']
 
 
 class CaptainPostSerializer(serializers.ModelSerializer):
@@ -63,7 +63,7 @@ class CaptainPostSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Captain
-        fields = ['user_id', 'team_name', 'reason']
+        fields = ['user_id', 'tournament_id', 'smite_name', 'team_name', 'reason']
 
     def create(self, validated_data):
 

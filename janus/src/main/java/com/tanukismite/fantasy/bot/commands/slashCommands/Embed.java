@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.lang.reflect.Method;
 
 import com.tanukismite.fantasy.bot.commands.Command;
-import com.tanukismite.fantasy.bot.commands.Context;
 import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Components;
+import com.tanukismite.fantasy.bot.handlers.Handler;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -26,7 +26,7 @@ public class Embed implements Command {
     }
 
     @Override
-    public void execute(Context context) {
+    public void execute(Handler handler) {
 
         event.getMessageChannel();
 
@@ -44,10 +44,10 @@ public class Embed implements Command {
     }
 
     @Override
-    public void executeMethod(String methodName, Context context, Object... params) throws Exception {
+    public void executeMethod(String methodName, Handler handler, Object... params) throws Exception {
 
-        Method method = Embed.class.getDeclaredMethod(methodName, Context.class, Object[].class);
-        method.invoke(this, context, new Object[] {params});
+        Method method = Embed.class.getDeclaredMethod(methodName, Handler.class, Object[].class);
+        method.invoke(this, handler, new Object[] {params});
 
     }
 

@@ -3,9 +3,9 @@ package com.tanukismite.fantasy.bot.commands.slashCommands;
 import java.lang.reflect.Method;
 
 import com.tanukismite.fantasy.bot.commands.Command;
-import com.tanukismite.fantasy.bot.commands.Context;
 import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Components;
+import com.tanukismite.fantasy.bot.handlers.Handler;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -24,7 +24,7 @@ public class ButtonTest implements Command {
     }
 
     @Override
-    public void execute(Context context) {
+    public void execute(Handler handler) {
 
         FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, "Testing Buttons");
 
@@ -38,10 +38,10 @@ public class ButtonTest implements Command {
     }
 
     @Override
-    public void executeMethod(String methodName, Context context, Object... params) throws Exception {
+    public void executeMethod(String methodName, Handler handler, Object... params) throws Exception {
 
-        Method method = ButtonTest.class.getDeclaredMethod(methodName, Context.class, Object[].class);
-        method.invoke(this, context, new Object[] {params});
+        Method method = ButtonTest.class.getDeclaredMethod(methodName, Handler.class, Object[].class);
+        method.invoke(this, handler, new Object[] {params});
 
     }
 

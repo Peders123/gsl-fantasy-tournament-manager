@@ -6,12 +6,12 @@ import java.net.URL;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.tanukismite.fantasy.bot.HttpHandler;
+import com.tanukismite.fantasy.bot.signup.PlayerSignupData;
 import com.tanukismite.fantasy.bot.signup.PostData;
-import com.tanukismite.fantasy.bot.signup.UserSignupData;
 
-public class UserCommunicator extends MercuryCommunicator {
+public class PlayerCommunicator extends MercuryCommunicator {
 
-    public UserCommunicator() {
+    public PlayerCommunicator() {
 
         super();
 
@@ -26,7 +26,7 @@ public class UserCommunicator extends MercuryCommunicator {
     @Override
     public JsonNode get() throws IOException {
 
-        HttpHandler getter = this.genericGet(new URL("http://192.168.64.1:8001/api/users/"));
+        HttpHandler getter = this.genericGet(new URL("http://192.168.64.1:8001/api/players/"));
 
         int responseCode = getter.getResponseCode();
 
@@ -46,12 +46,12 @@ public class UserCommunicator extends MercuryCommunicator {
     @Override
     public <T> boolean post(PostData data) throws IOException {
 
-        if (!(data instanceof UserSignupData)) {
+        if (!(data instanceof PlayerSignupData)) {
             System.out.println("MALFORMED DATA SIGNUP FORMAT");
             return false;
         }
 
-        HttpHandler poster = this.genericPost(new URL("http://192.168.64.1:8001/api/users/"), data.toMap());
+        HttpHandler poster = this.genericPost(new URL("http://192.168.64.1:8001/api/players/"), data.toMap());
 
         int responseCode = poster.getResponseCode();
 
@@ -63,12 +63,12 @@ public class UserCommunicator extends MercuryCommunicator {
 
     }
 
-    public <T> JsonNode getDetailed(T userId) throws IOException {
+    public <T> JsonNode getDetailed(T playerId) throws IOException {
 
         URL url;
 
-        if (userId instanceof Long) {
-            url = new URL("http://192.168.64.1:8001/api/users/" + Long.toString((Long) userId));
+        if (playerId instanceof Integer) {
+            url = new URL("http://192.168.64.1:8001/api/players/" + Integer.toString((Integer) playerId));
         } else {
             System.out.println("ERROR");
             System.out.println("Malformed userId in request, expected long.");

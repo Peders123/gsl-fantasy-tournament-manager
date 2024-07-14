@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.tanukismite.fantasy.bot.HttpHandler;
+import com.tanukismite.fantasy.bot.signup.PostData;
 
 public abstract class MercuryCommunicator {
 
@@ -73,7 +74,7 @@ public abstract class MercuryCommunicator {
     }
 
     public abstract JsonNode get() throws IOException;
-    public abstract <T> boolean post(T data) throws IOException;
+    public abstract <T> boolean post(PostData data) throws IOException;
     public abstract <T> JsonNode getDetailed(T id) throws IOException;
 
     /* public boolean postPlayer(Map<String, Object> inputMap) throws IOException {

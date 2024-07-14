@@ -14,7 +14,6 @@ import com.tanukismite.fantasy.bot.handlers.Handler;
 import com.tanukismite.fantasy.bot.signup.CaptainSignupData;
 import com.tanukismite.fantasy.bot.signup.PlayerSignupData;
 import com.tanukismite.fantasy.bot.signup.SignupData;
-import com.tanukismite.fantasy.bot.signup.UserSignupData;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -146,14 +145,6 @@ public class CreateSignups extends ExtendedCommand {
         Modal modal = Action.createModal(modalId, title, inputs);
         FluentRestAction<Void, ModalCallbackAction> action = Action.replyWithModal(buttonEvent, modal);
         this.queue(action);
-
-        UserSignupData data = new UserSignupData(buttonEvent.getUser().getId(), buttonEvent.getUser().getName());
-        try {
-            handler.getCommunicator("user").post(data);
-        } catch (IOException e) {
-            System.out.println("ERROR");
-            e.printStackTrace();
-        }
 
     }
 

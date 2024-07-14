@@ -1,11 +1,9 @@
 package com.tanukismite.fantasy.bot.communicators;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.tanukismite.fantasy.bot.HttpHandler;
 import com.tanukismite.fantasy.bot.signup.PostData;
 import com.tanukismite.fantasy.bot.signup.UserSignupData;
 
@@ -24,124 +22,56 @@ public class UserCommunicator extends MercuryCommunicator {
     }
 
     @Override
+    protected String getBaseEndpoint() {
+        return "http://192.168.64.1:8001/api/users/";
+    }
+
+    @Override
     public JsonNode get() throws IOException {
-
-        HttpHandler getter = this.genericGet(new URL("http://192.168.64.1:8001/api/users/"));
-
-        int responseCode = getter.getResponseCode();
-
-        if (responseCode != HttpURLConnection.HTTP_OK) {
-
-            System.out.println("ERROR - NOT SUCCESSFUL GET");
-            getter.readToJson();
-
-            return null;
-
-        }
-
-        return getter.readToJson();
-
+        return genericGet(new URL(this.getBaseEndpoint()));
     }
 
     @Override
     public boolean post(PostData data) throws IOException {
-
+        System.out.println(data.getClass());
         if (!(data instanceof UserSignupData)) {
             System.out.println("MALFORMED DATA SIGNUP FORMAT");
             return false;
         }
-
-        HttpHandler poster = this.genericPost(new URL("http://192.168.64.1:8001/api/users/"), data.toMap());
-
-        int responseCode = poster.getResponseCode();
-
-        if (responseCode != HttpURLConnection.HTTP_CREATED) {
-            System.out.println("ERROR - NOT SUCCESSFUL POST");
-            return false;
-        }
-        return true;
-
+        return genericPost(new URL(this.getBaseEndpoint()), data.toMap());
     }
 
     public <T> JsonNode getDetailed(T userId) throws IOException {
-
-        URL url;
-
         if (userId instanceof Long) {
-            url = new URL("http://192.168.64.1:8001/api/users/" + Long.toString((Long) userId));
+            return genericDetailedGet(new URL(this.getBaseEndpoint() + userId));
         } else {
-            System.out.println("ERROR");
-            System.out.println("Malformed userId in request, expected long.");
-
+            System.out.println("ERROR: Malformed userId in request, expected long.");
             return null;
         }
-
-        HttpHandler getter = this.genericGet(url);
-        int responseCode = getter.getResponseCode();
-
-        if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_NOT_FOUND){
-            JsonNode response = getter.readToJson();
-            return response;
-        } else {
-            System.out.println("ERROR - NOT SUCCESSFUL GET");
-            getter.readToJson();
-            return null;
-        }
-
     }
 
     @Override
     public <T> boolean delete(T userId) throws IOException {
-        
-        URL url;
-
         if (userId instanceof Long) {
-            url = new URL("http://192.168.64.1:8001/api/users/" + Long.toString((Long) userId));
+            return genericDelete(new URL(this.getBaseEndpoint() + userId));
         } else {
-            System.out.println("ERROR");
-            System.out.println("Malformed userId in request, expected long.");
-
+            System.out.println("ERROR: Malformed userId in request, expected long.");
             return false;
         }
-
-        HttpHandler deleter = this.genericDelete(url);
-        int responseCode = deleter.getResponseCode();
-
-        if (responseCode == HttpURLConnection.HTTP_NO_CONTENT) {
-            return true;
-        }
-        return false;
     }
 
     @Override
     public <T> boolean put(T userId, PostData data) throws IOException {
-
-        URL url;
-
         if (userId instanceof Long) {
-            url = new URL("http://192.168.64.1:8001/api/users/" + Long.toString((Long) userId));
+            if (!(data instanceof UserSignupData)) {
+                System.out.println("MALFORMED DATA SIGNUP FORMAT");
+                return false;
+            }
+            return genericPut(new URL(this.getBaseEndpoint() + userId), data.toMap());
         } else {
-            System.out.println("ERROR");
-            System.out.println("Malformed userId in request, expected long.");
-
+            System.out.println("ERROR: Malformed userId in request, expected long.");
             return false;
         }
-
-        if (!(data instanceof UserSignupData)) {
-            System.out.println("MALFORMED DATA SIGNUP FORMAT");
-            return false;
-        }
-
-        HttpHandler putter = this.genericPut(url, data.toMap());
-
-        int responseCode = putter.getResponseCode();
-
-        if (responseCode != HttpURLConnection.HTTP_CREATED) {
-            System.out.println("ERROR - NOT SUCCESSFUL PUT");
-            return false;
-        }
-        return true;
-
     }
 
 }

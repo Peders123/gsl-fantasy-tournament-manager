@@ -7,6 +7,7 @@ import com.tanukismite.fantasy.bot.commands.slashCommands.CreateSignups;
 import com.tanukismite.fantasy.bot.commands.slashCommands.Edit;
 import com.tanukismite.fantasy.bot.communicators.UserCommunicator;
 import com.tanukismite.fantasy.bot.handlers.Handler;
+import com.tanukismite.fantasy.bot.signup.UserSignupData;
 
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -92,7 +93,6 @@ public class ButtonListener extends BaseListener {
     private void signup(ButtonInteractionEvent event, boolean captain) {
 
         UserCommunicator userCommunicator = (UserCommunicator) this.handler.getCommunicator("user");
-
         boolean exists = CreateSignups.checkUserExists(this.handler, Long.parseLong(event.getUser().getId()));
 
         try {
@@ -105,7 +105,8 @@ public class ButtonListener extends BaseListener {
 
         if (exists == false) {
             try {
-                userCommunicator.post(null);
+                UserSignupData data = new UserSignupData(event.getUser().getId(), event.getUser().getName());
+                userCommunicator.post(data);
             } catch (IOException e) {
                 System.out.println("HANDLE ERROR");
                 return;

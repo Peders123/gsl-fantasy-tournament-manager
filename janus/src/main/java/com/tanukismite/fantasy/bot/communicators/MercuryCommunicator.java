@@ -73,9 +73,38 @@ public abstract class MercuryCommunicator {
 
     }
 
+    protected HttpHandler genericDelete(URL url) throws IOException {
+
+        Dictionary<String, String> headers = new Hashtable<String, String>();
+        headers.put("User-Agent", "Mozilla/5.0");
+        headers.put("Authorization", "Token " + this.token);
+
+        HttpHandler deleter = new HttpHandler(url, "DELETE", headers);
+
+        return deleter;
+
+    }
+
+    protected HttpHandler genericPut(URL url, Map<String, Object> inputMap) throws IOException {
+
+        Dictionary<String, String> headers = new Hashtable<String, String>();
+        headers.put("User-Agent", "Mozilla/5.0");
+        headers.put("Content-Type", "application/json");
+        headers.put("Authorization", "Token " + this.token);
+
+        HttpHandler putter = new HttpHandler(url, "PUT", headers);
+
+        putter.writeFromMap(inputMap);
+
+        return putter;
+
+    }
+
     public abstract JsonNode get() throws IOException;
-    public abstract <T> boolean post(PostData data) throws IOException;
+    public abstract boolean post(PostData data) throws IOException;
     public abstract <T> JsonNode getDetailed(T id) throws IOException;
+    public abstract <T> boolean delete(T id) throws IOException;
+    public abstract <T> boolean put(T id, PostData data) throws IOException;
 
     /* public boolean postPlayer(Map<String, Object> inputMap) throws IOException {
 

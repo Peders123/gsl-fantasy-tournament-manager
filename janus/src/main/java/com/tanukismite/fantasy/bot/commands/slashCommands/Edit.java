@@ -1,7 +1,6 @@
 package com.tanukismite.fantasy.bot.commands.slashCommands;
 
 import com.tanukismite.fantasy.bot.commands.ExtendedCommand;
-import com.tanukismite.fantasy.bot.commands.Context;
 import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Components;
 import com.tanukismite.fantasy.bot.handlers.Handler;

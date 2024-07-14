@@ -19,7 +19,6 @@ public class PlayerSignupData extends SignupData {
         super(currentSession);
     }
 
-
     public String getSmiteGuru() {
         return this.smiteGuru;
     }

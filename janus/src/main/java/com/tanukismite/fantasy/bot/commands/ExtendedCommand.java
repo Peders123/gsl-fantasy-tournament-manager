@@ -14,8 +14,6 @@ public class ExtendedCommand implements Command {
     @Override
     public void executeMethod(String methodName, Handler handler, Object... params) throws Exception {
 
-        Context context = handler.getContext();
-
         Class<?>[] paramTypes = new Class<?>[params.length + 1];
         paramTypes[0] = Handler.class;
 

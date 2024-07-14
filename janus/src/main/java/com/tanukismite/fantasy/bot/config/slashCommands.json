@@ -55,20 +55,6 @@
         "adminOnly": false
     },
     {
-        "name": "signup",
-        "description": "Test command to create a user instance in the database.",
-        "options": [
-            {
-                "type": 3,
-                "name": "smite-name",
-                "description": "The smite username.",
-                "required": true
-            }
-        ],
-        "guildOnly": true,
-        "adminOnly": false
-    },
-    {
         "name": "edit",
         "description": "Testing message edits.",
         "options": [],
@@ -81,5 +67,12 @@
         "options": [],
         "guildOnly": true,
         "adminOnly": true
+    },
+    {
+        "name": "delete",
+        "description": "Test deleting a user.",
+        "options": [],
+        "guildOnly": false,
+        "adminOnly": false
     }
 ]

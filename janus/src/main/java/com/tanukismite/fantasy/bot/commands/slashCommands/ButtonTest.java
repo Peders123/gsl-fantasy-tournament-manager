@@ -3,7 +3,6 @@ package com.tanukismite.fantasy.bot.commands.slashCommands;
 import java.lang.reflect.Method;
 
 import com.tanukismite.fantasy.bot.commands.Command;
-import com.tanukismite.fantasy.bot.commands.Context;
 import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Components;
 import com.tanukismite.fantasy.bot.handlers.Handler;
@@ -40,8 +39,6 @@ public class ButtonTest implements Command {
 
     @Override
     public void executeMethod(String methodName, Handler handler, Object... params) throws Exception {
-
-        Context context = handler.getContext();
 
         Method method = ButtonTest.class.getDeclaredMethod(methodName, Handler.class, Object[].class);
         method.invoke(this, handler, new Object[] {params});

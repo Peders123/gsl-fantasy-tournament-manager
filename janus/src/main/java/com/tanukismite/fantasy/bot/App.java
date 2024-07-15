@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
 import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
 import com.tanukismite.fantasy.bot.communicators.UserCommunicator;
 import com.tanukismite.fantasy.bot.handlers.Handler;
@@ -61,6 +62,7 @@ public class App {
 
         handler.addCommunicator("user", new UserCommunicator());
         handler.addCommunicator("player", new PlayerCommunicator());
+        handler.addCommunicator("captain", new CaptainCommunicator());
 
         CommandListUpdateAction commands = jda.updateCommands();
 
@@ -105,6 +107,9 @@ public class App {
         handler.getCommunicator("user").post(data);
 
         response = handler.getCommunicator("user").get();
+        System.out.println(response.toString());
+
+        response = handler.getCommunicator("captain").get();
         System.out.println(response.toString());
 
     }

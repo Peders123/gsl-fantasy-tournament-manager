@@ -68,6 +68,8 @@ class CaptainPostSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         captain = Captain.objects.create(
+            tournament_id=validated_data['tournament_id'],
+            smite_name=validated_data['smite_name'],
             user_id=validated_data['user_id'],
             team_name=validated_data['team_name'],
             reason=validated_data['reason']

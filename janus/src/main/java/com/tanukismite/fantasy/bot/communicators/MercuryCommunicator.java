@@ -78,8 +78,11 @@ public abstract class MercuryCommunicator {
 
         HttpHandler poster = createHttpHandler(url, "POST", inputMap);
 
+        System.out.println(poster.getResponseCode());
+
         if (poster.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
             System.out.println("ERROR - NOT SUCCESSFUL POST");
+            poster.readError();
             return false;
         }
         return true;

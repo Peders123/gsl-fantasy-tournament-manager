@@ -117,30 +117,42 @@ public class CreateSignups extends ExtendedCommand {
 
         modalId += captain ? ":captain-signup" : ":player-signup";
         String title = captain ? "Captain Signup" : "Player signup";
-        TextInput[] inputs = new TextInput[2];
+        TextInput[] inputs;
 
-        inputs[0] = TextInput.create("ign", "Smite IGN", TextInputStyle.SHORT)
-                .setPlaceholder("Peders")
-                .setMinLength(4)
-                .setMaxLength(15)
-                .build();
-
+        
         if (captain) {
 
+            inputs = new TextInput[3];
+
             inputs[1] = TextInput.create("reason", "Reasoning", TextInputStyle.PARAGRAPH)
-                    .setPlaceholder("Why would you like to be a captain?")
-                    .setMinLength(20)
-                    .setMaxLength(1000)
-                    .build();
+                .setPlaceholder("Why would you like to be a captain?")
+                .setMinLength(20)
+                .setMaxLength(1000)
+                .build();
+
+            inputs[2] = TextInput.create("team-name", "Team Name", TextInputStyle.SHORT)
+                .setPlaceholder("Please enter your proposed team name.")
+                .setMinLength(1)
+                .setMaxLength(30)
+                .build();
 
         } else {
 
+            inputs = new TextInput[2];
+
             inputs[1] = TextInput.create("guru", "Smite-guru", TextInputStyle.SHORT)
-                    .setPlaceholder("Link to your Smite-guru profile.")
-                    .setMinLength(15)
-                    .build();
+                .setPlaceholder("Link to your Smite-guru profile.")
+                .setMinLength(15)
+                .build();
 
         }
+
+        inputs[0] = TextInput.create("ign", "Smite IGN", TextInputStyle.SHORT)
+            .setPlaceholder("Peders")
+            .setMinLength(4)
+            .setMaxLength(20)
+            .build();
+
 
         Modal modal = Action.createModal(modalId, title, inputs);
         FluentRestAction<Void, ModalCallbackAction> action = Action.replyWithModal(buttonEvent, modal);
@@ -164,6 +176,17 @@ public class CreateSignups extends ExtendedCommand {
 
             data = context.getUserSignupData(modalEvent.getUser().getId(), CaptainSignupData.class);
             CaptainSignupData.class.cast(data).setReason(modalEvent.getValue("reason").getAsString());
+            CaptainSignupData.class.cast(data).setTeamName(modalEvent.getValue("team-name").getAsString());
+
+            data.setId(modalEvent.getUser().getId());
+            data.setIGN(modalEvent.getValue("ign").getAsString());
+
+            try {
+                handler.getCommunicator("captain").post(CaptainSignupData.class.cast(data));
+            } catch (IOException e) {
+                System.out.println("ERROR");
+                e.printStackTrace();
+            }
 
             FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(modalEvent, "SUBMITTED", true);
             this.queue(action);
@@ -172,6 +195,9 @@ public class CreateSignups extends ExtendedCommand {
 
             data = context.getUserSignupData(modalEvent.getUser().getId(), PlayerSignupData.class);
             PlayerSignupData.class.cast(data).setSmiteGuru(modalEvent.getValue("guru").getAsString());
+
+            data.setId(modalEvent.getUser().getId());
+            data.setIGN(modalEvent.getValue("ign").getAsString());
 
             SelectOption[] options = Components.createSelectOptions("role1");
             StringSelectMenu selection = Components.createSelectMenu("role1", options);
@@ -182,9 +208,7 @@ public class CreateSignups extends ExtendedCommand {
 
         }
 
-        data.setId(modalEvent.getUser().getId());
-        data.setIGN(modalEvent.getValue("ign").getAsString());
-
+        
 
     }
 

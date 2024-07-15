@@ -82,10 +82,10 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "djehuty",
         "USER": "Pedro",
-        "PASSWORD": "p[%K*9/)<mB]j.V8N'2S-r", #best we hide this one
+        "PASSWORD": "p[%K*9/)<mB]j.V8N'2S-r",  # best we hide this one
         "HOST": "djehuty.postgres.database.azure.com",
         "PORT": "5432",
-        "OPTIONS": {"sslmode":"require"},
+        "OPTIONS": {"sslmode": "require"},
     }
 }
 

@@ -10,7 +10,7 @@ python3 manage.py migrate
 export BUILD_TYPE="dev"
 
 if [[ $BUILD_TYPE = "dev" ]]; then
-    python3 manage.py populate_database
+    
     expect -c "
         spawn python3 manage.py createsuperuser --username=Peders --email=admin@example.com
         expect \"Password:\"
@@ -21,4 +21,4 @@ if [[ $BUILD_TYPE = "dev" ]]; then
     "
 fi
 
-python3 manage.py runserver 0.0.0.0:8001
+python3 manage.py runserver 0.0.0.0:8000

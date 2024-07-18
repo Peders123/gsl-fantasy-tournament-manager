@@ -3,11 +3,10 @@
 cd /data/mercury
 
 source environment.sh
+export BUILD_TYPE="ops"
 
 python3 manage.py makemigrations
 python3 manage.py migrate
-
-export BUILD_TYPE="dev"
 
 if [[ $BUILD_TYPE = "dev" ]]; then
     python3 manage.py populate_database
@@ -21,4 +20,4 @@ if [[ $BUILD_TYPE = "dev" ]]; then
     "
 fi
 
-python3 manage.py runserver 0.0.0.0:8000
+python3 manage.py runserver 0.0.0.0:80

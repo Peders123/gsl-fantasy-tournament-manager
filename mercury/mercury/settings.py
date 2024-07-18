@@ -48,7 +48,6 @@ DATABASE_SETUPS = {
     }
 }
 
-
 # Application definition
 
 INSTALLED_APPS = [

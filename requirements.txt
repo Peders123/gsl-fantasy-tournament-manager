@@ -2,3 +2,4 @@ Django
 djangorestframework
 whitenoise
 psycopg2-binary
+gunicorn

@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import os
 
 from pathlib import Path
 
@@ -25,7 +26,27 @@ SECRET_KEY = 'django-insecure-&5w+v%pk339$m6+n)(pujq8@zl#$&o*#7h_14$k#eb6u+1azsf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [*]
+ALLOWED_HOSTS = ['*']
+
+DATABASE_SETUPS = {
+    "dev": {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    },
+    "ops": {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "djehuty",
+            "USER": "Pedro",
+            "PASSWORD": "p[%K*9/)<mB]j.V8N'2S-r",  # best we hide this one
+            "HOST": "djehuty.postgres.database.azure.com",
+            "PORT": "5432",
+            "OPTIONS": {"sslmode": "require"},
+        }
+    }
+}
 
 
 # Application definition
@@ -86,17 +107,10 @@ WSGI_APPLICATION = 'mercury.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "djehuty",
-        "USER": "Pedro",
-        "PASSWORD": "p[%K*9/)<mB]j.V8N'2S-r",  # best we hide this one
-        "HOST": "djehuty.postgres.database.azure.com",
-        "PORT": "5432",
-        "OPTIONS": {"sslmode": "require"},
-    }
-}
+print(f"BUILD: {os.environ['BUILD_TYPE']}")
+print(DATABASE_SETUPS["dev"])
+
+DATABASES = DATABASE_SETUPS[os.environ['BUILD_TYPE']]
 
 
 # Password validation

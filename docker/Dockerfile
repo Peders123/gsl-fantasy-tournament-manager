@@ -76,5 +76,5 @@ EXPOSE 80
 RUN apt-get update && apt-get install -y dos2unix && dos2unix /data/mercury/startMercury.sh
 
 WORKDIR /data/mercury
-CMD ["expose", "BUILD_TYPE='ops'"]
+
 CMD ["python", "manage.py", "runserver", "0.0.0.0:80"]

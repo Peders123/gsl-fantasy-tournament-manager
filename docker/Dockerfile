@@ -71,4 +71,6 @@ COPY mercury/talaria /data/mercury/talaria
 COPY mercury/manage.py /data/mercury/.
 COPY mercury/dData.json /data/mercury/.
 
+EXPOSE 80
+
 RUN apt-get update && apt-get install -y dos2unix && dos2unix /data/mercury/startMercury.sh

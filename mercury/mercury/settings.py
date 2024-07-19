@@ -109,7 +109,7 @@ WSGI_APPLICATION = 'mercury.wsgi.application'
 #print(f"BUILD: {os.environ['BUILD_TYPE']}")
 print(DATABASE_SETUPS["dev"])
 
-DATABASES = DATABASE_SETUPS[os.environ['BUILD_TYPE']]
+DATABASES = DATABASE_SETUPS["dev"]
 
 
 # Password validation

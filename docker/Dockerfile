@@ -77,4 +77,4 @@ RUN apt-get update && apt-get install -y dos2unix && dos2unix /data/mercury/star
 
 WORKDIR /data/mercury
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:80"]
+CMD ["./startMercury.sh"]

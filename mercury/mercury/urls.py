@@ -18,7 +18,10 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework.authtoken.views import obtain_auth_token
 
+from . import views
+
 urlpatterns = [
+    path('', views.index, name='index'),
     path('admin/', admin.site.urls),
     path('api/', include('talaria.urls')),
     path('api-authentication/', obtain_auth_token, name='api_authentication'),

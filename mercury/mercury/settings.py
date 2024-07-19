@@ -106,7 +106,7 @@ WSGI_APPLICATION = 'mercury.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-print(f"BUILD: {os.environ['BUILD_TYPE']}")
+#print(f"BUILD: {os.environ['BUILD_TYPE']}")
 print(DATABASE_SETUPS["dev"])
 
 DATABASES = DATABASE_SETUPS[os.environ['BUILD_TYPE']]

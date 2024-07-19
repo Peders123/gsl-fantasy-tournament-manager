@@ -2,7 +2,6 @@
 
 cd /data/mercury
 
-source environment.sh
 export BUILD_TYPE="ops"
 
 python3 manage.py makemigrations

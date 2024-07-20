@@ -74,5 +74,12 @@
         "options": [],
         "guildOnly": false,
         "adminOnly": false
+    },
+    {
+        "name": "create-tournament",
+        "description": "Load a new tournament into the database.",
+        "options": [],
+        "guildOnly": true,
+        "adminOnly": true
     }
 ]

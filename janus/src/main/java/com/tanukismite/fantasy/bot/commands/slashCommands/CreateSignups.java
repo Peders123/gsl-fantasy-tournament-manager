@@ -208,8 +208,6 @@ public class CreateSignups extends ExtendedCommand {
 
         }
 
-        
-
     }
 
     protected void submitFirstRole(Handler handler, StringSelectInteractionEvent selectEvent) {

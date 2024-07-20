@@ -17,6 +17,7 @@ public class CaptainCommunicator extends MercuryCommunicator {
             this.initialise();
         } catch (IOException e) {
             System.out.println("ERROR ON CONSTRUCTION");
+            e.printStackTrace();
         }
 
     }

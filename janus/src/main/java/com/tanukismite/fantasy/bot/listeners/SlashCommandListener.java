@@ -2,6 +2,7 @@ package com.tanukismite.fantasy.bot.listeners;
 
 import com.tanukismite.fantasy.bot.commands.slashCommands.ButtonTest;
 import com.tanukismite.fantasy.bot.commands.slashCommands.CreateSignups;
+import com.tanukismite.fantasy.bot.commands.slashCommands.CreateTournament;
 import com.tanukismite.fantasy.bot.commands.slashCommands.Delete;
 import com.tanukismite.fantasy.bot.commands.slashCommands.Edit;
 import com.tanukismite.fantasy.bot.commands.slashCommands.Embed;
@@ -53,6 +54,11 @@ public class SlashCommandListener extends BaseListener {
 
             case "delete":
                 this.handler.execute(new Delete(event));
+                break;
+
+            case "create-tournament":
+                this.handler.execute(new CreateTournament(event));
+                break;
 
         }
 

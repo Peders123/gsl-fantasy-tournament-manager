@@ -20,7 +20,7 @@ services:
     entrypoint: /data/mercury/startMercury.sh
     image: mercury:1.0
     ports:
-      - "80:80"
+      - "8001:8001"
 
   janus:
     build:

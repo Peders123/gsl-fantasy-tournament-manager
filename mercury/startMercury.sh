@@ -2,7 +2,7 @@
 
 cd /data/mercury
 
-export BUILD_TYPE="ops"
+export BUILD_TYPE="dev"
 
 python3 manage.py makemigrations
 python3 manage.py migrate
@@ -19,4 +19,4 @@ if [[ $BUILD_TYPE = "dev" ]]; then
     "
 fi
 
-python3 manage.py runserver 0.0.0.0:80
+python3 manage.py runserver 0.0.0.0:8001

@@ -77,7 +77,6 @@ RUN apt-get update && apt-get install -y dos2unix && dos2unix /data/mercury/star
 
 WORKDIR /data/mercury
 
-
-ENV BUILD_TYPE="ops"
+ENV BUILD_TYPE="dev"
 
 CMD ["./startMercury.sh"]

@@ -53,24 +53,24 @@ public class TournamentCommunicator extends MercuryCommunicator {
 
     @Override
     public <T> boolean delete(T tournamentId) throws IOException {
-        if (tournamentId instanceof Long) {
+        if (tournamentId instanceof Integer) {
             return genericDelete(new URL(this.getBaseEndpoint() + tournamentId));
         } else {
-            System.out.println("ERROR: Malformed tournamentId in request, expected long.");
+            System.out.println("ERROR: Malformed tournamentId in request, expected integer.");
             return false;
         }
     }
 
     @Override
     public <T> boolean put(T tournamentId, PostData data) throws IOException {
-        if (tournamentId instanceof Long) {
+        if (tournamentId instanceof Integer) {
             if (!(data instanceof TournamentData)) {
                 System.out.println("MALFORMED DATA SIGNUP FORMAT");
                 return false;
             }
             return genericPut(new URL(this.getBaseEndpoint() + tournamentId), data.toMap());
         } else {
-            System.out.println("ERROR: Malformed tournamentId in request, expected long.");
+            System.out.println("ERROR: Malformed tournamentId in request, expected integer.");
             return false;
         }
     }

@@ -1,7 +1,5 @@
 package com.tanukismite.fantasy.bot.commands.slashCommands;
 
-import java.lang.reflect.Method;
-
 import com.tanukismite.fantasy.bot.commands.Context;
 import com.tanukismite.fantasy.bot.commands.ExtendedCommand;
 import com.tanukismite.fantasy.bot.handlers.Action;

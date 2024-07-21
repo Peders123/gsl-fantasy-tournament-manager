@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteract
 public abstract class SignupData implements PostData {
 
     protected String id;
+    protected int tournamentId;
     protected String ign;
     protected CreateSignups signupRoot;
     protected GenericComponentInteractionCreateEvent signupSession;
@@ -36,6 +37,14 @@ public abstract class SignupData implements PostData {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public int getTournamentId() {
+        return this.tournamentId;
+    }
+
+    public void setTournamentId(int tournamentId) {
+        this.tournamentId = tournamentId;
     }
 
     public String getIGN() {
@@ -73,7 +82,7 @@ public abstract class SignupData implements PostData {
     public Map<String, Object> toMap() {
 
         Map<String, Object> map = new HashMap<>();
-        map.put("tournament_id", 1);
+        map.put("tournament_id", this.tournamentId);
         map.put("user_id", Long.valueOf(this.id));
         map.put("smite_name", this.ign);
 

@@ -2,6 +2,8 @@ package com.tanukismite.fantasy.bot.commands.slashCommands;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.tanukismite.fantasy.bot.Role;
@@ -40,6 +42,7 @@ import net.dv8tion.jda.internal.requests.restaction.MessageCreateActionImpl;
 public class CreateSignups extends ExtendedCommand {
 
     private SlashCommandInteractionEvent event;
+    private int tournamentId;
     private String signupRootId;
     private String recentMessageId;
 
@@ -48,21 +51,30 @@ public class CreateSignups extends ExtendedCommand {
         this.event = event;
         this.signupRootId = "TESTING ROOT ID";
         this.recentMessageId = null;
+        this.tournamentId = event.getOption("tournamentid").getAsInt();
 
     }
 
     @Override
     public void execute(Handler handler) {
 
+        JsonNode node = null;
+
+        try{
+            node = handler.getCommunicator("tournament").getDetailed(this.tournamentId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Context context = handler.getContext();
 
         MessageChannel channel = event.getMessageChannel();
 
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("Embed testing command");
-        embed.setDescription("TANUKI SMITE LEAGUE FANTASY TOURNAMENT\n <@365588450881306630>");
+        embed.setTitle(node.get("title").asText());
+        embed.setDescription(node.get("description").asText());
         embed.setColor(new Color(28, 19, 31, 255));
-        embed.setFooter("August 10th");
+        embed.setFooter(CreateSignups.convertDate(node.get("datetime").asText()));
 
         FluentRestAction<InteractionHook, ReplyCallbackAction> response = Action.replyWithMessage(event, "Created!");
         FluentRestAction<Message, MessageCreateAction> action = Action.sendMessageWithEmbed(channel, embed.build());
@@ -179,6 +191,7 @@ public class CreateSignups extends ExtendedCommand {
             CaptainSignupData.class.cast(data).setTeamName(modalEvent.getValue("team-name").getAsString());
 
             data.setId(modalEvent.getUser().getId());
+            data.setTournamentId(this.tournamentId);
             data.setIGN(modalEvent.getValue("ign").getAsString());
 
             try {
@@ -197,6 +210,7 @@ public class CreateSignups extends ExtendedCommand {
             PlayerSignupData.class.cast(data).setSmiteGuru(modalEvent.getValue("guru").getAsString());
 
             data.setId(modalEvent.getUser().getId());
+            data.setTournamentId(this.tournamentId);
             data.setIGN(modalEvent.getValue("ign").getAsString());
 
             SelectOption[] options = Components.createSelectOptions("role1");
@@ -324,6 +338,15 @@ public class CreateSignups extends ExtendedCommand {
         }
 
         return false;
+
+    }
+
+    public static String convertDate(String dateString) {
+
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME;
+        ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateString, inputFormatter);
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("hh:mm a dd/MM/yyyy");
+        return zonedDateTime.format(outputFormatter);
 
     }
 

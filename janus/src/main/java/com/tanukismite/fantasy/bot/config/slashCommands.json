@@ -64,7 +64,14 @@
     {
         "name": "create-signups",
         "description": "Create signups using select menu.",
-        "options": [],
+        "options": [
+            {
+                "type": 4,
+                "name": "tournamentid",
+                "description": "The id of the tournament the signups are for.",
+                "required": true
+            }
+        ],
         "guildOnly": true,
         "adminOnly": true
     },

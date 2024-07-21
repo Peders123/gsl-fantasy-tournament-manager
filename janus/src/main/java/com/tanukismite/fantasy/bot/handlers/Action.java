@@ -47,7 +47,19 @@ public class Action {
 
     }
 
+    public static FluentRestAction<InteractionHook, ReplyCallbackAction> replyWithEmbeds(IReplyCallback event, MessageEmbed embed) {
+
+        return event.replyEmbeds(embed);
+
+    }
+
     public static FluentRestAction<Void, ModalCallbackAction> replyWithModal(ButtonInteractionEvent event, Modal modal) {
+
+        return event.replyModal(modal);
+
+    }
+
+    public static FluentRestAction<Void, ModalCallbackAction> replyWithModal(SlashCommandInteractionEvent event, Modal modal) {
 
         return event.replyModal(modal);
 

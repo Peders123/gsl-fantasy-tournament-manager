@@ -1,7 +1,7 @@
 """
 Defines the serializers for all models defined in Talaria.
 """
-from rest_framework import serializers
+from rest_framework import fields, serializers
 
 from .models import User, Tournament, Captain, Player
 
@@ -11,21 +11,22 @@ class TournamentGetSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Tournament
-        fields = ['tournament_id', 'date', 'time', 'title', 'description']
+        fields = ['tournament_id', 'datetime', 'title', 'description']
 
 
 class TournamentPostSerializer(serializers.ModelSerializer):
 
+    datetime = fields.DateTimeField(input_formats=['%Y-%m-%dT%H:%M:%SZ'])
+
     class Meta:
 
         model = Tournament
-        fields = ['date', 'time', 'title', 'description']
+        fields = ['datetime', 'title', 'description']
 
     def create(self, validated_data):
 
         tournament = Tournament.objects.create(
-            date=validated_data['date'],
-            time=validated_data['time'],
+            datetime=validated_data['datetime'],
             title=validated_data['title'],
             description=validated_data['description']
         )

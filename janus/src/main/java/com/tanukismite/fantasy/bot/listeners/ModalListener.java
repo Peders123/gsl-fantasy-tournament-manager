@@ -45,6 +45,19 @@ public class ModalListener extends BaseListener {
                 }
                 break;
 
+            case "tournament-modal":
+
+                try {
+                    this.handler.executeMethod(
+                        this.handler.getContext().getTournamentRoot(),
+                        "submitModal",
+                        event
+                    );
+                } catch (Exception e) {
+                    System.out.println("ERROR");
+                    e.printStackTrace();
+                }
+
         }
 
     }

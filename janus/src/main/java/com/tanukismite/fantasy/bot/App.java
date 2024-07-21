@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
 import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
+import com.tanukismite.fantasy.bot.communicators.TournamentCommunicator;
 import com.tanukismite.fantasy.bot.communicators.UserCommunicator;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 import com.tanukismite.fantasy.bot.listeners.*;
@@ -62,6 +63,7 @@ public class App {
 
         handler.addCommunicator("user", new UserCommunicator());
         handler.addCommunicator("player", new PlayerCommunicator());
+        handler.addCommunicator("tournament", new TournamentCommunicator());
         handler.addCommunicator("captain", new CaptainCommunicator());
 
         CommandListUpdateAction commands = jda.updateCommands();

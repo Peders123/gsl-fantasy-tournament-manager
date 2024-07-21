@@ -3,12 +3,14 @@ package com.tanukismite.fantasy.bot.commands;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.tanukismite.fantasy.bot.commands.slashCommands.CreateSignups;
+import com.tanukismite.fantasy.bot.commands.slashCommands.CreateTournament;
 import com.tanukismite.fantasy.bot.signup.SignupData;
 
 public class Context {
 
     private ConcurrentHashMap<String, SignupData> userSignupSessions;
     private CreateSignups signupRoot;
+    private CreateTournament tournamentRoot;
 
     public Context() {
 
@@ -38,6 +40,14 @@ public class Context {
 
     public void setSignupRoot(CreateSignups signupRoot) {
         this.signupRoot = signupRoot;
+    }
+
+    public CreateTournament getTournamentRoot() {
+        return this.tournamentRoot;
+    }
+
+    public void setTournamentRoot(CreateTournament tournamentRoot) {
+        this.tournamentRoot = tournamentRoot;
     }
 
 }

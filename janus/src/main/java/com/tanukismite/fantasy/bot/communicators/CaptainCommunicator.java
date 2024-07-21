@@ -5,7 +5,6 @@ import java.net.URL;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.tanukismite.fantasy.bot.signup.CaptainSignupData;
-import com.tanukismite.fantasy.bot.signup.PlayerSignupData;
 import com.tanukismite.fantasy.bot.signup.PostData;
 
 public class CaptainCommunicator extends MercuryCommunicator {
@@ -18,6 +17,7 @@ public class CaptainCommunicator extends MercuryCommunicator {
             this.initialise();
         } catch (IOException e) {
             System.out.println("ERROR ON CONSTRUCTION");
+            e.printStackTrace();
         }
 
     }
@@ -65,7 +65,7 @@ public class CaptainCommunicator extends MercuryCommunicator {
     @Override
     public <T> boolean put(T captainId, PostData data) throws IOException {
         if (captainId instanceof Long) {
-            if (!(data instanceof PlayerSignupData)) {
+            if (!(data instanceof CaptainSignupData)) {
                 System.out.println("MALFORMED DATA SIGNUP FORMAT");
                 return false;
             }

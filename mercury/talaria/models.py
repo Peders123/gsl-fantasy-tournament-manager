@@ -29,14 +29,12 @@ class Tournament(models.Model):
 
     Attributes:
         tournament_id (IntegerField): Primary key for a tournament record.
-        date (DateField): The day the tournament takes place.
-        time (TimeField): The time the tournament takes place.
+        datetime (DateTimeField): The time the tournament takes place.
         title (CharField): The user-facing name of the tournament.
         description (CharField): Brief description of what the touranment is.
     """
     tournament_id = models.IntegerField(primary_key=True)
-    date = models.DateField(default=datetime(2001, 11, 5, 0, 0))
-    time = models.TimeField(default=datetime(1, 1, 1, 12, 0))
+    datetime = models.DateTimeField(default=datetime(year=2001, month=11, day=5, hour=0, minute=0, second=0))
     title = models.CharField(max_length=64, default="Glaeria Smite League")
     description = models.CharField(max_length=256, default="None")
 

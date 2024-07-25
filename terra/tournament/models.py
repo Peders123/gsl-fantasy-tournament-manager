@@ -3,12 +3,7 @@ Defines the database models for the Talaria app.
 """
 from datetime import datetime
 
-from django.conf import settings
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
-from rest_framework.authtoken.models import Token
 
 
 class Tournament(models.Model):
@@ -26,7 +21,7 @@ class Tournament(models.Model):
     description = models.CharField(max_length=256, default="None")
 
     class Meta:
-        
+
         db_table = 'talaria_players'
 
     @property
@@ -46,7 +41,7 @@ class User(models.Model):
     discord_name = models.CharField(max_length=32)
 
     class Meta:
-        
+
         db_table = 'talaria_players'
 
 
@@ -71,7 +66,7 @@ class Captain(models.Model):
     captain_budget = models.IntegerField(default=0)
 
     class Meta:
-        
+
         db_table = 'talaria_players'
 
 
@@ -100,5 +95,5 @@ class Player(models.Model):
     estimated_value = models.IntegerField(default=0)
 
     class Meta:
-        
+
         db_table = 'talaria_players'

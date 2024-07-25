@@ -30,14 +30,9 @@ ALLOWED_HOSTS = ['*']
 
 DATABASE_SETUPS = {
     "dev": {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "djehuty",
-            "USER": "Pedro",
-            "PASSWORD": "p[%K*9/)<mB]j.V8N'2S-r",  # best we hide this one
-            "HOST": "djehuty.postgres.database.azure.com",
-            "PORT": "5432",
-            "OPTIONS": {"sslmode": "require"},
+        'default': {
+            'NAME': BASE_DIR / 'db.sqlite3',
+            'ENGINE': 'django.db.backends.sqlite3',
         }
     },
     "ops": {
@@ -111,7 +106,7 @@ WSGI_APPLICATION = 'mercury.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-#print(f"BUILD: {os.environ['BUILD_TYPE']}")
+print(f"BUILD: {os.environ['BUILD_TYPE']}")
 print(DATABASE_SETUPS["dev"])
 
 DATABASES = DATABASE_SETUPS[os.environ['BUILD_TYPE']]

@@ -11,34 +11,23 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    """Automatically generates a token upon creation of a new admin user.
-
-    Args:
-        sender (_type_): Model that sends the signal.
-        instance (_type_, optional): User that was created. Defaults to None.
-        created (bool, optional): Whether or not the user was created. Defaults to False.
-    """
-    if created:
-        Token.objects.create(user=instance)
-
-
 class Tournament(models.Model):
     """Model representing an individual tournament.
 
     Attributes:
         tournament_id (IntegerField): Primary key for a tournament record.
-        date (DateField): The day the tournament takes place.
-        time (TimeField): The time the tournament takes place.
+        datetime (DateTimeField): The time the tournament takes place.
         title (CharField): The user-facing name of the tournament.
         description (CharField): Brief description of what the touranment is.
     """
     tournament_id = models.IntegerField(primary_key=True)
-    date = models.DateField(default=datetime(2001, 11, 5, 0, 0))
-    time = models.TimeField(default=datetime(1, 1, 1, 12, 0))
+    datetime = models.DateTimeField(default=datetime(year=2001, month=11, day=5, hour=0, minute=0, second=0))
     title = models.CharField(max_length=64, default="Glaeria Smite League")
     description = models.CharField(max_length=256, default="None")
+
+    class Meta:
+        
+        db_table = 'talaria_players'
 
     @property
     def url_id(self):
@@ -55,6 +44,10 @@ class User(models.Model):
     """
     user_id = models.IntegerField(primary_key=True)
     discord_name = models.CharField(max_length=32)
+
+    class Meta:
+        
+        db_table = 'talaria_players'
 
 
 class Captain(models.Model):
@@ -76,6 +69,10 @@ class Captain(models.Model):
     team_name = models.CharField(max_length=32)
     reason = models.CharField(max_length=256)
     captain_budget = models.IntegerField(default=0)
+
+    class Meta:
+        
+        db_table = 'talaria_players'
 
 
 class Player(models.Model):
@@ -101,3 +98,7 @@ class Player(models.Model):
     role_2 = models.CharField(max_length=16, default="Fill")
     smite_guru = models.CharField(max_length=128)
     estimated_value = models.IntegerField(default=0)
+
+    class Meta:
+        
+        db_table = 'talaria_players'

@@ -2,8 +2,6 @@
 
 cd /data/mercury
 
-export BUILD_TYPE="dev"
-
 python3 manage.py makemigrations
 python3 manage.py migrate
 

@@ -24,7 +24,7 @@ public class CaptainCommunicator extends MercuryCommunicator {
 
     @Override
     protected String getBaseEndpoint() {
-        return "http://192.168.64.1:8001/api/captains/";
+        return this.baseUrl + "api/captains/";
     }
 
     @Override

@@ -44,8 +44,9 @@ public class App {
     public static void main(String[] args) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(new File("config.json"));
-        String token = jsonNode.get("discord_token").asText();
+        JsonNode secretNode = objectMapper.readTree(new File("secrets.json"));
+        
+        String token = secretNode.get("tokens").get("discord").asText();
 
         JDABuilder build = JDABuilder.createDefault(token);
         build.setActivity(Activity.watching("playing Donkey Kong Country"));

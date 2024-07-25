@@ -1,5 +1,6 @@
 package com.tanukismite.fantasy.bot.communicators;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -9,6 +10,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tanukismite.fantasy.bot.HttpHandler;
 import com.tanukismite.fantasy.bot.signup.PostData;
 
@@ -17,11 +19,26 @@ public abstract class MercuryCommunicator {
     private String username;
     private String password;
     protected String token;
+    protected String baseUrl;
 
     protected MercuryCommunicator() {
+
+        JsonNode configNode;
+        JsonNode secretNode;
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            configNode = objectMapper.readTree(new File("config.json"));
+            secretNode = objectMapper.readTree(new File("secrets.json"));
+        } catch (IOException e) {
+            System.out.println("Could not read config files.");
+            e.printStackTrace();
+            return;
+        }
         
-        this.username = "Peders";
-        this.password = "Pa55we1rd";
+        this.username = configNode.get("proc").get("username").get(System.getenv("BUILD_TYPE")).asText();
+        this.password = secretNode.get("passwords").get("proc").get(System.getenv("BUILD_TYPE")).asText();
+        this.baseUrl = configNode.get("endpoint").get(System.getenv("BUILD_TYPE")).asText();
 
     }
 
@@ -31,7 +48,7 @@ public abstract class MercuryCommunicator {
         headers.put("User-Agent", "Mozilla/5.0");
         headers.put("Content-Type", "application/json");
 
-        HttpHandler tokenGrabber = new HttpHandler(new URL("http://192.168.64.1:8001/api-authentication/"), "POST", headers);
+        HttpHandler tokenGrabber = new HttpHandler(new URL(this.baseUrl + "api-authentication/"), "POST", headers);
 
         Map<String, Object> inputMap = new HashMap<>();
         inputMap.put("username", this.username);

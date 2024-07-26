@@ -38,7 +38,7 @@ stages:
       inputs:
         SourceFolder: '$(Agent.TempDirectory)'
         Contents: 'secrets.json'
-        TargetFolder: '$(Agent.BuildDirectory)/s/janus'
+        TargetFolder: '$(Agent.BuildDirectory)/s/'
     - task: DockerCompose@1
       inputs:
         containerregistrytype: 'Azure Container Registry'

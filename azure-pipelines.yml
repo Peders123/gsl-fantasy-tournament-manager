@@ -27,11 +27,11 @@ stages:
     steps:
     - task: DownloadSecureFile@1
       inputs:
-        secureFile: 'config.json'
+        secureFile: 'secrets.json'
     - task: CopyFiles@2
       inputs:
         SourceFolder: '$(Agent.TempDirectory)'
-        Contents: 'config.json'
+        Contents: 'secrets.json'
         TargetFolder: '$(Agent.BuildDirectory)/s/janus'
     - task: DockerCompose@1
       inputs:

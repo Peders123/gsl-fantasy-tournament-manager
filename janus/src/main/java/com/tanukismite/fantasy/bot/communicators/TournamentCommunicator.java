@@ -23,7 +23,7 @@ public class TournamentCommunicator extends MercuryCommunicator {
 
     @Override
     protected String getBaseEndpoint() {
-        return "http://192.168.64.1:8001/api/tournaments/";
+        return this.baseUrl + "api/tournaments/";
     }
 
     @Override

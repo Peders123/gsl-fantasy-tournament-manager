@@ -16,6 +16,7 @@ WORKDIR /data/janus
 COPY --from=java-builder /data/janus/target/janus-1.0-SNAPSHOT.jar .
 COPY --from=java-builder /data/janus/config.json .
 COPY janus/src /data/janus/src
+COPY secrets.json /data/janus/secrets.json
 
 ENTRYPOINT ["java", "-cp", "janus-1.0-SNAPSHOT.jar", "com.tanukismite.fantasy.bot.App"]
 
@@ -76,7 +77,5 @@ EXPOSE 80
 RUN apt-get update && apt-get install -y dos2unix && dos2unix /data/mercury/startMercury.sh
 
 WORKDIR /data/mercury
-
-ENV BUILD_TYPE="dev"
 
 CMD ["./startMercury.sh"]

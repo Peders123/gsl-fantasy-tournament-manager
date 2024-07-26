@@ -4,7 +4,7 @@ __pycache__
 
 janus/target/*
 
-config.json
+secrets.json
 
 .vscode
 .venv

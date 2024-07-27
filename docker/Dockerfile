@@ -59,6 +59,8 @@ RUN apt-get update && apt-get install -y dos2unix && dos2unix /data/terra/startT
 
 FROM python:3.12-slim-bookworm AS mercury
 
+RUN mkdir -p /data/mercury
+
 RUN apt-get update
 RUN apt-get install -y expect
 

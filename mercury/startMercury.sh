@@ -2,11 +2,15 @@
 
 cd /data/mercury
 
+echo "Migrating Talaria"
 python3 manage.py makemigrations talaria
 python3 manage.py migrate talaria
 
+echo "Migrating general"
 python3 manage.py makemigrations
 python3 manage.py migrate
+
+echo "Finished Migrations"
 
 if [[ $BUILD_TYPE = "dev" ]]; then
     python3 manage.py populate_database

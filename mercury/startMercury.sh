@@ -2,9 +2,6 @@
 
 cd /data/mercury
 
-mkdir -p /data/mercury/mount/mercury/testing
-touch /data/mercury/mount/mercury/migrations/__init__.py
-
 python3 manage.py makemigrations talaria
 python3 manage.py migrate talaria
 

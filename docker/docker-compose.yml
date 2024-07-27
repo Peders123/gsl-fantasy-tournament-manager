@@ -36,3 +36,5 @@ services:
     environment:
       - BUILD_TYPE=dev
     image: janus:1.0
+    volumes:
+      - ../athena/mount:/data/janus/mount

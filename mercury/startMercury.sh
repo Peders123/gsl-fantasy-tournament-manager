@@ -2,6 +2,9 @@
 
 cd /data/mercury
 
+python3 manage.py makemigrations talaria
+python3 manage.py migrate talaria
+
 python3 manage.py makemigrations
 python3 manage.py migrate
 

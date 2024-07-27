@@ -27,7 +27,7 @@ sys.path.append(str(MIGRATIONS_PATH))
 
 # Update MIGRATION_MODULES setting
 MIGRATION_MODULES = {
-    'talaria': 'mercury.migrations',
+    'talaria': 'mount.mercury.migrations',
 }
 
 
@@ -122,6 +122,8 @@ WSGI_APPLICATION = 'mercury.wsgi.application'
 
 print(f"BUILD: {os.environ['BUILD_TYPE']}")
 print(DATABASE_SETUPS["dev"])
+print(os.getcwd())
+print(os.listdir())
 
 DATABASES = DATABASE_SETUPS[os.environ['BUILD_TYPE']]
 
@@ -143,8 +145,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-print(os.getcwd())
-print(os.listdir())
+
 
 
 # Internationalization

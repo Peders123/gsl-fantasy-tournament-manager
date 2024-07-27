@@ -25,6 +25,8 @@ services:
     image: mercury:1.0
     ports:
       - "8001:8001"
+    volumes:
+      - ../mercury/talaria/migrations:/data/mercury/talaria/migrations
 
   janus:
     build:
@@ -35,4 +37,4 @@ services:
       - BUILD_TYPE=dev
     image: janus:1.0
     volumes:
-      - ../janus/test_dir:/data/janus/test_dir
+      - ${WEBAPP_STORAGE_HOME}/site/wwwroot:/data/janus/test_dir

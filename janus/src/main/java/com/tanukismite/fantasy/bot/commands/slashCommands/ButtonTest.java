@@ -1,7 +1,5 @@
 package com.tanukismite.fantasy.bot.commands.slashCommands;
 
-import java.lang.reflect.Method;
-
 import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Components;
@@ -34,14 +32,6 @@ public class ButtonTest implements Command {
         );
 
         this.queue(action);
-
-    }
-
-    @Override
-    public void executeMethod(String methodName, Handler handler, Object... params) throws Exception {
-
-        Method method = ButtonTest.class.getDeclaredMethod(methodName, Handler.class, Object[].class);
-        method.invoke(this, handler, new Object[] {params});
 
     }
 

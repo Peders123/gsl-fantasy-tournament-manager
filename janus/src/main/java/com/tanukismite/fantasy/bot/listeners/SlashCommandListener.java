@@ -9,6 +9,7 @@ import com.tanukismite.fantasy.bot.commands.slashCommands.Embed;
 import com.tanukismite.fantasy.bot.commands.slashCommands.Ping;
 import com.tanukismite.fantasy.bot.commands.slashCommands.Test;
 import com.tanukismite.fantasy.bot.commands.slashCommands.User;
+import com.tanukismite.fantasy.bot.commands.slashCommands.Volumes;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -58,6 +59,10 @@ public class SlashCommandListener extends BaseListener {
 
             case "create-tournament":
                 this.handler.execute(new CreateTournament(event));
+                break;
+
+            case "volumes":
+                this.handler.execute(new Volumes(event));
                 break;
 
         }

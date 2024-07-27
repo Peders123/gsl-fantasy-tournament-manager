@@ -88,5 +88,19 @@
         "options": [],
         "guildOnly": true,
         "adminOnly": true
+    },
+    {
+        "name": "volumes",
+        "description": "Test creating a docker volume.",
+        "options": [
+            {
+                "type": 3,
+                "name": "testmessage",
+                "description": "The test message to be written to the file.",
+                "required": true
+            }
+        ],
+        "guildOnly": true,
+        "adminOnly": true
     }
 ]

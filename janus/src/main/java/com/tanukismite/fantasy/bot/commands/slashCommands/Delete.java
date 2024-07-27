@@ -1,7 +1,6 @@
 package com.tanukismite.fantasy.bot.commands.slashCommands;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 
 import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.communicators.MercuryCommunicator;
@@ -39,14 +38,6 @@ public class Delete implements Command {
             System.out.println("ERROR");
             e.printStackTrace();
         }
-
-    }
-
-    @Override
-    public void executeMethod(String methodName, Handler handler, Object... params) throws Exception {
-
-        Method method = User.class.getDeclaredMethod(methodName, Handler.class, Object[].class);
-        method.invoke(this, handler, new Object[] {params});
 
     }
 

@@ -110,7 +110,7 @@ WSGI_APPLICATION = 'mercury.wsgi.application'
 
 print(f"BUILD: {os.environ['BUILD_TYPE']}")
 print(os.getcwd())
-print(os.listdir("mount"))
+print(os.listdir("mount/mercury"))
 
 DATABASES = DATABASE_SETUPS[os.environ['BUILD_TYPE']]
 

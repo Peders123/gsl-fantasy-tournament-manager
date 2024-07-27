@@ -10,11 +10,25 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+import sys
 
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+
+# Define the path to your custom migrations
+MIGRATIONS_PATH = Path("/data/mercury/mount/mercury/migrations")
+
+# Add the custom migrations path to the system path
+sys.path.append(str(MIGRATIONS_PATH))
+
+# Update MIGRATION_MODULES setting
+MIGRATION_MODULES = {
+    'talaria': 'mount.mercury.migrations',
+}
 
 
 # Quick-start development settings - unsuitable for production

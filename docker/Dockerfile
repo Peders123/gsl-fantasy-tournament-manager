@@ -13,7 +13,7 @@ FROM eclipse-temurin:22-jre AS janus
 
 WORKDIR /data/janus
 
-RUN mkdir -p mount/janus/test_dir
+RUN mkdir -p mount/janus
 
 COPY --from=java-builder /data/janus/target/janus-1.0-SNAPSHOT.jar .
 COPY --from=java-builder /data/janus/config.json .
@@ -59,7 +59,8 @@ RUN apt-get update && apt-get install -y dos2unix && dos2unix /data/terra/startT
 
 FROM python:3.12-slim-bookworm AS mercury
 
-RUN mkdir -p /data/mercury
+RUN mkdir -p /data/mercury/mount/mercury/migrations
+RUN touch /data/mercury/mount/mercury/migrations/__init__.py
 
 RUN apt-get update
 RUN apt-get install -y expect

@@ -123,17 +123,7 @@ WSGI_APPLICATION = 'mercury.wsgi.application'
 print(f"BUILD: {os.environ['BUILD_TYPE']}")
 print(DATABASE_SETUPS["dev"])
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "djehuty",
-        "USER": "Pedro",
-        "PASSWORD": "p[%K*9/)<mB]j.V8N'2S-r",  # best we hide this one
-        "HOST": "djehuty.postgres.database.azure.com",
-        "PORT": "5432",
-        "OPTIONS": {"sslmode": "require"},
-    }
-}
+DATABASES = DATABASE_SETUPS[os.environ['BUILD_TYPE']]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -152,6 +142,9 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+print(os.getcwd())
+print(os.listdir())
 
 
 # Internationalization

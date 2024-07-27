@@ -27,7 +27,7 @@ sys.path.append(str(MIGRATIONS_PATH))
 
 # Update MIGRATION_MODULES setting
 MIGRATION_MODULES = {
-    'talaria': 'mount.mercury.migrations',
+    'talaria': 'mercury.migrations',
 }
 
 
@@ -142,6 +142,9 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+print(os.getcwd())
+print(os.listdir())
 
 
 # Internationalization

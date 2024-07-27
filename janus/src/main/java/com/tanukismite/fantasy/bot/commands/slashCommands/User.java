@@ -12,7 +12,6 @@ import net.dv8tion.jda.api.requests.FluentRestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 
 public class User implements Command {
 
@@ -53,14 +52,6 @@ public class User implements Command {
             }
 
         }
-
-    }
-
-    @Override
-    public void executeMethod(String methodName, Handler handler, Object... params) throws Exception {
-
-        Method method = User.class.getDeclaredMethod(methodName, Handler.class, Object[].class);
-        method.invoke(this, handler, new Object[] {params});
 
     }
 

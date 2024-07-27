@@ -9,9 +9,11 @@ WORKDIR /data/janus
 RUN mvn clean package
 
 
-FROM eclipse-temurin:22-jre as janus
+FROM eclipse-temurin:22-jre AS janus
 
 WORKDIR /data/janus
+
+RUN mkdir test_dir
 
 COPY --from=java-builder /data/janus/target/janus-1.0-SNAPSHOT.jar .
 COPY --from=java-builder /data/janus/config.json .
@@ -36,7 +38,7 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 
-FROM python:3.12-slim-bookworm as terra
+FROM python:3.12-slim-bookworm AS terra
 
 RUN mkdir -p /data/terra
 
@@ -55,7 +57,7 @@ COPY docker/environment.sh /data/terra/.
 RUN apt-get update && apt-get install -y dos2unix && dos2unix /data/terra/startTerra.sh
 
 
-FROM python:3.12-slim-bookworm as mercury
+FROM python:3.12-slim-bookworm AS mercury
 
 RUN mkdir -p /data/mercury
 

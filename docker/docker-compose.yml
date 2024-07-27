@@ -34,3 +34,5 @@ services:
     environment:
       - BUILD_TYPE=dev
     image: janus:1.0
+    volumes:
+      - ../janus/test_dir:/data/janus/test_dir

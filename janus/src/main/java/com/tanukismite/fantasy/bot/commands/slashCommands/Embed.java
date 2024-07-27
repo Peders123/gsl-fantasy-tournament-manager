@@ -1,7 +1,6 @@
 package com.tanukismite.fantasy.bot.commands.slashCommands;
 
 import java.awt.Color;
-import java.lang.reflect.Method;
 
 import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.handlers.Action;
@@ -40,14 +39,6 @@ public class Embed implements Command {
         action = Components.addActionRowReply(action,  Button.secondary(event.getUser().getId() + ":test", "TESTING"));
 
         this.queue(action);
-
-    }
-
-    @Override
-    public void executeMethod(String methodName, Handler handler, Object... params) throws Exception {
-
-        Method method = Embed.class.getDeclaredMethod(methodName, Handler.class, Object[].class);
-        method.invoke(this, handler, new Object[] {params});
 
     }
 

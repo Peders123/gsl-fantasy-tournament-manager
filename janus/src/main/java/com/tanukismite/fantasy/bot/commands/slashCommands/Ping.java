@@ -1,7 +1,5 @@
 package com.tanukismite.fantasy.bot.commands.slashCommands;
 
-import java.lang.reflect.Method;
-
 import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Handler;
@@ -33,14 +31,6 @@ public class Ping implements Command {
         FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, message);
 
         action.queue();
-
-    }
-
-    @Override
-    public void executeMethod(String methodName, Handler handler, Object... params) throws Exception {
-
-        Method method = Ping.class.getDeclaredMethod(methodName, Handler.class, Object[].class);
-        method.invoke(this, handler, new Object[] {params});
 
     }
 

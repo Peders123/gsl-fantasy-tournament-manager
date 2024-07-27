@@ -27,7 +27,7 @@ sys.path.append(str(MIGRATIONS_PATH))
 
 # Update MIGRATION_MODULES setting
 MIGRATION_MODULES = {
-    'talaria': 'mount.mercury.migrations',
+    'talaria': 'mercury.migrations',
 }
 
 

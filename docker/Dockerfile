@@ -13,7 +13,7 @@ FROM eclipse-temurin:22-jre AS janus
 
 WORKDIR /data/janus
 
-RUN mkdir test_dir
+RUN mkdir -p mount/janus/test_dir
 
 COPY --from=java-builder /data/janus/target/janus-1.0-SNAPSHOT.jar .
 COPY --from=java-builder /data/janus/config.json .

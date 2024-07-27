@@ -32,7 +32,7 @@ public class Volumes implements Command {
         String testMessage = event.getOption("testmessage").getAsString();
         String message = "Error";
 
-        File f = new File("test_dir/test_file.txt");
+        File f = new File("mount/janus/test_dir/test_file.txt");
 
         if (f.exists()) {
             try {
@@ -46,7 +46,7 @@ public class Volumes implements Command {
             } catch (FileNotFoundException e) {}
         } else {
             try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter("test_dir/test_file.txt"));
+                BufferedWriter writer = new BufferedWriter(new FileWriter("mount/janus/test_dir/test_file.txt"));
                 writer.write(testMessage);
                 writer.close();
                 message = "Written to file.";

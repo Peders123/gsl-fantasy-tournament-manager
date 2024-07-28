@@ -49,7 +49,7 @@ public class App {
         String token = secretNode.get("tokens").get("discord").asText();
 
         JDABuilder build = JDABuilder.createDefault(token);
-        build.setActivity(Activity.watching("playing Donkey Kong Country"));
+        build.setActivity(Activity.playing("Donkey Kong Country"));
         build.setStatus(OnlineStatus.ONLINE);
 
         JDA jda = build.enableIntents(GatewayIntent.MESSAGE_CONTENT)

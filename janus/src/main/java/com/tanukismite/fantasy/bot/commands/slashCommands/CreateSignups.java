@@ -78,7 +78,7 @@ public class CreateSignups extends ExtendedCommand {
         embed.setColor(new Color(28, 19, 31, 255));
         embed.setFooter(CreateSignups.convertDate(node.get("datetime").asText()));
 
-        FluentRestAction<InteractionHook, ReplyCallbackAction> response = Action.replyWithMessage(event, "Created!");
+        FluentRestAction<InteractionHook, ReplyCallbackAction> response = Action.replyWithMessage(event, "Created!", true);
         FluentRestAction<Message, MessageCreateAction> action = Action.sendMessageWithEmbed(channel, embed.build());
 
         action = Components.addActionRowMessage(action,
@@ -270,7 +270,7 @@ public class CreateSignups extends ExtendedCommand {
 
             SelectOption[] options = Components.createSelectOptions("role1");
             StringSelectMenu selection = Components.createSelectMenu("role1", options);
-            FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(modalEvent, "TESTING", true);
+            FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(modalEvent, "Choose your primary role:", true);
             Components.addActionRowReply(action, selection);
     
             this.queue(action);
@@ -286,23 +286,16 @@ public class CreateSignups extends ExtendedCommand {
         PlayerSignupData data = context.getUserSignupData(selectEvent.getUser().getId(), PlayerSignupData.class);
         data.setRole1(Role.valueOf(selectEvent.getValues().get(0)));
 
-        FluentRestAction<Message, MessageCreateAction> action = MessageCreateAction.class.cast(Action.sendMessage(selectEvent.getMessageChannel(), "Hello World!")).setMessageReference(this.signupRootId);
+        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(selectEvent, "Choose your secondary role:", true);
         StringSelectMenu selection = Components.createSelectMenu("role2", Components.createSelectOptions("role2"));
-        Components.addActionRowMessage(action, selection);
+        Components.addActionRowReply(action, selection);
 
-        selectEvent.deferReply(true).queue(
+        action.queue(
             hook -> {
-                hook.deleteOriginal().queue(
-                    success -> {
-                        selectEvent.getMessage().delete().queue();
-                    },
-                    error -> System.out.println("ERROR HANDLING")
-                );
+                selectEvent.getMessage().delete().queue();
             },
             error -> System.out.println("OUT ERROR HANDLING")
         );
-
-        this.queue(action);
 
     }
 
@@ -313,30 +306,18 @@ public class CreateSignups extends ExtendedCommand {
         PlayerSignupData data = context.getUserSignupData(selectEvent.getUser().getId(), PlayerSignupData.class);
         data.setRole2(Role.valueOf(selectEvent.getValues().get(0)));
 
-        this.submitData(handler, selectEvent.getUser().getId());
-
-        selectEvent.deferReply(true).queue(
-            hook -> {
-                hook.deleteOriginal().queue(
-                    success -> {
-                        selectEvent.getMessage().delete().queue();
-                    },
-                    error -> System.out.println("ERROR HANDLING")
-                );
-            },
-            error -> System.out.println("OUT ERROR HANDLING")
-        );
+        this.submitData(handler, selectEvent.getUser().getId(), selectEvent);
 
     }
 
-    private void submitData(Handler handler, String userId) {
+    private void submitData(Handler handler, String userId, StringSelectInteractionEvent selectEvent) {
 
         Context context = handler.getContext();
         MercuryCommunicator communicator = handler.getCommunicator("player");
 
         PlayerSignupData data = context.getUserSignupData(userId, PlayerSignupData.class);
         MessageEmbed embed = data.toEmbed();
-        FluentRestAction<Message, MessageCreateAction> action = Action.sendMessageWithEmbed(this.event.getMessageChannel(), embed);
+        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithEmbeds(selectEvent, embed, true);
 
         System.out.println(data.toMap().toString());
 
@@ -346,7 +327,12 @@ public class CreateSignups extends ExtendedCommand {
             System.out.println("FAILED TO WRITE PLAYER");
         }
 
-        this.queue(action);
+        action.queue(
+            hook -> {
+                selectEvent.getMessage().delete().queue();
+            },
+            error -> System.out.println("OUT ERROR HANDLING")
+        );
 
     }
 

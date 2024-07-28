@@ -27,6 +27,7 @@ services:
       - "80:80"      
     volumes:
       - mercury-athena:/data/mercury/mount
+      
 
   janus:
     build:
@@ -38,3 +39,7 @@ services:
     image: janus:1.0
     volumes:
       - ../athena/mount:/data/janus/mount
+
+volumes:
+  mercury-athena:
+    external: true

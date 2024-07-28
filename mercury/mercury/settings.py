@@ -38,7 +38,7 @@ SECRET_KEY = 'django-insecure-&5w+v%pk339$m6+n)(pujq8@zl#$&o*#7h_14$k#eb6u+1azsf
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+print( credential["passwords"]["djehuty"]["Cadueceus"] )
 DATABASE_SETUPS = {
     "dev": {
         'default': {

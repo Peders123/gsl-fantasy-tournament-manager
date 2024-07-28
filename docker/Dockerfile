@@ -79,5 +79,5 @@ EXPOSE 80
 RUN apt-get update && apt-get install -y dos2unix && dos2unix /data/mercury/startMercury.sh
 
 WORKDIR /data/mercury
-CMD ["ls"]
+RUN chmod +x startMercury.sh
 ENTRYPOINT ["./startMercury.sh"]

@@ -75,7 +75,7 @@ COPY mercury/manage.py /data/mercury/.
 COPY mercury/dData.json /data/mercury/.
 COPY secrets.json /data/mercury/secrets.json
 
-EXPOSE 80
+EXPOSE 80 2222
 
 RUN apt-get update && apt-get install -y dos2unix && dos2unix /data/mercury/startMercury.sh
 

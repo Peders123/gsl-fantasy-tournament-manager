@@ -34,6 +34,13 @@
             "description": "The solo role.",
             "isDefault": false,
             "emoji": "<:Warrior:846799331523690546>"
+        },
+        {
+            "label": "Fill",
+            "value": "FILL",
+            "description": "Fill.",
+            "isDefault": false,
+            "emoji": "<:Fill:762432341838397440>"
         }
     ],
     "role2": [
@@ -71,6 +78,13 @@
             "description": "The solo role.",
             "isDefault": false,
             "emoji": "<:Warrior:846799331523690546>"
+        },
+        {
+            "label": "Fill",
+            "value": "FILL",
+            "description": "Fill.",
+            "isDefault": false,
+            "emoji": "<:Fill:762432341838397440>"
         }
     ]
 }

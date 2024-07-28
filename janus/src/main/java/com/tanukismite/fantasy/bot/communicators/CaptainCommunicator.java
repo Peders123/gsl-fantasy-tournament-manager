@@ -56,24 +56,24 @@ public class CaptainCommunicator extends MercuryCommunicator {
 
     @Override
     public <T> boolean delete(T captainId) throws IOException {
-        if (captainId instanceof Long) {
+        if (captainId instanceof Integer) {
             return genericDelete(new URL(this.getBaseEndpoint() + captainId));
         } else {
-            System.out.println("ERROR: Malformed captainId in request, expected long.");
+            System.out.println("ERROR: Malformed captainId in request, expected integer.");
             return false;
         }
     }
 
     @Override
     public <T> boolean put(T captainId, PostData data) throws IOException {
-        if (captainId instanceof Long) {
+        if (captainId instanceof Integer) {
             if (!(data instanceof CaptainSignupData)) {
                 System.out.println("MALFORMED DATA SIGNUP FORMAT");
                 return false;
             }
             return genericPut(new URL(this.getBaseEndpoint() + captainId), data.toMap());
         } else {
-            System.out.println("ERROR: Malformed captainId in request, expected long.");
+            System.out.println("ERROR: Malformed captainId in request, expected integer.");
             return false;
         }
     }

@@ -122,12 +122,12 @@ public class CreateSignups extends ExtendedCommand {
         System.out.println(this.signupRootId);
 
         if (captain) {
-            if (context.getUserSignupData(buttonEvent.getUser().getId(), CaptainSignupData.class) != null) {
+            if (context.signupDataExists(buttonEvent.getUser().getId()) == true) {
                 context.removeUserSignupData(buttonEvent.getUser().getId());
             }
             context.putUserSignupData(buttonEvent.getUser().getId(), new CaptainSignupData(this), CaptainSignupData.class);
         } else {
-            if (context.getUserSignupData(buttonEvent.getUser().getId(), PlayerSignupData.class) != null) {
+            if (context.signupDataExists(buttonEvent.getUser().getId()) == true) {
                 context.removeUserSignupData(buttonEvent.getUser().getId());
             }
             context.putUserSignupData(buttonEvent.getUser().getId(), new PlayerSignupData(this), PlayerSignupData.class);
@@ -198,8 +198,10 @@ public class CreateSignups extends ExtendedCommand {
 
         try {
             if (playerCommunicator.getPlayerUserExists(longId)) {
+                System.out.println("DELETING PLAYER");
                 playerCommunicator.delete(playerCommunicator.getPlayerUser(longId).get("player_id").asInt());
             } else if (captainCommunicator.getCaptainUserExists(longId)) {
+                System.out.println(tournamentId);
                 captainCommunicator.delete(captainCommunicator.getCaptainUser(longId).get("captain_id").asInt());
             }
         } catch (IOException e) {

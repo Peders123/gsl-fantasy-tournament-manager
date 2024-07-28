@@ -2,7 +2,6 @@ package com.tanukismite.fantasy.bot.listeners;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.tanukismite.fantasy.bot.commands.slashCommands.CreateSignups;
 import com.tanukismite.fantasy.bot.commands.slashCommands.Edit;
 import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
@@ -117,14 +116,6 @@ public class ButtonListener extends BaseListener {
             return;
         }
 
-        try {
-            JsonNode response = this.handler.getCommunicator("user").get();
-            System.out.println(response.toString());
-        } catch (IOException e) {
-            System.out.println("HANDLE ERROR GET");
-            return;
-        }
-
         if (signupExists == true) {
             try {
                 this.handler.executeMethod(
@@ -147,14 +138,6 @@ public class ButtonListener extends BaseListener {
                 System.out.println("HANDLE ERROR");
                 return;
             }
-        }
-
-        try {
-            JsonNode response = userCommunicator.get();
-            System.out.println(response.toString());
-        } catch (IOException e) {
-            System.out.println("HANDLE ERROR GET");
-            return;
         }
 
         try {

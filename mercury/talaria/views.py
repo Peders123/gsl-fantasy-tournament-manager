@@ -38,7 +38,7 @@ class CaptainViewSet(viewsets.ModelViewSet):
             return CaptainPostSerializer
         return CaptainGetSerializer
 
-    @action(detail=False, methods=['get'], url_path='by-user/(?P<user_id>\d+)')
+    @action(detail=False, methods=['get'], url_path='by-user/(?P<user_id>[^/.]+)')
     def get_by_user_id(self, request, user_id=None):
         try:
             captain = Captain.objects.get(user_id=user_id)
@@ -57,7 +57,7 @@ class PlayerViewSet(viewsets.ModelViewSet):
             return PlayerPostSerializer
         return PlayerGetSerializer
     
-    @action(detail=False, methods=['get'], url_path='by-user/(?P<user_id>\d+)')
+    @action(detail=False, methods=['get'], url_path='by-user/(?P<user_id>[^/.]+)')
     def get_by_user_id(self, request, user_id=None):
         try:
             player = Player.objects.get(user_id=user_id)

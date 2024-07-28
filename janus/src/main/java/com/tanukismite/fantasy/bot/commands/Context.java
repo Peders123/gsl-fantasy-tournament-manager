@@ -28,6 +28,13 @@ public class Context {
         this.userSignupSessions.remove(id);
     }
 
+    public boolean signupDataExists(String id) {
+        if (userSignupSessions.get(id) == null) {
+            return false;
+        }
+        return true;
+    }
+
     public CreateSignups getSignupRoot() {
         return this.signupRoot;
     }

@@ -73,6 +73,7 @@ COPY mercury/mercury /data/mercury/mercury
 COPY mercury/talaria /data/mercury/talaria
 COPY mercury/manage.py /data/mercury/.
 COPY mercury/dData.json /data/mercury/.
+COPY secrets.json /data/mercury/secrets.json
 
 EXPOSE 80
 

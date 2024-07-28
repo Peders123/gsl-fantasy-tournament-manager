@@ -13,6 +13,9 @@ FROM eclipse-temurin:22-jre AS janus
 
 WORKDIR /data/janus
 
+RUN apt-get update
+RUN apt-get install -y curl
+
 RUN mkdir -p mount/janus
 
 COPY --from=java-builder /data/janus/target/janus-1.0-SNAPSHOT.jar .

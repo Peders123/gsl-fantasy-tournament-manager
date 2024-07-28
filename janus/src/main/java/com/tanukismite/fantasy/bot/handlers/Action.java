@@ -29,6 +29,12 @@ public class Action {
 
     }
 
+    public static FluentRestAction<Message, MessageCreateAction> sendMessageWithEmbed(MessageChannel channel, MessageEmbed embed, boolean ephemeral) {
+
+        return channel.sendMessageEmbeds(embed);
+
+    }
+
     public static FluentRestAction<InteractionHook, ReplyCallbackAction> replyWithMessage(IReplyCallback event, String message) {
 
         return Action.replyWithMessage(event, message, false);
@@ -50,6 +56,12 @@ public class Action {
     public static FluentRestAction<InteractionHook, ReplyCallbackAction> replyWithEmbeds(IReplyCallback event, MessageEmbed embed) {
 
         return event.replyEmbeds(embed);
+
+    }
+
+    public static FluentRestAction<InteractionHook, ReplyCallbackAction> replyWithEmbeds(IReplyCallback event, MessageEmbed embed, boolean ephemeral) {
+
+        return event.replyEmbeds(embed).setEphemeral(ephemeral);
 
     }
 

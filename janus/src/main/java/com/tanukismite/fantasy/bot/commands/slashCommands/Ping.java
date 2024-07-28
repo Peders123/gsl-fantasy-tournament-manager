@@ -22,13 +22,7 @@ public class Ping implements Command {
     @Override
     public void execute(Handler handler) {
 
-        // RestAction<Message> action = Action.sendMessage(event.getChannel(), "ping");
-
-        // this.queue(action);
-
-        String message = event.getUser().getId() + " " + event.getUser().getName();
-
-        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, message);
+        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, "Pong!");
 
         action.queue();
 

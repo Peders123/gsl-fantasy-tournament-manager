@@ -1,64 +1,9 @@
 [
     {
-        "name": "test",
-        "description": "Testing the bot",
-        "options": [
-            {
-                "type": 3,
-                "name": "content",
-                "description": "Message that is send by the bot",
-                "required": true
-            },
-            {
-                "type": 4,
-                "name": "iterations",
-                "description": "Number of times the message is sent",
-                "required": true
-            }
-        ],
-        "guildOnly": true,
-        "adminOnly": false
-    },
-    {
-        "name": "button",
-        "description": "Testing buttons",
-        "options": [],
-        "guildOnly": false,
-        "adminOnly": false
-    },
-    {
         "name": "ping",
         "description": "Testing new slash command method",
         "options": [],
         "guildOnly": true,
-        "adminOnly": true
-    },
-    {
-        "name": "embed",
-        "description": "Testing discord embeds",
-        "options": [],
-        "guildOnly": false,
-        "adminOnly": false
-    },
-    {
-        "name": "user",
-        "description": "Test command for creating a user",
-        "options":  [
-            {
-                "type": 3,
-                "name": "method",
-                "description": "The http method.",
-                "required": true
-            }
-        ],
-        "guildOnly": true,
-        "adminOnly": false
-    },
-    {
-        "name": "edit",
-        "description": "Testing message edits.",
-        "options": [],
-        "guildOnly": false,
         "adminOnly": false
     },
     {
@@ -76,30 +21,9 @@
         "adminOnly": true
     },
     {
-        "name": "delete",
-        "description": "Test deleting a user.",
-        "options": [],
-        "guildOnly": false,
-        "adminOnly": false
-    },
-    {
         "name": "create-tournament",
         "description": "Load a new tournament into the database.",
         "options": [],
-        "guildOnly": true,
-        "adminOnly": true
-    },
-    {
-        "name": "volumes",
-        "description": "Test creating a docker volume.",
-        "options": [
-            {
-                "type": 3,
-                "name": "testmessage",
-                "description": "The test message to be written to the file.",
-                "required": true
-            }
-        ],
         "guildOnly": true,
         "adminOnly": true
     }

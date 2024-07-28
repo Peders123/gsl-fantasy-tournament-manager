@@ -24,7 +24,7 @@ public class Context {
         this.userSignupSessions.put(id, type.cast(data));
     }
 
-    public <T extends SignupData> void removeUserSignupData(String id) {
+    public void removeUserSignupData(String id) {
         this.userSignupSessions.remove(id);
     }
 

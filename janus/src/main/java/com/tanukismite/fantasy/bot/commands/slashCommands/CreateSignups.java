@@ -122,8 +122,14 @@ public class CreateSignups extends ExtendedCommand {
         System.out.println(this.signupRootId);
 
         if (captain) {
+            if (context.getUserSignupData(buttonEvent.getUser().getId(), CaptainSignupData.class) != null) {
+                context.removeUserSignupData(buttonEvent.getUser().getId());
+            }
             context.putUserSignupData(buttonEvent.getUser().getId(), new CaptainSignupData(this), CaptainSignupData.class);
         } else {
+            if (context.getUserSignupData(buttonEvent.getUser().getId(), PlayerSignupData.class) != null) {
+                context.removeUserSignupData(buttonEvent.getUser().getId());
+            }
             context.putUserSignupData(buttonEvent.getUser().getId(), new PlayerSignupData(this), PlayerSignupData.class);
         }
 

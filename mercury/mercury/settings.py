@@ -51,7 +51,7 @@ DATABASE_SETUPS = {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": "djehuty",
             "USER": "Cadueceus",
-            "PASSWORD": credential["password"]["djehuty"]["Cadueceus"],  
+            "PASSWORD": credential["passwords"]["djehuty"]["Cadueceus"],  
             "HOST": "djehuty.postgres.database.azure.com",
             "PORT": "5432",
             "OPTIONS": {"sslmode": "require"},

@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 import sys
-
+import json
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,7 +29,8 @@ MIGRATION_MODULES = {
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
+with open(os.path.join('secrets.json'),"r") as A
+    credential = json.load(A)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-&5w+v%pk339$m6+n)(pujq8@zl#$&o*#7h_14$k#eb6u+1azsf'
 
@@ -49,8 +50,8 @@ DATABASE_SETUPS = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": "djehuty",
-            "USER": "Pedro",
-            "PASSWORD": "p[%K*9/)<mB]j.V8N'2S-r",  # best we hide this one
+            "USER": "Cadueceus",
+            "PASSWORD": credential["password"]["djehuty"]["Cadueceus"],  
             "HOST": "djehuty.postgres.database.azure.com",
             "PORT": "5432",
             "OPTIONS": {"sslmode": "require"},

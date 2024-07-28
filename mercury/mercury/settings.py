@@ -29,7 +29,7 @@ MIGRATION_MODULES = {
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-with open("../../secrets.json","r") as A:
+with open(os.path.join('secrets.json')) as A:
     credential = json.load(A)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-&5w+v%pk339$m6+n)(pujq8@zl#$&o*#7h_14$k#eb6u+1azsf'

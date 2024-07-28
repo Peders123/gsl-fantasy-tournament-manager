@@ -33,7 +33,7 @@ class Tournament(models.Model):
         title (CharField): The user-facing name of the tournament.
         description (CharField): Brief description of what the touranment is.
     """
-    tournament_id = models.IntegerField(primary_key=True)
+    tournament_id = models.AutoField(primary_key=True)
     datetime = models.DateTimeField(default=datetime(year=2001, month=11, day=5, hour=0, minute=0, second=0))
     title = models.CharField(max_length=64, default="Glaeria Smite League")
     description = models.CharField(max_length=256, default="None")
@@ -48,10 +48,10 @@ class User(models.Model):
     """Model representing a single user, mapping 1-to-1 with a discord account.
 
     Attributes:
-        user_id (IntegerField): Primary key. Same as the user's discord id.
+        user_id (CharField): Primary key. Same as the user's discord id.
         discord_name (CharField): Signed up user's discord name.
     """
-    user_id = models.IntegerField(primary_key=True)
+    user_id = models.CharField(primary_key=True, max_length=64)
     discord_name = models.CharField(max_length=32)
 
 
@@ -67,7 +67,7 @@ class Captain(models.Model):
         reason (CharField): Justification for why the person should be a captain.
         captain_budget (IntegerField): Budget the captain will begin the tournament with.
     """
-    captain_id = models.IntegerField(primary_key=True)
+    captain_id = models.AutoField(primary_key=True)
     tournament_id = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     smite_name = models.CharField(max_length=32)
@@ -99,9 +99,3 @@ class Player(models.Model):
     role_2 = models.CharField(max_length=16, default="Fill")
     smite_guru = models.CharField(max_length=128)
     estimated_value = models.IntegerField(default=0)
-
-
-class Test(models.Model):
-
-    test_id = models.AutoField(primary_key=True)
-    test_field = models.TextField(max_length=10, default="FILL")

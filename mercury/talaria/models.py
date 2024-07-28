@@ -33,7 +33,7 @@ class Tournament(models.Model):
         title (CharField): The user-facing name of the tournament.
         description (CharField): Brief description of what the touranment is.
     """
-    tournament_id = models.IntegerField(primary_key=True)
+    tournament_id = models.AutoField(primary_key=True)
     datetime = models.DateTimeField(default=datetime(year=2001, month=11, day=5, hour=0, minute=0, second=0))
     title = models.CharField(max_length=64, default="Glaeria Smite League")
     description = models.CharField(max_length=256, default="None")
@@ -67,7 +67,7 @@ class Captain(models.Model):
         reason (CharField): Justification for why the person should be a captain.
         captain_budget (IntegerField): Budget the captain will begin the tournament with.
     """
-    captain_id = models.IntegerField(primary_key=True)
+    captain_id = models.AutoField(primary_key=True)
     tournament_id = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     smite_name = models.CharField(max_length=32)

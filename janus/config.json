@@ -1,12 +1,12 @@
 {
     "endpoint": {
-        "dev": "http://192.168.64.1:8001/",
-        "ops": "https://mercury.tanukismiteleague.com/"
+        "dev": "http://192.168.64.1:80/",
+        "ops": "http://mercury.tanukismiteleague.com/"
     },
     "proc": {
         "username": {
             "dev": "Peders",
-            "ops": "Peders"
+            "ops": "Janus"
         }
     }
 }

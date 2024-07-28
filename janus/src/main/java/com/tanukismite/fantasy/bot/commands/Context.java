@@ -13,25 +13,19 @@ public class Context {
     private CreateTournament tournamentRoot;
 
     public Context() {
-
         this.userSignupSessions = new ConcurrentHashMap<>();
-
     }
 
     public <T extends SignupData> T getUserSignupData(String id, Class<T> type) {
-
         return type.cast(this.userSignupSessions.get(id));
-
     }
 
     public <T extends SignupData> void putUserSignupData(String id, SignupData data, Class<T> type) {
-
-        T new_data = type.cast(data);
-
-        System.out.println("CAST_DATA" + new_data);
-
         this.userSignupSessions.put(id, type.cast(data));
+    }
 
+    public void removeUserSignupData(String id) {
+        this.userSignupSessions.remove(id);
     }
 
     public CreateSignups getSignupRoot() {

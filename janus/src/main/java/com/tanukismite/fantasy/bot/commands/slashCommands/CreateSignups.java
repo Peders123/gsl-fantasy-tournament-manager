@@ -9,7 +9,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.tanukismite.fantasy.bot.Role;
 import com.tanukismite.fantasy.bot.commands.Context;
 import com.tanukismite.fantasy.bot.commands.ExtendedCommand;
+import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
 import com.tanukismite.fantasy.bot.communicators.MercuryCommunicator;
+import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
 import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Components;
 import com.tanukismite.fantasy.bot.handlers.Handler;
@@ -80,9 +82,9 @@ public class CreateSignups extends ExtendedCommand {
         FluentRestAction<Message, MessageCreateAction> action = Action.sendMessageWithEmbed(channel, embed.build());
 
         action = Components.addActionRowMessage(action,
-            Button.primary(event.getUser().getId() + ":player-signup", "Signup"),
-            Button.primary(event.getUser().getId() + ":captain-signup", "Signup (Captain)"),
-            Button.secondary(event.getUser().getId() + ":players", "Players")
+            Button.primary(event.getUser().getId() + ":player-signup", "Player Signup"),
+            Button.success(event.getUser().getId() + ":captain-signup", "Captain Signup"),
+            Button.danger(event.getUser().getId() + ":signout", "Signout")
         );
 
         this.queue(response);
@@ -120,8 +122,14 @@ public class CreateSignups extends ExtendedCommand {
         System.out.println(this.signupRootId);
 
         if (captain) {
+            if (context.getUserSignupData(buttonEvent.getUser().getId(), CaptainSignupData.class) != null) {
+                context.removeUserSignupData(buttonEvent.getUser().getId());
+            }
             context.putUserSignupData(buttonEvent.getUser().getId(), new CaptainSignupData(this), CaptainSignupData.class);
         } else {
+            if (context.getUserSignupData(buttonEvent.getUser().getId(), PlayerSignupData.class) != null) {
+                context.removeUserSignupData(buttonEvent.getUser().getId());
+            }
             context.putUserSignupData(buttonEvent.getUser().getId(), new PlayerSignupData(this), PlayerSignupData.class);
         }
 
@@ -169,6 +177,53 @@ public class CreateSignups extends ExtendedCommand {
         Modal modal = Action.createModal(modalId, title, inputs);
         FluentRestAction<Void, ModalCallbackAction> action = Action.replyWithModal(buttonEvent, modal);
         this.queue(action);
+
+    }
+
+    protected void alreadySignedUp(Handler handler, ButtonInteractionEvent buttonEvent) {
+
+        String message = "You are already signed up with this discord account. If you want to re-do your signup, please first use the sign-out button!";
+
+        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(buttonEvent, message, true);
+        this.queue(action);
+
+    }
+
+    protected void signout(Handler handler, ButtonInteractionEvent buttonEvent) {
+
+        Long longId = Long.parseLong(buttonEvent.getUser().getId());
+
+        PlayerCommunicator playerCommunicator = (PlayerCommunicator) handler.getCommunicator("player");
+        CaptainCommunicator captainCommunicator = (CaptainCommunicator) handler.getCommunicator("captain");
+
+        try {
+            if (playerCommunicator.getPlayerUserExists(longId)) {
+                playerCommunicator.delete(playerCommunicator.getPlayerUser(longId).get("player_id").asInt());
+            } else if (captainCommunicator.getCaptainUserExists(longId)) {
+                captainCommunicator.delete(captainCommunicator.getCaptainUser(longId).get("captain_id").asInt());
+            }
+        } catch (IOException e) {
+            System.out.println("ERROR");
+            e.printStackTrace();
+        }
+        
+        boolean signupExists = false;
+
+        try {
+            System.out.println("Player exists:" + Boolean.toString(playerCommunicator.getPlayerUserExists(longId)));
+            System.out.println("Captain exists:" + Boolean.toString(captainCommunicator.getCaptainUserExists(longId)));
+            signupExists = playerCommunicator.getPlayerUserExists(longId) || captainCommunicator.getCaptainUserExists(longId);
+            System.out.println(Boolean.toString(signupExists));
+        } catch (IOException e) {
+            System.out.println("HANDLE ERROR");
+            return;
+        }
+
+        if (signupExists == true) {
+            Action.replyWithMessage(buttonEvent, "Error when deleting user, please contact an admin.", true).queue();
+        } else {
+            Action.replyWithMessage(buttonEvent, "Signup deleted successfully.", true).queue();
+        }
 
     }
 

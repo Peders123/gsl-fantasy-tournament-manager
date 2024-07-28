@@ -27,6 +27,8 @@ MIGRATION_MODULES = {
     'talaria': 'mount.mercury.migrations',
 }
 
+CSRF_TRUSTED_ORIGINS = ['https://mercury.tanukismiteleague.com']
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 with open(os.path.join('secrets.json')) as A:

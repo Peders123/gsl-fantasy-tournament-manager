@@ -99,3 +99,9 @@ class Player(models.Model):
     role_2 = models.CharField(max_length=16, default="Fill")
     smite_guru = models.CharField(max_length=128)
     estimated_value = models.IntegerField(default=0)
+
+
+class Test(models.Model):
+
+    test_id = models.AutoField(primary_key=True)
+    test_field = models.TextField(max_length=10, default="FILL")

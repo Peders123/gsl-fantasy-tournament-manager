@@ -11,7 +11,6 @@ import com.tanukismite.fantasy.bot.communicators.TournamentCommunicator;
 import com.tanukismite.fantasy.bot.communicators.UserCommunicator;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 import com.tanukismite.fantasy.bot.listeners.*;
-import com.tanukismite.fantasy.bot.signup.UserSignupData;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -101,19 +100,6 @@ public class App {
         commands.queue();
 
         System.out.println("Commands created");
-
-        UserSignupData data = new UserSignupData("123456", "peedly");
-
-        JsonNode response = handler.getCommunicator("user").get();
-        System.out.println(response.toString());
-
-        handler.getCommunicator("user").post(data);
-
-        response = handler.getCommunicator("user").get();
-        System.out.println(response.toString());
-
-        response = handler.getCommunicator("captain").get();
-        System.out.println(response.toString());
 
     }
 

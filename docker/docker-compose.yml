@@ -25,7 +25,7 @@ services:
     image: mercury:1.0
     ports:
       - "80:80"      
-     volumes:
+    volumes:
       - ./mercury-athena:/data/mercury/mount
 
   janus:

@@ -1,9 +1,11 @@
 package com.tanukismite.fantasy.bot.communicators;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.tanukismite.fantasy.bot.HttpHandler;
 import com.tanukismite.fantasy.bot.signup.CaptainSignupData;
 import com.tanukismite.fantasy.bot.signup.PostData;
 
@@ -74,6 +76,23 @@ public class CaptainCommunicator extends MercuryCommunicator {
             System.out.println("ERROR: Malformed captainId in request, expected long.");
             return false;
         }
+    }
+
+    public JsonNode getCaptainUser(long userId) throws IOException {
+        return genericDetailedGet(new URL(this.getBaseEndpoint() + "by-user/" + userId));
+    }
+
+    public boolean getCaptainUserExists(long userId) throws IOException {
+        URL url = new URL(this.getBaseEndpoint() + "by-user/" + userId);
+        HttpHandler getter = createHttpHandler(url, "GET", null);
+
+        if (getter.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
+            return false;
+        } else if (getter.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            return true;
+        }
+        System.out.println("ERROR");
+        return false;
     }
 
 }

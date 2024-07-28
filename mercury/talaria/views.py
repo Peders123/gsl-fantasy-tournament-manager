@@ -38,6 +38,15 @@ class CaptainViewSet(viewsets.ModelViewSet):
             return CaptainPostSerializer
         return CaptainGetSerializer
 
+    @action(detail=False, methods=['get'], url_path='by-user/(?P<user_id>\d+)')
+    def get_by_user_id(self, request, user_id=None):
+        try:
+            captain = Captain.objects.get(user_id=user_id)
+            serializer = self.get_serializer(captain)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Captain.DoesNotExist:
+            return Response({"detail": "Captain not found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 class PlayerViewSet(viewsets.ModelViewSet):
 

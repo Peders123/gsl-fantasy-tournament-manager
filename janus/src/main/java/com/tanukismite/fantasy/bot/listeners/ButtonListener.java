@@ -99,8 +99,6 @@ public class ButtonListener extends BaseListener {
 
     private void signup(ButtonInteractionEvent event, boolean captain) {
 
-        this.handler.getContext().getUserSignupData(null, null)
-
         Long longId = Long.parseLong(event.getUser().getId());
 
         UserCommunicator userCommunicator = (UserCommunicator) this.handler.getCommunicator("user");

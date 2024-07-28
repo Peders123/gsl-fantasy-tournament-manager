@@ -24,7 +24,9 @@ services:
       - BUILD_TYPE=dev
     image: mercury:1.0
     ports:
-      - "80:80"
+      - "80:80"      
+     volumes:
+      - ./mercury-athena:/data/mercury/mount
 
   janus:
     build:

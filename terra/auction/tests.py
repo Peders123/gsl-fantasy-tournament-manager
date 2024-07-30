@@ -1,5 +1,6 @@
 from channels.testing import ChannelsLiveServerTestCase
 from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -25,13 +26,13 @@ class AuctionTests(ChannelsLiveServerTestCase):
 
             service = Service(executable_path='/usr/bin/chromedriver')
             cls.driver = webdriver.Chrome(service=service, options=chrome_options)
-        except:
+        except (WebDriverException, FileNotFoundError) as e:
             super().tearDownClass()
-            raise
+            raise e
 
     @classmethod
     def tearDownClass(cls) -> None:
-        
+
         cls.driver.quit()
         super().tearDownClass()
 
@@ -82,7 +83,7 @@ class AuctionTests(ChannelsLiveServerTestCase):
             )
         finally:
             self._close_all_new_windows()
-    
+
     def _enter_chat_room(self, room_name):
 
         self.driver.get(self.live_server_url + '/auction/')

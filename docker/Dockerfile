@@ -46,7 +46,10 @@ RUN pip install -r requirements.txt
 
 FROM python:3.12-slim-bookworm AS terra
 
-RUN apt-get update && apt-get install -y dos2unix
+RUN apt-get update && apt-get install -y dos2unix chromium chromium-driver wget unzip
+
+ENV CHROME_BIN=/usr/bin/chromium \
+    CHROME_DRIVE=/usr/bin/chromedriver
 
 RUN mkdir -p /data/terra
 

@@ -83,6 +83,9 @@ DATABASES = {
     'default': {
         'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.sqlite3',
+        'TEST': {
+            'NAME': BASE_DIR / 'test.db.sqlite3'
+        }
     }
 }
 

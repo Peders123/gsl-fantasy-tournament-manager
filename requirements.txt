@@ -6,4 +6,5 @@ Django
 djangorestframework
 gunicorn
 psycopg2-binary
+selenium==4.23.1
 whitenoise

@@ -2,11 +2,18 @@ version: '3.8'
 
 services:
 
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
   terra:
     build:
       context: ../
       dockerfile: docker/Dockerfile
       target: terra
+    depends_on:
+      - redis
     entrypoint: /data/terra/startTerra.sh
     environment:
       - BUILD_TYPE=dev

@@ -46,6 +46,8 @@ RUN pip install -r requirements.txt
 
 FROM python:3.12-slim-bookworm AS terra
 
+RUN apt-get update && apt-get install -y dos2unix
+
 RUN mkdir -p /data/terra
 
 COPY --from=python-builder /opt/venv /opt/venv
@@ -57,10 +59,11 @@ COPY terra/manage.py /data/terra/.
 COPY terra/home /data/terra/home
 COPY terra/terra /data/terra/terra
 COPY terra/tournament /data/terra/tournament
+COPY terra/auction /data/terra/auction
 
-COPY docker/environment.sh /data/terra/.
+EXPOSE 8000
 
-RUN apt-get update && apt-get install -y dos2unix && dos2unix /data/terra/startTerra.sh
+RUN dos2unix /data/terra/startTerra.sh
 
 
 FROM python:3.12-slim-bookworm AS mercury

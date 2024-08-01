@@ -20,14 +20,10 @@ class Tournament(models.Model):
     title = models.CharField(max_length=64, default="Glaeria Smite League")
     description = models.CharField(max_length=256, default="None")
 
-    class Meta:
-
-        db_table = 'talaria_players'
-
     @property
     def url_id(self):
         """Returns the date in a format to be used in the url."""
-        return self.date.strftime('%Y%m%d')
+        return self.datetime.strftime('%Y%m%d')
 
 
 class User(models.Model):
@@ -39,10 +35,6 @@ class User(models.Model):
     """
     user_id = models.IntegerField(primary_key=True)
     discord_name = models.CharField(max_length=32)
-
-    class Meta:
-
-        db_table = 'talaria_players'
 
 
 class Captain(models.Model):
@@ -64,10 +56,6 @@ class Captain(models.Model):
     team_name = models.CharField(max_length=32)
     reason = models.CharField(max_length=256)
     captain_budget = models.IntegerField(default=0)
-
-    class Meta:
-
-        db_table = 'talaria_players'
 
 
 class Player(models.Model):
@@ -93,7 +81,3 @@ class Player(models.Model):
     role_2 = models.CharField(max_length=16, default="Fill")
     smite_guru = models.CharField(max_length=128)
     estimated_value = models.IntegerField(default=0)
-
-    class Meta:
-
-        db_table = 'talaria_players'

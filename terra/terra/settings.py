@@ -31,6 +31,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'auction',
+    'daphne',
     "whitenoise.runserver_nostatic",
     'home.apps.HomeConfig',
     'tournament.apps.TournamentConfig',
@@ -78,14 +80,12 @@ WSGI_APPLICATION = 'terra.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "djehuty",
-        "USER": "Pedro",
-        "PASSWORD": "p[%K*9/)<mB]j.V8N'2S-r",  # best we hide this one
-        "HOST": "djehuty.postgres.database.azure.com",
-        "PORT": "5432",
-        "OPTIONS": {"sslmode": "require"},
+    'default': {
+        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'TEST': {
+            'NAME': BASE_DIR / 'test.db.sqlite3'
+        }
     }
 }
 
@@ -133,3 +133,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ASGI_APPLICATION = 'terra.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('redis', 6379)]
+        }
+    }
+}

@@ -37,7 +37,7 @@ with open(os.path.join('secrets.json')) as A:
 SECRET_KEY = 'django-insecure-&5w+v%pk339$m6+n)(pujq8@zl#$&o*#7h_14$k#eb6u+1azsf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = [False if os.environ['BUILD_TYPE'] == 'ops' else True]
 
 ALLOWED_HOSTS = ['*']
 
@@ -53,7 +53,7 @@ DATABASE_SETUPS = {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": "djehuty",
             "USER": "Cadueceus",
-            "PASSWORD": credential["passwords"]["djehuty"]["Cadueceus"],  
+            "PASSWORD": credential["passwords"]["djehuty"]["Cadueceus"],
             "HOST": "djehuty.postgres.database.azure.com",
             "PORT": "5432",
             "OPTIONS": {"sslmode": "require"},
@@ -142,8 +142,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-
 
 
 # Internationalization

@@ -14,6 +14,9 @@ import sys
 import json
 from pathlib import Path
 
+with open(os.path.join('secrets.json')) as secrets:
+    CREDENTIALS = json.load(secrets)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -31,13 +34,12 @@ CSRF_TRUSTED_ORIGINS = ['https://mercury.tanukismiteleague.com']
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-with open(os.path.join('secrets.json')) as A:
-    credential = json.load(A)
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&5w+v%pk339$m6+n)(pujq8@zl#$&o*#7h_14$k#eb6u+1azsf'
+SECRET_KEY = CREDENTIALS['tokens']['secret-key']['mercury']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = [False if os.environ['BUILD_TYPE'] == 'ops' else True]
+DEBUG = False if os.environ['BUILD_TYPE'] == 'ops' else True
 
 ALLOWED_HOSTS = ['*']
 
@@ -53,7 +55,7 @@ DATABASE_SETUPS = {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": "djehuty",
             "USER": "Cadueceus",
-            "PASSWORD": credential["passwords"]["djehuty"]["Cadueceus"],
+            "PASSWORD": CREDENTIALS["passwords"]["djehuty"]["Cadueceus"],
             "HOST": "djehuty.postgres.database.azure.com",
             "PORT": "5432",
             "OPTIONS": {"sslmode": "require"},
@@ -100,7 +102,7 @@ ROOT_URLCONF = 'mercury.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'mercury', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,10 +120,6 @@ WSGI_APPLICATION = 'mercury.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-print(f"BUILD: {os.environ['BUILD_TYPE']}")
-print(os.getcwd())
-print(os.listdir("mount/mercury"))
 
 DATABASES = DATABASE_SETUPS[os.environ['BUILD_TYPE']]
 

@@ -39,7 +39,7 @@ CSRF_TRUSTED_ORIGINS = ['https://mercury.tanukismiteleague.com']
 SECRET_KEY = CREDENTIALS['tokens']['secret-key']['mercury']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = False if os.environ['BUILD_TYPE'] == "ops" else True
 
 ALLOWED_HOSTS = ['*']
 

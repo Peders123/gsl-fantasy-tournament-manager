@@ -8,3 +8,4 @@ gunicorn
 psycopg2-binary
 selenium==4.23.1
 whitenoise
+social-auth-app-django==5.4.2

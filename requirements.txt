@@ -7,4 +7,4 @@ djangorestframework
 gunicorn
 psycopg2-binary
 selenium==4.23.1
-whitenoise
+whitenoise==6.7.0

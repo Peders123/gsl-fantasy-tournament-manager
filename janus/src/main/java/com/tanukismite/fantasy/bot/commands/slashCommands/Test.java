@@ -1,6 +1,9 @@
 package com.tanukismite.fantasy.bot.commands.slashCommands;
 
+import java.io.IOException;
+
 import com.tanukismite.fantasy.bot.commands.Command;
+import com.tanukismite.fantasy.bot.commands.Context;
 import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
@@ -22,14 +25,18 @@ public class Test implements Command {
     @Override
     public void execute(Handler handler) {
 
-        String replyString = "";
+        Context context = handler.getContext();
+        String msg;
 
-        for (int i = 0; i < event.getOption("iterations").getAsInt(); i++) {
-            replyString += event.getOption("content").getAsString() + "\n";
+        try {
+            context.write();
+            msg = "Written";
+        } catch (IOException e) {
+            e.printStackTrace();
+            msg = "Failed";
         }
 
-        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, replyString);
-
+        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, msg);
         this.queue(action);
 
     }

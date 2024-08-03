@@ -2,6 +2,7 @@ package com.tanukismite.fantasy.bot.commands.slashCommands;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -41,7 +42,7 @@ import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 import net.dv8tion.jda.internal.requests.restaction.MessageCreateActionImpl;
 
-public class CreateSignups extends ExtendedCommand {
+public class CreateSignups extends ExtendedCommand implements Serializable {
 
     private SlashCommandInteractionEvent event;
     private int tournamentId;

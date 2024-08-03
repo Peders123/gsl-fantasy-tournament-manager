@@ -1,5 +1,7 @@
 package com.tanukismite.fantasy.bot.commands.slashCommands;
 
+import java.io.Serializable;
+
 import com.tanukismite.fantasy.bot.commands.Context;
 import com.tanukismite.fantasy.bot.commands.ExtendedCommand;
 import com.tanukismite.fantasy.bot.handlers.Action;
@@ -16,7 +18,7 @@ import net.dv8tion.jda.api.requests.FluentRestAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ModalCallbackAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
-public class CreateTournament extends ExtendedCommand {
+public class CreateTournament extends ExtendedCommand implements Serializable {
     
     private SlashCommandInteractionEvent event;
 

@@ -7,6 +7,13 @@
         "adminOnly": false
     },
     {
+        "name": "test",
+        "description": "Test command",
+        "options": [],
+        "guildOnly": true,
+        "adminOnly": true
+    },
+    {
         "name": "create-signups",
         "description": "Create signups using select menu.",
         "options": [

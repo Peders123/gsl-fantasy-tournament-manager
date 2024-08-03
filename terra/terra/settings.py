@@ -9,23 +9,46 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import json
 import os
 from pathlib import Path
 
+with open(os.path.join('secrets.json')) as secrets:
+    CREDENTIALS = json.load(secrets)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-adn!fl*h5i(8uy=!zxx2s5o!ew-$6&q-de3-oa)d2^-uqxi)vt'
+SECRET_KEY = CREDENTIALS['token']['secret-key']['terra']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False if os.environ['BUILD_TYPE'] == "ops" else True
 
 ALLOWED_HOSTS = ['*']
+
+DATABASE_SETUPS = {
+    "dev": {
+        'default': {
+            'NAME': BASE_DIR / 'db.sqlite3',
+            'ENGINE': 'django.db.backends.sqlite3',
+        }
+    },
+    "ops": {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "djehuty",
+            "USER": "Cadueceus",
+            "PASSWORD": CREDENTIALS["passwords"]["djehuty"]["Cadueceus"],
+            "HOST": "djehuty.postgres.database.azure.com",
+            "PORT": "5432",
+            "OPTIONS": {"sslmode": "require"},
+        }
+    }
+}
 
 
 # Application definition
@@ -77,18 +100,7 @@ WSGI_APPLICATION = 'terra.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "djehuty",
-        "USER": "Pedro",
-        "PASSWORD": "p[%K*9/)<mB]j.V8N'2S-r",  # best we hide this one
-        "HOST": "djehuty.postgres.database.azure.com",
-        "PORT": "5432",
-        "OPTIONS": {"sslmode": "require"},
-    }
-}
-
+DATABASES = DATABASE_SETUPS[os.environ['BUILD_TYPE']]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

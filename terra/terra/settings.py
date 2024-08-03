@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     'home.apps.HomeConfig',
     'tournament.apps.TournamentConfig',
+    'social_django',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -74,7 +75,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware'
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.discord.DiscordOAuth2'
+)
 
 ROOT_URLCONF = 'terra.urls'
 
@@ -145,3 +151,19 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ASGI_APPLICATION = 'terra.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('redis', 6379)]
+        }
+    }
+}
+
+SOCIAL_AUTH_DISCORD_KEY = '1269330432672137257'
+SOCIAL_AUTH_DISCORD_SECRET = '4lFS_yGYO_RYoIp-QyoyymrY8ym_zK3d'
+SOCIAL_AUTH_DISCORD_SCOPE = ['']
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/login-success/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'

@@ -5,6 +5,15 @@
 </head>
 
 <body>
-
+    {% if signed_in %}
+        <p>{{ discord_id }}</p>
+        <a href="{% url 'logout' %}">Logout from discord</a>
+    {% else %}
+        <a href="{% url 'login' %}">Login with Discord</a>
+    {% endif %}
+    {% for tournament in tournaments %}
+        <p>{{ tournament.title }}</p>
+    {% endfor %}
+    
 </body>
 

@@ -12,6 +12,8 @@ python3 manage.py migrate
 
 echo "Finished Migrations"
 
+python3 manage.py collectstatic
+
 if [[ $BUILD_TYPE = "dev" ]]; then
     python3 manage.py populate_database
     expect -c "

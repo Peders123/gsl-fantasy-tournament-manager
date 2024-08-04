@@ -63,6 +63,7 @@ COPY terra/home /data/terra/home
 COPY terra/terra /data/terra/terra
 COPY terra/tournament /data/terra/tournament
 COPY terra/auction /data/terra/auction
+COPY secrets.json /data/terra/secrets.json
 
 EXPOSE 8000
 

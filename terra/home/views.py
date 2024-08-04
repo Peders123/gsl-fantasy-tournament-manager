@@ -10,8 +10,16 @@ def index(request):
 
     tournaments = Tournament.objects.all()
 
+    signed_in = False
+    discord_id = ""
+
+    if 'user' in request.session.keys():
+        signed_in = True
+        discord_id = request.session['user']['id']
+
     context = {
-        "tournaments": tournaments
+        'signed_in': signed_in,
+        'discord_id': discord_id
     }
 
     return render(request, 'home/home.html', context)
@@ -30,7 +38,9 @@ def login_redirect(request):
     code = request.GET.get('code')
     user = exchange_code(code)
 
-    return JsonResponse(user)
+    request.session['user'] = user
+
+    return redirect('home')
 
 
 def exchange_code(code):

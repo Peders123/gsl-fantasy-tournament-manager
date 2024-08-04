@@ -5,6 +5,10 @@
 </head>
 
 <body>
+    {% if signed_in %}
+    <p>{{ discord_id }}</p>
+    {% else %}
     <a href="{% url 'login' %}">Login with Discord</a>
+    {% endif %}
 </body>
 

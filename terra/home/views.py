@@ -43,6 +43,14 @@ def login_redirect(request):
     return redirect('home')
 
 
+def logout(request):
+
+    if 'discord' in request.session:
+        del request.session['discord']
+
+    return redirect('home')
+
+
 def exchange_code(code):
 
     with open('secrets.json') as secrets:

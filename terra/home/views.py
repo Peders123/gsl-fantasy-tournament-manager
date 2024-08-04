@@ -1,4 +1,3 @@
-from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 import requests
 import json
@@ -27,7 +26,7 @@ def index(request):
 
 
 def login(request):
-    
+
     with open('secrets.json') as secrets:
         url = json.load(secrets)['tokens']['discord-oauth'][os.environ['BUILD_TYPE']]['url']
 

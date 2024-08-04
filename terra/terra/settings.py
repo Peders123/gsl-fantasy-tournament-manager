@@ -31,21 +31,26 @@ DEBUG = False if os.environ['BUILD_TYPE'] == "ops" else True
 ALLOWED_HOSTS = ['*']
 
 DATABASE_SETUPS = {
-    "dev": {
+    'dev': {
         'default': {
-            'NAME': BASE_DIR / 'db.sqlite3',
-            'ENGINE': 'django.db.backends.sqlite3',
+            'ENGINE': "django.db.backends.postgresql",
+            'NAME': "postgres",
+            'USER': "Pedro",
+            'PASSWORD': CREDENTIALS['passwords']['postgres']['Pedro'],
+            'HOST': "djehuty.postgres.database.azure.com",
+            'PORT': "5432",
+            'OPTIONS': {"sslmode": "require"},
         }
     },
-    "ops": {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "djehuty",
-            "USER": "Cadueceus",
-            "PASSWORD": CREDENTIALS["passwords"]["djehuty"]["Cadueceus"],
-            "HOST": "djehuty.postgres.database.azure.com",
-            "PORT": "5432",
-            "OPTIONS": {"sslmode": "require"},
+    'ops': {
+        'default': {
+            'ENGINE': "django.db.backends.postgresql",
+            'NAME': "djehuty",
+            'USER': "Cadueceus",
+            'PASSWORD': CREDENTIALS['passwords']['djehuty']['Cadueceus'],
+            'HOST': "djehuty.postgres.database.azure.com",
+            'PORT': "5432",
+            'OPTIONS': {"sslmode": "require"},
         }
     }
 }
@@ -54,9 +59,10 @@ DATABASE_SETUPS = {
 # Application definition
 
 INSTALLED_APPS = [
-    "whitenoise.runserver_nostatic",
+    'whitenoise.runserver_nostatic',
     'home.apps.HomeConfig',
     'tournament.apps.TournamentConfig',
+    'auction.apps.AuctionConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

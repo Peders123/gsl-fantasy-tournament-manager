@@ -45,9 +45,14 @@ ALLOWED_HOSTS = ['*']
 
 DATABASE_SETUPS = {
     "dev": {
-        'default': {
-            'NAME': BASE_DIR / 'db.sqlite3',
-            'ENGINE': 'django.db.backends.sqlite3',
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "postgres",
+            "USER": "Pedro",
+            "PASSWORD": CREDENTIALS['passwords']['postgres']['Pedro'],
+            "HOST": "djehuty.postgres.database.azure.com",
+            "PORT": "5432",
+            "OPTIONS": {"sslmode": "require"},
         }
     },
     "ops": {

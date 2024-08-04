@@ -13,13 +13,14 @@ def index(request):
     signed_in = False
     discord_id = ""
 
-    if 'user' in request.session.keys():
+    if 'discord' in request.session.keys():
         signed_in = True
-        discord_id = request.session['user']['id']
+        discord_id = request.session['discord']['id']
 
     context = {
         'signed_in': signed_in,
-        'discord_id': discord_id
+        'discord_id': discord_id,
+        'tournaments': tournaments
     }
 
     return render(request, 'home/home.html', context)
@@ -36,9 +37,9 @@ def login(request):
 def login_redirect(request):
 
     code = request.GET.get('code')
-    user = exchange_code(code)
+    discord = exchange_code(code)
 
-    request.session['user'] = user
+    request.session['discord'] = discord
 
     return redirect('home')
 

@@ -9,6 +9,9 @@
     <p>{{ discord_id }}</p>
     {% else %}
     <a href="{% url 'login' %}">Login with Discord</a>
+    {% for tournament in tournaments %}
+    {{ tournament.title }}
+    {% endfor %}
     {% endif %}
 </body>
 

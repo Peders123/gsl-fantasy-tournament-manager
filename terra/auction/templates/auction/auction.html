@@ -5,7 +5,6 @@
     <title>Auction Rooms</title>
 </head>
 <body>
-    What auction room would you like to enter?<br>
     <input id="room-name-submit" type="button" value="Enter">
 
     {% if errno %}
@@ -14,8 +13,7 @@
 
     <script>
         document.querySelector('#room-name-submit').onclick = function(e) {
-            var roomName = "tsl";
-            window.location.pathname = '/auction/' + roomName + '/';
+            window.location.pathname = '/auction/auction/';
         };
     </script>
 </body>

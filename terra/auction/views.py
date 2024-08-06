@@ -9,13 +9,6 @@ def auction(request):
     errno = request.GET.get('errno', None)
     error = request.GET.get('error', None)
 
-    discord_id = "<blank>"
-
-    if 'discord' in request.session.keys():
-        discord_id = str(request.session['discord']['id'])
-
-    captain = Captain.objects.filter(user_id=discord_id).exists()
-
     return render(request, 'auction/auction.html', context={
         'errno': errno,
         'error': error

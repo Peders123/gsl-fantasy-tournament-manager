@@ -10,7 +10,7 @@ class AuctionConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
 
-        self.room_group_name = f"auction"
+        self.room_group_name = "auction"
 
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
@@ -25,11 +25,9 @@ class AuctionConsumer(AsyncWebsocketConsumer):
             }
         )
 
-
     async def disconnect(self, code):
 
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
-
 
     async def receive(self, text_data):
 
@@ -48,7 +46,6 @@ class AuctionConsumer(AsyncWebsocketConsumer):
                 }
             )
 
-
     async def connection(self, event):
 
         user = event['user']
@@ -57,7 +54,6 @@ class AuctionConsumer(AsyncWebsocketConsumer):
             'type': 'connection',
             'user': user
         }))
-
 
     async def message(self, event):
 

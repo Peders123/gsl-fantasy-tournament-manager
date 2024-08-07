@@ -66,8 +66,12 @@
 <body>
     <div class="grid-container">
     </div>
+
+    {{ bidders|json_script:"bidders" }}
+
     <script>
         const gridContainer = document.querySelector('.grid-container');
+        const bidders = JSON.parse(document.getElementById('bidders').textContent);
 
         function createPlayer(playerName) {
             const player = document.createElement('div');
@@ -100,10 +104,19 @@
             return gridItem;
         }
 
+        console.log(bidders.length);
+
+        bidders.forEach(bidder => {
+            console.log("Hello World");
+            console.log(bidder.username);
+            console.log(bidder.team_name);
+            gridContainer.appendChild(createGridItem(bidder.username, bidder.team_name));
+        })
+
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
-            + '/ws/auction/auction'
+            + '/ws/1/auction'
         );
 
         chatSocket.onmessage = function(e) {

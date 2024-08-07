@@ -2,12 +2,78 @@
 <html>
 <head>
     <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auction Room</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 2px;
+            flex-grow: 1;
+        }
+
+        .grid-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: lightgrey;
+            border: 1px solid black;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        button {
+            margin: 0 5px;
+        }
+    </style>
 </head>
 <body>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send">
+    <div class="grid-container">
+    </div>
+        <button id="turnRedButton">Turn Box Red</button>
+        <button id="turnGreyButton">Turn Box Grey</button>
+    <script>
+        // Create the grid items
+        const gridContainer = document.querySelector('.grid-container');
+        for (let i = 0; i < 16; i++) {
+            const gridItem = document.createElement('div');
+            gridItem.classList.add('grid-item');
+            gridContainer.appendChild(gridItem);
+        }
+
+        // JavaScript to handle the button clicks
+        const turnRedButton = document.getElementById('turnRedButton');
+        const turnGreyButton = document.getElementById('turnGreyButton');
+        let currentIndex = 0;
+
+        turnRedButton.addEventListener('click', () => {
+            const gridItems = document.querySelectorAll('.grid-item');
+            if (currentIndex < gridItems.length) {
+                gridItems[currentIndex].style.backgroundColor = 'red';
+                currentIndex++;
+            }
+        });
+
+        turnGreyButton.addEventListener('click', () => {
+            const gridItems = document.querySelectorAll('.grid-item');
+            if (currentIndex > 0) {
+                currentIndex--;
+                gridItems[currentIndex].style.backgroundColor = 'lightgrey';
+            }
+        });
+    </script>
     <script>
         console.log(window.location.host);
 

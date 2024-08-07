@@ -68,7 +68,6 @@
     </div>
     <script>
         const gridContainer = document.querySelector('.grid-container');
-        let teamCount = 0;
 
         function createPlayer(playerName) {
             const player = document.createElement('div');
@@ -79,6 +78,7 @@
         
         function createGridItem(captainName, teamName) {
             const gridItem = document.createElement('div');
+            gridItem.id = captainName + ":" + teamName;
             gridItem.classList.add('grid-item');
 
             const teamNameContainer = document.createElement('div');
@@ -111,8 +111,11 @@
             switch (data.type) {
                 case "connection":
                     console.log("Captain joining: " + data.user);
-                    teamCount++;
                     gridContainer.appendChild(createGridItem(data.user, data.teamName));
+                    break;
+                case "disconnection":
+                    console.log("Captain leaving: " + data.user);
+                    gridContainer.removeChild(document.getElementById(data.user + ":" + data.teamName));
                     break;
             }
         };

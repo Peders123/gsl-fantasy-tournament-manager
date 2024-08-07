@@ -15,9 +15,9 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
-        captain = await self.get_captain_user()
-        username = captain.smite_name
-        team_name = captain.team_name
+        self.captain = await self.get_captain_user()
+        username = self.captain.smite_name
+        team_name = self.captain.team_name
 
         await self.channel_layer.group_send(
             self.room_group_name, {
@@ -28,6 +28,14 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         )
 
     async def disconnect(self, code):
+
+        await self.channel_layer.group_send(
+            self.room_group_name, {
+                'type': 'disconnection',
+                'user': self.captain.smite_name,
+                'teamName': self.captain.team_name
+            }
+        )
 
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
@@ -52,6 +60,14 @@ class AuctionConsumer(AsyncWebsocketConsumer):
 
         await self.send(text_data=json.dumps({
             'type': 'connection',
+            'user': event['user'],
+            'teamName': event['teamName']
+        }))
+
+    async def disconnection(self, event):
+
+        await self.send(text_data=json.dumps({
+            'type': 'disconnection',
             'user': event['user'],
             'teamName': event['teamName']
         }))

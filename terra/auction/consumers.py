@@ -17,11 +17,13 @@ class AuctionConsumer(AsyncWebsocketConsumer):
 
         captain = await self.get_captain_user()
         username = captain.smite_name
+        team_name = captain.team_name
 
         await self.channel_layer.group_send(
             self.room_group_name, {
                 'type': 'connection',
-                'user': username
+                'user': username,
+                'teamName': team_name
             }
         )
 
@@ -48,11 +50,10 @@ class AuctionConsumer(AsyncWebsocketConsumer):
 
     async def connection(self, event):
 
-        user = event['user']
-
         await self.send(text_data=json.dumps({
             'type': 'connection',
-            'user': user
+            'user': event['user'],
+            'teamName': event['teamName']
         }))
 
     async def message(self, event):

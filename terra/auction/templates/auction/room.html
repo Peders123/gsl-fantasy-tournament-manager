@@ -7,75 +7,98 @@
     <style>
         html, body {
             height: 100%;
+            width: 100%;
             margin: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            box-sizing: border-box; /* Ensure padding and border are included in the width */
         }
-
         .grid-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(4, 1fr);
-            gap: 2px;
-            flex-grow: 1;
+            grid-template-rows: repeat(4, auto);
+            gap: 10px;
+            margin: 20px;
+            width: 80%; /* Set to 100% to span the full width of the viewport */
+            box-sizing: border-box; /* Ensure padding and border are included in the width */
         }
-
         .grid-item {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
             background-color: lightgrey;
             border: 1px solid black;
+            box-sizing: border-box; /* Ensure padding and border are included in the width */
         }
-
+        .team-name {
+            background-color: lightblue;
+            border-bottom: 1px solid black;
+            padding: 2ch 0ch;
+            border: 1px solid black;
+            text-align: center;
+            font-weight: bold;
+        }
+        .player-container {
+            display: flex;
+            border: 1px solid black;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .player {
+            flex: 1;
+            background-color: white;
+            padding: 1.5ch 0ch;
+            text-align: center;
+            box-sizing: border-box; /* Ensure padding and border are included in the width */
+        }
         .buttons-container {
             display: flex;
             justify-content: center;
             padding: 10px;
         }
-
         button {
             margin: 0 5px;
-        }
+        }  margin: 0 5px;
     </style>
 </head>
 <body>
     <div class="grid-container">
     </div>
-        <button id="turnRedButton">Turn Box Red</button>
-        <button id="turnGreyButton">Turn Box Grey</button>
     <script>
-        // Create the grid items
         const gridContainer = document.querySelector('.grid-container');
-        for (let i = 0; i < 16; i++) {
+        let teamCount = 0;
+
+        function createPlayer(playerName) {
+            const player = document.createElement('div');
+            player.classList.add('player');
+            player.textContent = playerName;
+            return player;
+        }
+        
+        function createGridItem(captainName, teamName) {
             const gridItem = document.createElement('div');
             gridItem.classList.add('grid-item');
-            gridContainer.appendChild(gridItem);
+
+            const teamNameContainer = document.createElement('div');
+            teamNameContainer.classList.add('team-name');
+            teamNameContainer.textContent = teamName;
+            gridItem.appendChild(teamNameContainer);
+
+            const playerContainer = document.createElement('div');
+            playerContainer.classList.add('player-container');
+
+            playerContainer.appendChild(createPlayer(captainName));
+
+            for (let j = 1; j < 5; j++) {
+                playerContainer.appendChild(createPlayer(`Player ${j}`));
+            }
+
+            gridItem.appendChild(playerContainer);
+
+            return gridItem;
         }
-
-        // JavaScript to handle the button clicks
-        const turnRedButton = document.getElementById('turnRedButton');
-        const turnGreyButton = document.getElementById('turnGreyButton');
-        let currentIndex = 0;
-
-        turnRedButton.addEventListener('click', () => {
-            const gridItems = document.querySelectorAll('.grid-item');
-            if (currentIndex < gridItems.length) {
-                gridItems[currentIndex].style.backgroundColor = 'red';
-                currentIndex++;
-            }
-        });
-
-        turnGreyButton.addEventListener('click', () => {
-            const gridItems = document.querySelectorAll('.grid-item');
-            if (currentIndex > 0) {
-                currentIndex--;
-                gridItems[currentIndex].style.backgroundColor = 'lightgrey';
-            }
-        });
-    </script>
-    <script>
-        console.log(window.location.host);
 
         const chatSocket = new WebSocket(
             'ws://'
@@ -87,10 +110,9 @@
             const data = JSON.parse(e.data);
             switch (data.type) {
                 case "connection":
-                    document.querySelector('#chat-log').value += ("User: " + data.user + " has connected.\n");
-                    break;
-                case "message":
-                    document.querySelector('#chat-log').value += (data.message + '\n');
+                    console.log("Captain joining: " + data.user);
+                    teamCount++;
+                    gridContainer.appendChild(createGridItem(data.user, data.teamName));
                     break;
             }
         };
@@ -99,22 +121,6 @@
             console.error('Chat socket closed unexpectedly');
         };
 
-        document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function(e) {
-            if (e.key === 'Enter') {  // enter, return
-                document.querySelector('#chat-message-submit').click();
-            }
-        };
-
-        document.querySelector('#chat-message-submit').onclick = function(e) {
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'type': 'message',
-                'message': message
-            }));
-            messageInputDom.value = '';
-        };
     </script>
 </body>
 </html>

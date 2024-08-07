@@ -3,7 +3,7 @@ import json
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from .models import Bidder, Biddee
+from .models import Bidder
 from tournament.models import Tournament, Captain
 
 
@@ -99,7 +99,7 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         return Captain.objects.filter(
             user_id=self.scope['session']['discord']['id']
         )[0]
-    
+
     @sync_to_async
     def get_bidder(self):
 
@@ -111,7 +111,7 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         if bidder.exists():
             return bidder[0]
         return None
-    
+
     @sync_to_async
     def create_bidder(self):
 
@@ -126,7 +126,7 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         bidder.save()
 
         return bidder
-    
+
     @sync_to_async
     def set_bidder_in(self, currently_in):
 

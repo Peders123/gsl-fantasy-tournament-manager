@@ -27,7 +27,7 @@ def room(request, room_name):
         url = reverse('auction')
         error = "User is not registered as a captain."
         return redirect(f"{url}?errno=401&error={error}")
-    
+
     bidders = Bidder.objects.filter(
         tournament_id=1,
         currently_in=True

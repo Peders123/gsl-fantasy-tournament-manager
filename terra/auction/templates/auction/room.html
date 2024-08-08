@@ -4,36 +4,49 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auction Room</title>
-    <style>
-        html, body {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            box-sizing: border-box; /* Ensure padding and border are included in the width */
-            font-family: Arial, sans-serif;
-            transition: margin-right 0.3s ease;
+    <script>
+        var mini = true;
+
+        function toggle_sidebar() {
+            const sidebar = document.getElementById("mySidebar");
+            const main = document.getElementById("main");
+        
+            if (mini) {
+                console.log("opening sidebar");
+                sidebar.classList.add("sidebar-expanded");
+                mini = false;
+            } else {
+                console.log("closing sidebar");
+                sidebar.classList.remove("sidebar-expanded");
+                mini = true;
+            }
         }
+    </script>
+    <style>
+        /* General Styles */
+        body {
+            font-family: "Trebuchet MS", sans-serif;
+            background-color: #C5EDF3;
+        }
+
         .grid-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(4, auto);
             gap: 10px;
             margin: 20px;
-            width: 80%; /* Set to 100% to span the full width of the viewport */
-            box-sizing: border-box; /* Ensure padding and border are included in the width */
+            width: 80%;
+            box-sizing: border-box;
         }
+
         .grid-item {
             display: flex;
             flex-direction: column;
             background-color: lightgrey;
             border: 1px solid black;
-            box-sizing: border-box; /* Ensure padding and border are included in the width */
+            box-sizing: border-box;
         }
+
         .team-name {
             background-color: lightblue;
             border-bottom: 1px solid black;
@@ -42,89 +55,153 @@
             text-align: center;
             font-weight: bold;
         }
+
         .player-container {
             display: flex;
             border: 1px solid black;
             flex-direction: column;
             flex-grow: 1;
         }
+
         .player {
             flex: 1;
             background-color: white;
             padding: 1.5ch 0ch;
             text-align: center;
-            box-sizing: border-box; /* Ensure padding and border are included in the width */
+            box-sizing: border-box;
+            color: black;
         }
+
         .buttons-container {
             display: flex;
             justify-content: center;
             padding: 10px;
         }
+
         button {
             margin: 0 5px;
         }
 
-        .container {
-            display: flex;
-            height: 100%;
-            width: 100%;
-            transition: margin-right 0.3s ease;
-        }
-
-        .content {
-            flex: 1;
-            padding: 20px;
-            transition: margin-right 0.3s ease;
-        }
-
+        /* Sidebar Styles */
         .sidebar {
-            width: 0;
-            height: 100vh;
-            overflow-x: hidden;
-            background-color: #f4f4f4;
-            box-shadow: -3px 0 5px rgba(0, 0, 0, 0.2);
+            height: 100%;
+            width: 85px; /* Default (collapsed) width */
             position: fixed;
-            right: 0;
+            z-index: 2;
             top: 0;
-            transition: width 0.3s ease;
-            padding: 20px;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: width 0.5s ease;
+            padding-top: 10px;
             box-sizing: border-box;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+            padding: 5px 0;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        /* Player Tag */
+        .player-tag {
+            width: 85px;
+            text-align: center;
+            background-color: #111;
+            color: #818181;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            white-space: nowrap;
+            padding: 5px 10px;
+            box-sizing: border-box;
+            position: absolute;
+            top: 10px;
+            left: 0;
+            transition: transform 0.5s ease; /* Apply transformation */
+        }
+
+        /* Sidebar Content */
+        .sidebar-content {
+            transform: translateX(-250px); /* Initially off-screen */
+            transition: transform 0.5s ease;
+            color: #818181;
+            padding-left: 10px;
+            box-sizing: border-box;
+            width: 100%;
+            position: relative;
+            margin-top: 50px;
+        }
+
+        .sidebar-inner {
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            height: 100%;
+            align-items: flex-start;
         }
 
-        .sidebar p {
-            margin: 0;
-            padding: 0;
+        /* Main Content Adjustment */
+        #main {
+            transition: margin-left 0.5s ease;
+            margin-left: 85px; /* Default (collapsed) margin */
+            margin-top: 100px;
         }
 
-        .sidebar:hover
-        {
+        /* Expanded Sidebar */
+        .sidebar-expanded {
             width: 250px;
         }
 
-        .sidebar:hover 
-        .players-tag:hover {
-            right: 250px;
+        /* Adjustments for Expanded Sidebar */
+        .sidebar-expanded .player-tag {
+            transform: translateX(165px); /* Move with sidebar */
         }
 
-        .sidebar:hover ~ .container .content, {
-            margin-right: 250px;
+        .sidebar-expanded .sidebar-content {
+            transform: translateX(0); /* Slide into view */
         }
+
+        .sidebar-expanded + #main {
+            margin-left: 250px; /* Adjust margin when sidebar is expanded */
+        }
+
+        /* Media Query for Smaller Screens */
+        @media screen and (max-height: 450px) {
+            .sidebar {
+                padding-top: 15px;
+            }
+            .sidebar a {
+                font-size: 18px;
+            }
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="grid-container">
+    <div id="mySidebar" class="sidebar" onmouseover="toggle_sidebar()" onmouseout="toggle_sidebar()">
+        <div class="sidebar-inner">
+            <div class="sidebar-content">
+                <a>Player 1</a>
+                <a>Player 2</a>
+            </div>
+            <div class="player-tag">
+                <a>PLAYERS</a>
+            </div>
+        </div>
+    </div>
+    <div id="main">
+        <div class="central-container">
+            <div class="grid-container">
+            </div>
         </div>
     </div>
 
-    <div class="sidebar">
-        <h2>Sidebar Content</h2>
-        <p>This is the content inside the sidebar.</p>
-    </div>
 
     {{ bidders|json_script:"bidders" }}
 
@@ -195,6 +272,8 @@
         chatSocket.onclose = function(e) {
             console.error('Chat socket closed unexpectedly');
         };
+
+
     </script>
 </body>
 </html>

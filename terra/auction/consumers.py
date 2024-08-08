@@ -68,6 +68,15 @@ class AuctionConsumer(AsyncWebsocketConsumer):
                 }
             )
 
+        elif data_type == "stagePlayer":
+
+            await self.channel_layer.group_send(
+                self.room_group_name, {
+                    'type': 'stagePlayer',
+                    'playerId': text_data_json['playerId']
+                }
+            )
+
         elif data_type == "buyPlayer":
 
             await self.channel_layer.group_send(
@@ -103,13 +112,24 @@ class AuctionConsumer(AsyncWebsocketConsumer):
             'message': message
         }))
 
+    async def stagePlayer(self, event):
+
+        player = await self.get_player_from_id(int(event['playerId']))
+
+        await self.send(text_data=json.dumps({
+            'type': 'stagePlayer',
+            'playerId': player.player_id,
+            'playerName': player.smite_name,
+            'playerValue': player.estimated_value
+        }))
+
     async def buyPlayer(self, event):
 
         player = await self.get_player_from_id(int(event['playerId']))
 
         await self.send(text_data=json.dumps({
             'type': 'buyPlayer',
-            'player': player.smite_name,
+            'playerName': player.smite_name,
             'teamId': event['teamId']
         }))
 

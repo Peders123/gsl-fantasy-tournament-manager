@@ -1,8 +1,8 @@
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from .models import Bidder
-from tournament.models import Captain, Player
+from .models import Bidder, Room
+from tournament.models import Captain, Player, Tournament
 
 
 def auction(request):
@@ -43,8 +43,16 @@ def room(request, room_name):
 
     players = Player.objects.all()
 
+    current_room = Room.objects.filter(tournament_id=1)
+    if current_room.exists():
+        current_room = current_room[0]
+    else:
+        current_room = Room(tournament_id=Tournament.objects.get(tournament_id=1))
+        current_room.save()
+
     return render(request, 'auction/room.html', {
         'room_name': room_name,
         'bidders': bidders_list,
-        'players': players
+        'players': players,
+        'room': current_room
     })

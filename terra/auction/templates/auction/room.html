@@ -217,7 +217,7 @@
             <div class="sidebar-content">
                 {% for player in players %}
                     <!-- htmlhint id-class-value: false -->
-                    <a id="{{ player.smite_name }}-lot" onclick="sendStagePlayer({{ player.player_id }})">{{ player.smite_name }} - {{ player.estimated_value }}</a>
+                    <a id="player{{ player.player_id }}-lot" onclick="sendStagePlayer({{ player.player_id }})">{{ player.smite_name }} - {{ player.estimated_value }}</a>
                     <!-- htmlhint id-class-value: true -->
                 {% endfor %}
             </div>
@@ -328,17 +328,6 @@
             return gridItem;
         }
 
-        function addPlayer(data) {
-            const gridItem = document.getElementById(data.teamId);
-            console.log(gridItem);
-            const playerContainer = gridItem.childNodes[1];
-            console.log(playerContainer);
-            playerContainer.appendChild(createPlayer(data.player));
-            document.getElementById(data.player + "-lot").remove();
-
-            handleMouseOver();
-        }
-
         function buyPlayer(teamId, playerName) {
             const gridItem = document.getElementById(teamId);
             const playerContainer = gridItem.childNodes[1];
@@ -352,7 +341,7 @@
             document.getElementById("current-player-id").value = playerId;
             document.getElementById("current-player").textContent = "Current Player: " + playerName;
             document.getElementById("estimated-value").textContent = "Estimated Value: " + playerValue;
-            document.getElementById(playerName + "-lot").remove();
+            document.getElementById("player" + playerId + "-lot").remove();
             handleMouseOver();
         }
 

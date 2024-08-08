@@ -2,29 +2,133 @@
 <html>
 <head>
     <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auction Room</title>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            box-sizing: border-box; /* Ensure padding and border are included in the width */
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, auto);
+            gap: 10px;
+            margin: 20px;
+            width: 80%; /* Set to 100% to span the full width of the viewport */
+            box-sizing: border-box; /* Ensure padding and border are included in the width */
+        }
+        .grid-item {
+            display: flex;
+            flex-direction: column;
+            background-color: lightgrey;
+            border: 1px solid black;
+            box-sizing: border-box; /* Ensure padding and border are included in the width */
+        }
+        .team-name {
+            background-color: lightblue;
+            border-bottom: 1px solid black;
+            padding: 2ch 0ch;
+            border: 1px solid black;
+            text-align: center;
+            font-weight: bold;
+        }
+        .player-container {
+            display: flex;
+            border: 1px solid black;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .player {
+            flex: 1;
+            background-color: white;
+            padding: 1.5ch 0ch;
+            text-align: center;
+            box-sizing: border-box; /* Ensure padding and border are included in the width */
+        }
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+        }
+        button {
+            margin: 0 5px;
+        }  margin: 0 5px;
+    </style>
 </head>
 <body>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send">
+    <div class="grid-container">
+    </div>
+
+    {{ bidders|json_script:"bidders" }}
+
     <script>
-        console.log(window.location.host);
+        const gridContainer = document.querySelector('.grid-container');
+        const bidders = JSON.parse(document.getElementById('bidders').textContent);
+
+        function createPlayer(playerName) {
+            const player = document.createElement('div');
+            player.classList.add('player');
+            player.textContent = playerName;
+            return player;
+        }
+        
+        function createGridItem(captainName, teamName) {
+            const gridItem = document.createElement('div');
+            gridItem.id = captainName + ":" + teamName;
+            gridItem.classList.add('grid-item');
+
+            const teamNameContainer = document.createElement('div');
+            teamNameContainer.classList.add('team-name');
+            teamNameContainer.textContent = teamName;
+            gridItem.appendChild(teamNameContainer);
+
+            const playerContainer = document.createElement('div');
+            playerContainer.classList.add('player-container');
+
+            playerContainer.appendChild(createPlayer(captainName));
+
+            for (let j = 1; j < 5; j++) {
+                playerContainer.appendChild(createPlayer(`Player ${j}`));
+            }
+
+            gridItem.appendChild(playerContainer);
+
+            return gridItem;
+        }
+
+        console.log(bidders.length);
+
+        bidders.forEach(bidder => {
+            console.log("Hello World");
+            console.log(bidder.username);
+            console.log(bidder.team_name);
+            gridContainer.appendChild(createGridItem(bidder.username, bidder.team_name));
+        })
 
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
-            + '/ws/auction/auction'
+            + '/ws/1/auction'
         );
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             switch (data.type) {
                 case "connection":
-                    document.querySelector('#chat-log').value += ("User: " + data.user + " has connected.\n");
+                    console.log("Captain joining: " + data.user);
+                    gridContainer.appendChild(createGridItem(data.user, data.teamName));
                     break;
-                case "message":
-                    document.querySelector('#chat-log').value += (data.message + '\n');
+                case "disconnection":
+                    console.log("Captain leaving: " + data.user);
+                    gridContainer.removeChild(document.getElementById(data.user + ":" + data.teamName));
                     break;
             }
         };
@@ -33,22 +137,6 @@
             console.error('Chat socket closed unexpectedly');
         };
 
-        document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function(e) {
-            if (e.key === 'Enter') {  // enter, return
-                document.querySelector('#chat-message-submit').click();
-            }
-        };
-
-        document.querySelector('#chat-message-submit').onclick = function(e) {
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'type': 'message',
-                'message': message
-            }));
-            messageInputDom.value = '';
-        };
     </script>
 </body>
 </html>

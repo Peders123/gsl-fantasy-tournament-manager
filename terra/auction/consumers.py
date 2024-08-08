@@ -3,29 +3,51 @@ import json
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from tournament.models import Captain
+from .models import Bidder
+from tournament.models import Tournament, Captain
 
 
 class AuctionConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
 
-        self.room_group_name = "auction"
+        self.tournament_id = self.scope['url_route']['kwargs']['tournament_id']
+        self.room_group_name = "tournament" + self.tournament_id + "auction"
 
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
-        captain = await self.get_captain_user()
-        username = captain.smite_name
+        self.captain = await self.get_captain_user()
+        username = self.captain.smite_name
+        team_name = self.captain.team_name
+
+        bidder = await self.get_bidder()
+
+        if not bidder:
+            self.bidder = await self.create_bidder()
+        else:
+            self.bidder = bidder
+            await self.set_bidder_in(True)
 
         await self.channel_layer.group_send(
             self.room_group_name, {
                 'type': 'connection',
-                'user': username
+                'user': username,
+                'teamName': team_name
             }
         )
 
     async def disconnect(self, code):
+
+        await self.set_bidder_in(False)
+
+        await self.channel_layer.group_send(
+            self.room_group_name, {
+                'type': 'disconnection',
+                'user': self.captain.smite_name,
+                'teamName': self.captain.team_name
+            }
+        )
 
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
@@ -48,11 +70,18 @@ class AuctionConsumer(AsyncWebsocketConsumer):
 
     async def connection(self, event):
 
-        user = event['user']
-
         await self.send(text_data=json.dumps({
             'type': 'connection',
-            'user': user
+            'user': event['user'],
+            'teamName': event['teamName']
+        }))
+
+    async def disconnection(self, event):
+
+        await self.send(text_data=json.dumps({
+            'type': 'disconnection',
+            'user': event['user'],
+            'teamName': event['teamName']
         }))
 
     async def message(self, event):
@@ -67,4 +96,39 @@ class AuctionConsumer(AsyncWebsocketConsumer):
     @sync_to_async
     def get_captain_user(self):
 
-        return Captain.objects.filter(user_id=self.scope['session']['discord']['id'])[0]
+        return Captain.objects.filter(
+            user_id=self.scope['session']['discord']['id']
+        )[0]
+
+    @sync_to_async
+    def get_bidder(self):
+
+        bidder = Bidder.objects.filter(
+            captain_id=self.captain.captain_id,
+            tournament_id=self.tournament_id
+        )
+
+        if bidder.exists():
+            return bidder[0]
+        return None
+
+    @sync_to_async
+    def create_bidder(self):
+
+        bidder = Bidder(
+            captain_id=self.captain,
+            tournament_id=Tournament.objects.get(tournament_id=self.tournament_id),
+            join_order=len(Bidder.objects.filter(
+                tournament_id=self.tournament_id
+            )),
+            currently_in=True
+        )
+        bidder.save()
+
+        return bidder
+
+    @sync_to_async
+    def set_bidder_in(self, currently_in):
+
+        self.bidder.currently_in = currently_in
+        self.bidder.save()

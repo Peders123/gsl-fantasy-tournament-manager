@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import json
 import os
+import sys
 from pathlib import Path
 
 with open(os.path.join('secrets.json')) as secrets:
@@ -18,6 +19,17 @@ with open(os.path.join('secrets.json')) as secrets:
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Define the path to your custom migrations
+MIGRATIONS_PATH = Path("/data/terra/mount/terra/migrations")
+
+# Add the custom migrations path to the system path
+sys.path.append(str(MIGRATIONS_PATH))
+
+MIGRATION_MODULES = {
+    'auction': 'mount.terra.migrations',
+}
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/

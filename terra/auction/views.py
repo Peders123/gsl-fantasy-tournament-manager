@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from .models import Bidder
-from tournament.models import Captain
+from tournament.models import Captain, Player
 
 
 def auction(request):
@@ -33,8 +33,6 @@ def room(request, room_name):
         currently_in=True
     ).order_by('join_order')
 
-    print(len(bidders))
-
     bidders_list = [
         {
             'username': bidder.captain_id.smite_name,
@@ -43,7 +41,10 @@ def room(request, room_name):
         for bidder in bidders
     ]
 
+    players = Player.objects.all()
+
     return render(request, 'auction/room.html', {
         'room_name': room_name,
-        'bidders': bidders_list
+        'bidders': bidders_list,
+        'players': players
     })

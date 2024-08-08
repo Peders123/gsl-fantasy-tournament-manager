@@ -4,7 +4,7 @@ from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 from .models import Bidder
-from tournament.models import Tournament, Captain
+from tournament.models import Tournament, Captain, Player
 
 
 class AuctionConsumer(AsyncWebsocketConsumer):
@@ -68,6 +68,16 @@ class AuctionConsumer(AsyncWebsocketConsumer):
                 }
             )
 
+        elif data_type == "buyPlayer":
+
+            await self.channel_layer.group_send(
+                self.room_group_name, {
+                    'type': 'buyPlayer',
+                    'playerId': text_data_json['playerId'],
+                    'teamId': self.captain.smite_name + ":" + self.captain.team_name
+                }
+            )
+
     async def connection(self, event):
 
         await self.send(text_data=json.dumps({
@@ -91,6 +101,16 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'type': 'message',
             'message': message
+        }))
+
+    async def buyPlayer(self, event):
+
+        player = await self.get_player_from_id(int(event['playerId']))
+
+        await self.send(text_data=json.dumps({
+            'type': 'buyPlayer',
+            'player': player.smite_name,
+            'teamId': event['teamId']
         }))
 
     @sync_to_async
@@ -132,3 +152,10 @@ class AuctionConsumer(AsyncWebsocketConsumer):
 
         self.bidder.currently_in = currently_in
         self.bidder.save()
+
+    @sync_to_async
+    def get_player_from_id(self, player_id):
+
+        return Player.objects.get(
+            player_id=player_id
+        )

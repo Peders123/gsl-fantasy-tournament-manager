@@ -4,52 +4,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auction Room</title>
-    <script>
-        var mini = true;
-        var sidebarTimer = null;
-
-        function toggle_sidebar(forceOpen = false) {
-            const sidebar = document.getElementById("mySidebar");
-            
-            if (forceOpen) {
-                openSidebar();
-                return;
-            }
-
-            if (mini) {
-                console.log("opening sidebar");
-                openSidebar();
-            } else {
-                console.log("closing sidebar");
-                closeSidebar();
-            }
-        }
-
-        function openSidebar() {
-            const sidebar = document.getElementById("mySidebar");
-            sidebar.classList.add("sidebar-expanded");
-            mini = false;
-        }
-
-        function closeSidebar() {
-            const sidebar = document.getElementById("mySidebar");
-            sidebar.classList.remove("sidebar-expanded");
-            mini = true;
-        }
-
-        function handleMouseOver() {
-            clearTimeout(sidebarTimer);
-            toggle_sidebar(true);
-        }
-
-        function handleMouseOut() {
-            sidebarTimer = setTimeout(() => {
-                if (!document.querySelector('.sidebar:hover')) { 
-                    toggle_sidebar();
-                }
-            }, 100); // 100ms debounce
-        }
-    </script>
+    
     <style>
         /* General Styles */
         body {
@@ -257,11 +212,13 @@
 </head>
 <body>
 
-    <div id="mySidebar" class="sidebar">
+    <div id="my-sidebar" class="sidebar">
         <div class="sidebar-inner">
             <div class="sidebar-content">
                 {% for player in players %}
+                    <!-- htmlhint id-class-value: false -->
                     <a id="{{ player.smite_name }}-lot" onclick="sendStagePlayer({{ player.player_id }})">{{ player.smite_name }} - {{ player.estimated_value }}</a>
+                    <!-- htmlhint id-class-value: true -->
                 {% endfor %}
             </div>
             <div class="player-tag">
@@ -293,8 +250,54 @@
     {{ bidders|json_script:"bidders" }}
 
     <script>
-        document.getElementById("mySidebar").addEventListener("mouseover", handleMouseOver);
-        document.getElementById("mySidebar").addEventListener("mouseout", handleMouseOut);
+        var mini = true;
+        var sidebarTimer = null;
+
+        function toggle_sidebar(forceOpen = false) {
+            const sidebar = document.getElementById("my-sidebar");
+            
+            if (forceOpen) {
+                openSidebar();
+                return;
+            }
+
+            if (mini) {
+                console.log("opening sidebar");
+                openSidebar();
+            } else {
+                console.log("closing sidebar");
+                closeSidebar();
+            }
+        }
+
+        function openSidebar() {
+            const sidebar = document.getElementById("my-sidebar");
+            sidebar.classList.add("sidebar-expanded");
+            mini = false;
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById("my-sidebar");
+            sidebar.classList.remove("sidebar-expanded");
+            mini = true;
+        }
+
+        function handleMouseOver() {
+            clearTimeout(sidebarTimer);
+            toggle_sidebar(true);
+        }
+
+        function handleMouseOut() {
+            sidebarTimer = setTimeout(() => {
+                if (!document.querySelector('.sidebar:hover')) { 
+                    toggle_sidebar();
+                }
+            }, 100); // 100ms debounce
+        }
+    </script>
+    <script>
+        document.getElementById("my-sidebar").addEventListener("mouseover", handleMouseOver);
+        document.getElementById("my-sidebar").addEventListener("mouseout", handleMouseOut);
         const gridContainer = document.querySelector('.grid-container');
         const bidders = JSON.parse(document.getElementById('bidders').textContent);
 

@@ -15,6 +15,8 @@
             align-items: center;
             justify-content: flex-start;
             box-sizing: border-box; /* Ensure padding and border are included in the width */
+            font-family: Arial, sans-serif;
+            transition: margin-right 0.3s ease;
         }
         .grid-container {
             display: grid;
@@ -60,11 +62,68 @@
         }
         button {
             margin: 0 5px;
-        }  margin: 0 5px;
+        }
+
+        .container {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            transition: margin-right 0.3s ease;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            transition: margin-right 0.3s ease;
+        }
+
+        .sidebar {
+            width: 0;
+            height: 100vh;
+            overflow-x: hidden;
+            background-color: #f4f4f4;
+            box-shadow: -3px 0 5px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            right: 0;
+            top: 0;
+            transition: width 0.3s ease;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .sidebar p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .sidebar:hover
+        {
+            width: 250px;
+        }
+
+        .sidebar:hover 
+        .players-tag:hover {
+            right: 250px;
+        }
+
+        .sidebar:hover ~ .container .content, {
+            margin-right: 250px;
+        }
     </style>
 </head>
 <body>
-    <div class="grid-container">
+
+    <div class="container">
+        <div class="grid-container">
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <h2>Sidebar Content</h2>
+        <p>This is the content inside the sidebar.</p>
     </div>
 
     {{ bidders|json_script:"bidders" }}
@@ -136,7 +195,6 @@
         chatSocket.onclose = function(e) {
             console.error('Chat socket closed unexpectedly');
         };
-
     </script>
 </body>
 </html>

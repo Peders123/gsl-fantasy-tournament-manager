@@ -3,6 +3,15 @@ from django.db import models
 from tournament.models import Tournament, Captain, Player
 
 
+class Room(models.Model):
+
+    room_id = models.AutoField(primary_key=True)
+    tournament_id = models.ForeignKey(Tournament, on_delete=models.CASCADE)
+    current_asset = models.ForeignKey(Player, on_delete=models.CASCADE, null=True, default=None)
+    current_highest_bid = models.IntegerField(default=0)
+    current_highest_bidder = models.ForeignKey(Captain, on_delete=models.CASCADE, null=True, default=None)
+
+
 class Bidder(models.Model):
 
     bidder_id = models.AutoField(primary_key=True)

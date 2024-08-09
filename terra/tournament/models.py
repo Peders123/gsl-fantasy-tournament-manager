@@ -2,6 +2,9 @@
 Defines the database models for the Talaria app.
 """
 from datetime import datetime
+from django.utils import timezone
+
+import pytz
 
 from django.db import models
 
@@ -25,6 +28,22 @@ class Tournament(models.Model):
         managed = False
         db_table = "talaria_tournament"
 
+    def is_past(self):
+        """Checks if the tournament time is in the past, considering BST."""
+        # Define the BST timezone
+        bst = pytz.timezone('Europe/London')
+
+        # Ensure the datetime is aware and in BST
+        if timezone.is_naive(self.datetime):
+            tournament_time = bst.localize(self.datetime)
+        else:
+            tournament_time = self.datetime
+
+        # Convert tournament time to the current timezone
+        tournament_time = tournament_time.astimezone(timezone.get_current_timezone())
+
+        # Compare with the current time
+        return tournament_time < timezone.now()
 
 class User(models.Model):
     """Model representing a single user, mapping 1-to-1 with a discord account.

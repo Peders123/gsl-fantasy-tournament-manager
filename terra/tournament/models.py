@@ -45,6 +45,7 @@ class Tournament(models.Model):
         # Compare with the current time
         return tournament_time < timezone.now()
 
+
 class User(models.Model):
     """Model representing a single user, mapping 1-to-1 with a discord account.
 

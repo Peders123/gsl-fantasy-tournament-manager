@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 
-from tournament.models import Tournament, Player, Captain, User, Suggestion
+from home.models import Suggestion
+from tournament.models import Tournament, Player, Captain, User
 
 
 def overview(request, t_id):

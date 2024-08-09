@@ -1,27 +1,43 @@
 <!DOCTYPE html>
+{% extends 'base.html' %}
 
-<html>
-    <head>
-        <title>Players - {{ tournament.title }}</title>
-    </head>
+{% block title %}
+    Players - {{ tournament.title }}
+{% endblock title %}
+{%block nav%}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'tournament_overview' t_id=tournament.tournament_id %}">Tournament</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'auction' t_id=tournament.tournament_id %}">Auction</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'players' t_id=tournament.tournament_id %}">Players</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'captains' t_id=tournament.tournament_id %}">Captains</a>
+</li>
+{%endblock nav%}
+{% block content %}
+<h1>{{ tournament.title }}</h1><br>
+<table align="left" cellspacing="10" cellpadding="10">
+    <tr>
+        <th>Discord</th>
+        <th>Player</th>
+        <th>Role 1</th>
+        <th>Role 2</th>
+        <th>Estimated Value</th>
+    </tr>
+    {% for player in players %}
+        <tr>
+            <td>{{ player.user_id.discord_name }}</td>
+            <td>{{ player.smite_name }}</td>
+            <td>{{ player.role_1 }}</td>
+            <td>{{ player.role_2 }}</td>
+            <td>{{ player.estimated_value }}</td>
+        </tr>
+    {% endfor %}
+</table>
 
-    <body>
-        <h1>{{ tournament.title }}</h1><br>
-        <table>
-            <tr>
-                <th>Player</th>
-                <th>Role 1</th>
-                <th>Role 2</th>
-                <th>Estimated Value</th>
-            </tr>
-            {% for player in players %}
-                <tr>
-                    <td>{{ player.user_id.smite_name }}</td>
-                    <td>{{ player.role_1 }}</td>
-                    <td>{{ player.role_2 }}</td>
-                    <td>{{ player.estimated_value }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    </body>
-</html>
+{% endblock content %}
+

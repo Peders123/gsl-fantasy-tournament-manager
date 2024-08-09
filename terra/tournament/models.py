@@ -28,11 +28,6 @@ class Tournament(models.Model):
         managed = False
         db_table = "talaria_tournament"
 
-    @property
-    def url_id(self):
-        """Returns the date in a format to be used in the url."""
-        return self.datetime.strftime('%Y%m%d')
-
     def is_past(self):
         """Checks if the tournament time is in the past, considering BST."""
         # Define the BST timezone
@@ -121,3 +116,12 @@ class Player(models.Model):
 
         managed = False
         db_table = "talaria_player"
+
+
+class Suggestion(models.Model):
+
+    suggestion_id = models.AutoField(primary_key=True)
+    tournament_id = models.ForeignKey(Tournament, on_delete=models.CASCADE, default=1)
+    player_name = models.CharField(max_length=32)
+    discord_nametag = models.CharField(max_length=32)
+    suggested_value = models.IntegerField(default=0)

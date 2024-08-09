@@ -1,10 +1,8 @@
 #!/bin/bash
 
 cd /data/terra
-
 python3 manage.py makemigrations auction
 python3 manage.py migrate auction
-
 
 python3 manage.py makemigrations
 python3 manage.py migrate

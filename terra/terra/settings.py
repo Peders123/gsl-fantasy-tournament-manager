@@ -173,10 +173,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [{
-                'address': ('odin-tslfg.redis.cache.windows.net', 6380),
-                'ssl': True
-            }]
+            'hosts': [('redis', 6379)]
         }
     }
 }

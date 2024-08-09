@@ -5,6 +5,13 @@
     Tanuki Smite League
 {% endblock title %}
 
+{% block main%}
+<h1>Welcome to Tanuki Smite League!</h1>
+
+<p>Check out the links below to get started!</p>
+<p>This website is still under construction, so if some things don't work please bare with us. </p>{% endblock main %}
+
+
 {% block content %}
     {% for tournament in tournaments %}
         <p><a href="{% url 'tournament_overview' t_id=tournament.tournament_id %}" class="btn-link">{{ tournament.title }}</a></p>

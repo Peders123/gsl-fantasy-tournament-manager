@@ -16,8 +16,10 @@
     <a class="nav-link" href="{% url 'captains' t_id=tournament.tournament_id %}">Captains</a>
 </li>
 {%endblock nav%}
+{%block main%}
+<h1>{{ tournament.title }}</h1><br>
+{%endblock main%}
 {% block content %}
-    <h1>{{ tournament.title }}</h1><br>
 
     {% for player in players %}
         <p><a href="{% url 'player_suggestion' t_id=tournament.tournament_id p_id=player.player_id%}">{{ player.smite_name }}</a></p>

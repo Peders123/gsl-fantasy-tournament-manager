@@ -74,7 +74,6 @@ WORKDIR /data/terra
 RUN chmod +x startTerra.sh
 ENTRYPOINT ["./startTerra.sh"]
 
-WORKDIR /
 
 FROM python:3.12-slim-bookworm AS mercury
 

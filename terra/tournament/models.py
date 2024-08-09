@@ -101,3 +101,15 @@ class Player(models.Model):
 
         managed = False
         db_table = "talaria_player"
+
+class suggestion(models.Model):
+    suggestion_id = models.AutoField(primary_key=True)
+    #tournament_id = models.ForeignKey(Tournament, on_delete=models.CASCADE, default=1) maybe for later when there are more tournaments 
+    player_name  = models.CharField(max_length=32)
+    discord_nametag = models.CharField(max_length=32)
+    suggested_value = models.IntegerField(default=0)
+
+    class Meta:
+
+        managed = False
+        db_table = "talaria_suggestion"

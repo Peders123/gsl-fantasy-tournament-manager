@@ -59,6 +59,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 COPY terra/startTerra.sh /data/terra/.
 COPY terra/manage.py /data/terra/.
+COPY terra/static /data/terra/static
 COPY terra/home /data/terra/home
 COPY terra/terra /data/terra/terra
 COPY terra/tournament /data/terra/tournament

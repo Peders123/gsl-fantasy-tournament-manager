@@ -1,7 +1,8 @@
+<!DOCTYPE html>
 {% extends 'base.html' %}
 
 {% block title %}
-    TSL
+    Tanuki Smite League
 {% endblock title %}
 
 {% block content %}
@@ -10,5 +11,3 @@
     {% endfor %}
 
 {% endblock content %}
-<a class="nav-link" href="{% url 'tournament_overview' t_id=tournament.tournament_id %}">Tournament</a>
-

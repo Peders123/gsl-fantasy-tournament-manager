@@ -1,8 +1,8 @@
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from .models import Bidder
-from tournament.models import Captain
+from .models import Bidder, Room
+from tournament.models import Captain, Player, Tournament
 
 
 def auction(request):
@@ -28,12 +28,17 @@ def room(request, room_name):
         error = "User is not registered as a captain."
         return redirect(f"{url}?errno=401&error={error}")
 
+    tournament = Tournament.objects.get(tournament_id=1)
+
+    if tournament.is_past():
+        url = reverse('auction')
+        error = "This tournament hasn't started yet."
+        return redirect(f"{url}?errno=401&error={error}")
+
     bidders = Bidder.objects.filter(
         tournament_id=1,
         currently_in=True
     ).order_by('join_order')
-
-    print(len(bidders))
 
     bidders_list = [
         {
@@ -43,7 +48,18 @@ def room(request, room_name):
         for bidder in bidders
     ]
 
+    players = Player.objects.all()
+
+    current_room = Room.objects.filter(tournament_id=1)
+    if current_room.exists():
+        current_room = current_room[0]
+    else:
+        current_room = Room(tournament_id=Tournament.objects.get(tournament_id=1))
+        current_room.save()
+
     return render(request, 'auction/room.html', {
         'room_name': room_name,
-        'bidders': bidders_list
+        'bidders': bidders_list,
+        'players': players,
+        'room': current_room
     })

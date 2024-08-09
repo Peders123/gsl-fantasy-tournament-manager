@@ -30,7 +30,7 @@ MIGRATION_MODULES = {
     'auction': 'mount.terra.migrations',
 }
 
-
+CSRF_TRUSTED_ORIGINS = ['https://tanukismiteleague.com']
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 

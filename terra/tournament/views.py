@@ -1,8 +1,6 @@
 from django.shortcuts import redirect, render
 
-from datetime import datetime
-
-from tournament.models import Tournament, Player, Captain, User, suggestion
+from tournament.models import Tournament, Player, Captain, User, Suggestion
 
 
 def overview(request, t_id):
@@ -11,7 +9,7 @@ def overview(request, t_id):
 
     if 'discord' in request.session.keys():
         signed_in = True
-        discord_id = request.session['discord']['id']    
+        discord_id = request.session['discord']['id']
 
     tournament = Tournament.objects.get(tournament_id=t_id)
 
@@ -28,7 +26,7 @@ def auction(request, t_id):
 
     if 'discord' in request.session.keys():
         signed_in = True
-        discord_id = request.session['discord']['id']    
+        discord_id = request.session['discord']['id']
 
     tournament = Tournament.objects.get(tournament_id=t_id)
 
@@ -45,7 +43,7 @@ def players(request, t_id):
 
     if 'discord' in request.session.keys():
         signed_in = True
-        discord_id = request.session['discord']['id']    
+        discord_id = request.session['discord']['id']
 
     tournament = Tournament.objects.get(tournament_id=t_id)
 
@@ -58,13 +56,14 @@ def players(request, t_id):
         "players": tournament_players
     })
 
+
 def captains(request, t_id):
     signed_in = False
     discord_id = ""
 
     if 'discord' in request.session.keys():
         signed_in = True
-        discord_id = request.session['discord']['id']    
+        discord_id = request.session['discord']['id']
 
     tournament = Tournament.objects.get(tournament_id=t_id)
 
@@ -76,6 +75,7 @@ def captains(request, t_id):
         "tournament": tournament,
         "captains": tournament_captains
     })
+
 
 def suggestions(request, t_id):
     signed_in = False
@@ -97,10 +97,11 @@ def suggestions(request, t_id):
         "players": all_players
     })
 
+
 def player_suggestion(request, t_id, p_id):
     signed_in = False
     discord_id = None
-    post=0
+    post = 0
     tournament = Tournament.objects.get(tournament_id=t_id)
     player = Player.objects.get(player_id=p_id)
     if 'discord' in request.session.keys():
@@ -111,11 +112,16 @@ def player_suggestion(request, t_id, p_id):
     user = User.objects.get(user_id=discord_id)
     try:
         value_input = request.POST['value']
-        post=1
-    except:
-        post=0
+        post = 1
+    except KeyError:
+        post = 0
     if post == 1:
-        suggestion.objects.create(player_name=player.smite_name, discord_nametag=user.discord_name, suggested_value=value_input )
+        Suggestion.objects.create(
+            player_name=player.smite_name,
+            tournament_id=t_id,
+            discord_nametag=user.discord_name,
+            suggested_value=value_input
+        )
         return redirect('home')
     else:
         return render(request, 'tournament/player_suggestion.html', context={
@@ -123,4 +129,4 @@ def player_suggestion(request, t_id, p_id):
             'signed_in': signed_in,
             'discord_id': discord_id,
             "player": player
-    })
+        })

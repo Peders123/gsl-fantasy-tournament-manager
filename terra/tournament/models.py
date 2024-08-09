@@ -32,7 +32,7 @@ class Tournament(models.Model):
     def url_id(self):
         """Returns the date in a format to be used in the url."""
         return self.datetime.strftime('%Y%m%d')
-    
+
     def is_past(self):
         """Checks if the tournament time is in the past, considering BST."""
         # Define the BST timezone

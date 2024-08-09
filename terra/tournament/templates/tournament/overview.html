@@ -1,13 +1,28 @@
 <!DOCTYPE html>
+{% extends 'base.html' %}
 
-<html>
-    <head>
-        <title>{{ tournament.title }}</title>
-    </head>
+{% block title %}
+    {{tournament.title}}
+{% endblock title %}
+{%block nav%}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'tournament_overview' t_id=tournament.tournament_id %}">Tournament</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'auction' t_id=tournament.tournament_id %}">Auction</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'players' t_id=tournament.tournament_id %}">Players</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'captains' t_id=tournament.tournament_id %}">Captains</a>
+</li>
+{%endblock nav%}
+{% block content %}
+    <h1>{{ tournament.title }}</h1><br>
 
-    <body>
-        <h1>{{ tournament.title }}</h1><br>
-        <a href="{% url 'auction' date=tournament.url_id %}">Auction</a>
-        <a href="{% url 'players' date=tournament.url_id %}">Players</a>
-    </body>
-</html>
+    <p>{{ tournament.description }}</p>
+
+    <p>Opens at: {{ tournament.datetime }}</p>
+{% endblock content %}
+

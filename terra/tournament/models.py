@@ -2,6 +2,9 @@
 Defines the database models for the Talaria app.
 """
 from datetime import datetime
+from django.utils import timezone
+
+import pytz
 
 from django.db import models
 
@@ -20,10 +23,27 @@ class Tournament(models.Model):
     title = models.CharField(max_length=64, default="Glaeria Smite League")
     description = models.CharField(max_length=256, default="None")
 
-    @property
-    def url_id(self):
-        """Returns the date in a format to be used in the url."""
-        return self.datetime.strftime('%Y%m%d')
+    class Meta:
+
+        managed = False
+        db_table = "talaria_tournament"
+
+    def is_past(self):
+        """Checks if the tournament time is in the past, considering BST."""
+        # Define the BST timezone
+        bst = pytz.timezone('Europe/London')
+
+        # Ensure the datetime is aware and in BST
+        if timezone.is_naive(self.datetime):
+            tournament_time = bst.localize(self.datetime)
+        else:
+            tournament_time = self.datetime
+
+        # Convert tournament time to the current timezone
+        tournament_time = tournament_time.astimezone(timezone.get_current_timezone())
+
+        # Compare with the current time
+        return tournament_time < timezone.now()
 
 
 class User(models.Model):
@@ -33,8 +53,13 @@ class User(models.Model):
         user_id (IntegerField): Primary key. Same as the user's discord id.
         discord_name (CharField): Signed up user's discord name.
     """
-    user_id = models.IntegerField(primary_key=True)
+    user_id = models.CharField(primary_key=True)
     discord_name = models.CharField(max_length=32)
+
+    class Meta:
+
+        managed = False
+        db_table = "talaria_user"
 
 
 class Captain(models.Model):
@@ -56,6 +81,11 @@ class Captain(models.Model):
     team_name = models.CharField(max_length=32)
     reason = models.CharField(max_length=256)
     captain_budget = models.IntegerField(default=0)
+
+    class Meta:
+
+        managed = False
+        db_table = "talaria_captain"
 
 
 class Player(models.Model):
@@ -81,3 +111,17 @@ class Player(models.Model):
     role_2 = models.CharField(max_length=16, default="Fill")
     smite_guru = models.CharField(max_length=128)
     estimated_value = models.IntegerField(default=0)
+
+    class Meta:
+
+        managed = False
+        db_table = "talaria_player"
+
+
+class Suggestion(models.Model):
+
+    suggestion_id = models.AutoField(primary_key=True)
+    tournament_id = models.ForeignKey(Tournament, on_delete=models.CASCADE, default=1)
+    player_name = models.CharField(max_length=32)
+    discord_nametag = models.CharField(max_length=32)
+    suggested_value = models.IntegerField(default=0)

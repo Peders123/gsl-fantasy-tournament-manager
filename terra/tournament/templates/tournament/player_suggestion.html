@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{%block nav%}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'tournament_overview' t_id=tournament.tournament_id %}">Tournament</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'auction' t_id=tournament.tournament_id %}">Auction</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'players' t_id=tournament.tournament_id %}">Players</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'captains' t_id=tournament.tournament_id %}">Captains</a>
+</li>
+{%endblock nav%}
+{% block content %}
+    <h1>{{ tournament.title }}</h1><br>
+
+        <p>{{ player.smite_name }}</p>
+    
+    <form action="{% url 'player_suggestion' t_id=tournament.tournament_id p_id=player.player_id%}" method="post">
+        Value: <input type="text" name="value">
+        <br>
+        <br>
+        {% csrf_token %}
+        <input type="submit">
+    </form>
+
+{% endblock content %}

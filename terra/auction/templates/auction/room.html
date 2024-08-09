@@ -208,6 +208,14 @@
             text-align: center;
             background-color: lightblue;
         }
+
+        #countdown {
+            color: black;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -228,8 +236,11 @@
     </div>
     <div id="main">
         <div class="central-container">
+            <div id="countdown">Time Remaining: 0</div>
             <div class="game-summary">
                 <input type="hidden" id="current-player-id" value="0">
+                <input type="hidden" id="current-highest-bid" value="0">
+                <input type="hidden" id="current-highest-bidder" value="None">
                 <div id="current-player">Current Player: {% if room.current_asset %}{{ room.current_asset.smite_name }}{% else %}None{% endif %}</div>
                 <div id="estimated-value">Estimated Value: {% if room.current_asset %}{{ room.current_asset.estimated_value }}{% else %}0{% endif %}</div>
                 <div id="current-bid">Current Highest Bid: {{ room.current_highest_bidder }} - {{ room.current_highest_bid }}</div>
@@ -295,11 +306,13 @@
             }, 100); // 100ms debounce
         }
     </script>
+    {{ t_id|json_script:"tournament-id" }}
     <script>
         document.getElementById("my-sidebar").addEventListener("mouseover", handleMouseOver);
         document.getElementById("my-sidebar").addEventListener("mouseout", handleMouseOut);
         const gridContainer = document.querySelector('.grid-container');
         const bidders = JSON.parse(document.getElementById('bidders').textContent);
+        const tournament_id = JSON.parse(document.getElementById('tournament-id').textContent);
 
         function createPlayer(playerName) {
             const player = document.createElement('div');
@@ -333,14 +346,19 @@
             const playerContainer = gridItem.childNodes[1];
             playerContainer.appendChild(createPlayer(playerName));
             document.getElementById("current-player-id").value = 0;
+            document.getElementById("current-highest-bid").value = 0;
+            document.getElementById("current-highest-bidder").value = "None";
             document.getElementById("current-player").textContent = "Current Player: None" ;
             document.getElementById("estimated-value").textContent = "Estimated Value: 0";
         }
 
-        function stagePlayer(playerId, playerName, playerValue) {
+        function stagePlayer(playerId, playerName, playerValue, captainName) {
             document.getElementById("current-player-id").value = playerId;
+            document.getElementById("current-highest-bid").value = 0;
+            document.getElementById("current-highest-bidder").value = captainName;
             document.getElementById("current-player").textContent = "Current Player: " + playerName;
             document.getElementById("estimated-value").textContent = "Estimated Value: " + playerValue;
+            document.getElementById("current-bid").textContent = captainName + " - 0";
             document.getElementById("player" + playerId + "-lot").remove();
             handleMouseOver();
         }
@@ -367,7 +385,9 @@
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
-            + '/ws/1/auction'
+            + '/ws/'
+            + tournament_id
+            + '/auction'
         );
 
         chatSocket.onmessage = function(e) {
@@ -382,10 +402,18 @@
                     gridContainer.removeChild(document.getElementById(data.user + ":" + data.teamName));
                     break;
                 case "stagePlayer":
-                    stagePlayer(data.playerId, data.playerName, data.playerValue);
+                    stagePlayer(data.playerId, data.playerName, data.playerValue, data.captainName);
                     break;
                 case "buyPlayer":
                     buyPlayer(data.teamId, data.playerName);
+                    break;
+                case "timerUpdate":
+                    document.getElementById("countdown").innerHTML = "Time remaining: " + data.time_left;
+                    break;
+                case "timerFinished":
+                    console.log("timerFinished");
+                    document.getElementById("countdown").innerHTML = "Time remaining: 0";
+                    sendBuyPlayer();
                     break;
             }
         };

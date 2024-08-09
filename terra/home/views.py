@@ -16,10 +16,15 @@ def index(request):
         signed_in = True
         discord_id = request.session['discord']['id']
 
+    errno = request.GET.get('errno', None)
+    error = request.GET.get('error', None)
+
     context = {
         'signed_in': signed_in,
         'discord_id': discord_id,
-        'tournaments': tournaments
+        'tournaments': tournaments,
+        'errno': errno,
+        'error': error
     }
 
     return render(request, 'home/home.html', context)

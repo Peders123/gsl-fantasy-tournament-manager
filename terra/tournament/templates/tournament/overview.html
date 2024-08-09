@@ -16,12 +16,12 @@
 <li class="nav-item">
     <a class="nav-link" href="{% url 'captains' t_id=tournament.tournament_id %}">Captains</a>
 </li>
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'suggestions' t_id=tournament.tournament_id %}">Value_suggestions</a>
-</li>
 {%endblock nav%}
 {% block content %}
     <h1>{{ tournament.title }}</h1><br>
 
+    <p>{{ tournament.description }}</p>
+
+    <p>Opens at: {{ tournament.datetime }}</p>
 {% endblock content %}
 

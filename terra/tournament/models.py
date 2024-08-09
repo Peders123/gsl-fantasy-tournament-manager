@@ -25,11 +25,6 @@ class Tournament(models.Model):
         managed = False
         db_table = "talaria_tournament"
 
-    @property
-    def url_id(self):
-        """Returns the date in a format to be used in the url."""
-        return self.datetime.strftime('%Y%m%d')
-
 
 class User(models.Model):
     """Model representing a single user, mapping 1-to-1 with a discord account.

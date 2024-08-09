@@ -1,6 +1,9 @@
 #!/bin/bash
 
 cd /data/terra
+
+python3 manage.py makemigrations tournament
+python3 manage.py migrate tournament
 python3 manage.py makemigrations auction
 python3 manage.py migrate auction
 

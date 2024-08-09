@@ -247,10 +247,9 @@
             </div>
             <br>
             <div class="auction-buttons">
-                <div class="auction-button">+1</div>
-                <div class="auction-button">+5</div>
-                <div class="auction-button">+10</div>
-                <div class="auction-button" onclick="sendBuyPlayer()">BUY</div>
+                <div class="auction-button" onclick="sendPlaceBid(1)">+1</div>
+                <div class="auction-button" onclick="sendPlaceBid(5)">+5</div>
+                <div class="auction-button" onclick="sendPlaceBid(10)">+10</div>
             </div>
             <br>
             <div class="grid-container">
@@ -352,13 +351,19 @@
             document.getElementById("estimated-value").textContent = "Estimated Value: 0";
         }
 
+        function placeBid(captainName, bidAmount) {
+            document.getElementById("current-highest-bid").value = bidAmount;
+            document.getElementById("current-highest-bidder").value = captainName;
+            document.getElementById("current-bid").textContent = "Current highest bid: " + captainName + " - " + bidAmount;
+        }
+
         function stagePlayer(playerId, playerName, playerValue, captainName) {
             document.getElementById("current-player-id").value = playerId;
             document.getElementById("current-highest-bid").value = 0;
             document.getElementById("current-highest-bidder").value = captainName;
             document.getElementById("current-player").textContent = "Current Player: " + playerName;
             document.getElementById("estimated-value").textContent = "Estimated Value: " + playerValue;
-            document.getElementById("current-bid").textContent = captainName + " - 0";
+            document.getElementById("current-bid").textContent = "Current highest bid: " + captainName + " - 0";
             document.getElementById("player" + playerId + "-lot").remove();
             handleMouseOver();
         }
@@ -369,6 +374,13 @@
                 'type': 'buyPlayer',
                 'playerId': sendPlayerId
             }));
+        }
+
+        function sendPlaceBid(bidAmount) {
+            chatSocket.send(JSON.stringify({
+                'type': 'placeBid',
+                'bidAmount': bidAmount
+            }))
         }
 
         function sendStagePlayer(playerId) {
@@ -404,6 +416,9 @@
                 case "stagePlayer":
                     stagePlayer(data.playerId, data.playerName, data.playerValue, data.captainName);
                     break;
+                case "placeBid":
+                    placeBid(data.captainName, data.bidAmount);
+                    break;
                 case "buyPlayer":
                     buyPlayer(data.teamId, data.playerName);
                     break;
@@ -411,7 +426,6 @@
                     document.getElementById("countdown").innerHTML = "Time remaining: " + data.time_left;
                     break;
                 case "timerFinished":
-                    console.log("timerFinished");
                     document.getElementById("countdown").innerHTML = "Time remaining: 0";
                     sendBuyPlayer();
                     break;

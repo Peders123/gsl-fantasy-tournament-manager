@@ -83,7 +83,20 @@ class AuctionConsumer(AsyncWebsocketConsumer):
                 self.room_group_name, {
                     'type': 'stagePlayer',
                     'playerId': text_data_json['playerId'],
-                    'captainId': self.captain.smite_name
+                    'captainName': self.captain.smite_name
+                }
+            )
+
+        elif data_type == "placeBid":
+
+            self.auction_room = await self.refresh_auction_room()
+            await self.increment_highest_bidder(self.captain, text_data_json['bidAmount'])
+
+            await self.channel_layer.group_send(
+                self.room_group_name,  {
+                    'type': 'placeBid',
+                    'bidAmount': text_data_json['bidAmount'],
+                    'captainName': self.captain.smite_name
                 }
             )
 
@@ -96,6 +109,7 @@ class AuctionConsumer(AsyncWebsocketConsumer):
             if sender:
 
                 team_id = await self.get_team_id()
+                await self.set_highest_bidder(None, 0)
 
                 await self.channel_layer.group_send(
                     self.room_group_name, {
@@ -139,10 +153,18 @@ class AuctionConsumer(AsyncWebsocketConsumer):
             'playerId': player.player_id,
             'playerName': player.smite_name,
             'playerValue': player.estimated_value,
-            'captainId': event['captainId']
+            'captainName': event['captainName']
         }))
 
         await self.start_timer()
+
+    async def placeBid(self, event):
+
+        await self.send(text_data=json.dumps({
+            'type': 'placeBid',
+            'captainName': event['captainName'],
+            'bidAmount': event['bidAmount']
+        }))
 
     async def buyPlayer(self, event):
 
@@ -221,6 +243,15 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         self.auction_room.current_highest_bidder = captain
         self.auction_room.current_highest_bid = bid
         self.auction_room.save()
+
+    @sync_to_async
+    def increment_highest_bidder(self, captain, bid):
+
+        current_bid = self.auction_room.current_highest_bid
+        self.auction_room.current_highest_bidder =  captain
+        self.auction_room.current_highest_bid = int(bid) + int(current_bid)
+        self.auction_room.save()
+
     
     async def start_timer(self):
 
@@ -246,17 +277,6 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         except asyncio.CancelledError:
             pass
 
-    async def timerUpdate(self, event):
-        await self.send(text_data=json.dumps({
-            'type': 'timerUpdate',
-            'time_left': event['time_left']
-        }))
-
-    async def timerFinished(self, event):
-        await self.send(text_data=json.dumps({
-            'type': 'timerFinished'
-        }))
-
     @sync_to_async
     def refresh_auction_room(self):
         tournament = Tournament.objects.get(tournament_id=self.tournament_id)
@@ -269,3 +289,4 @@ class AuctionConsumer(AsyncWebsocketConsumer):
     @sync_to_async
     def check_if_highest_bidder(self):
         return self.auction_room.current_highest_bidder.captain_id == self.captain.captain_id
+    

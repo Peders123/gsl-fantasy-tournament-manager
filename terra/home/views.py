@@ -53,11 +53,15 @@ def logout(request):
 
 def exchange_code(code):
 
+    if os.environ['BUILD_TYPE'] == 'dev':
+        redirect = "http://127.0.0.1:8000/login/redirect"
+    else:
+        redirect = "https://tanukismiteleague.com/login/redirect"
+
     with open('secrets.json') as secrets:
         oauth = json.load(secrets)['tokens']['discord-oauth'][os.environ['BUILD_TYPE']]
         client_id = oauth['client-id']
         client_secret = oauth['client-secret']
-        redirect = "http://127.0.0.1:8000/login/redirect"
 
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded'

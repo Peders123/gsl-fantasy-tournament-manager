@@ -461,15 +461,16 @@
                     gridContainer.removeChild(document.getElementById(data.user + ":" + data.teamName));
                     break;
                 case "stagePlayer":
-                    stagePlayer(data.playerId, data.playerName, data.playerValue, data.captainName);
                     document.getElementById("selector").textContent = "Selector: Bidding in Progress";
+                    stagePlayer(data.playerId, data.playerName, data.playerValue, data.captainName);
                     break;
                 case "placeBid":
                     placeBid(data.captainName, data.bidAmount);
                     break;
                 case "buyPlayer":
-                    buyPlayer(data.teamId, data.playerName, data.newBudget);
+                    console.log(data.selector);
                     document.getElementById("selector").textContent = "Selector: " + data.selector;
+                    buyPlayer(data.teamId, data.playerName, data.newBudget);
                     break;
                 case "timerUpdate":
                     document.getElementById("countdown").innerHTML = "Time remaining: " + data.time_left;
@@ -477,6 +478,9 @@
                 case "timerFinished":
                     document.getElementById("countdown").innerHTML = "Time remaining: 0";
                     sendBuyPlayer();
+                    break;
+                case "complete":
+                    document.getElementById("selector").textContent = "FINISHED";
                     break;
             }
         };

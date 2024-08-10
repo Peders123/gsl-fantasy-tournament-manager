@@ -90,15 +90,18 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         elif data_type == "placeBid":
 
             self.auction_room = await self.refresh_auction_room()
-            await self.increment_highest_bidder(self.captain, text_data_json['bidAmount'])
 
-            await self.channel_layer.group_send(
-                self.room_group_name,  {
-                    'type': 'placeBid',
-                    'bidAmount': text_data_json['bidAmount'],
-                    'captainName': self.captain.smite_name
-                }
-            )
+            if not await self.check_if_highest_bidder():
+
+                new_bid = await self.increment_highest_bidder(self.captain, text_data_json['bidAmount'])
+
+                await self.channel_layer.group_send(
+                    self.room_group_name,  {
+                        'type': 'placeBid',
+                        'bidAmount': new_bid,
+                        'captainName': self.captain.smite_name
+                    }
+                )
 
         elif data_type == "buyPlayer":
 
@@ -159,6 +162,9 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         await self.start_timer()
 
     async def placeBid(self, event):
+
+        if self.time_left < 5:
+            self.time_left = 6
 
         await self.send(text_data=json.dumps({
             'type': 'placeBid',
@@ -252,24 +258,27 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         self.auction_room.current_highest_bid = int(bid) + int(current_bid)
         self.auction_room.save()
 
+        return self.auction_room.current_highest_bid
+
     
     async def start_timer(self):
 
         if self.timer_task and not self.timer_task.done():
             self.timer_task.cancel()
 
-        time_left = 5
+        time_left = 10
         self.timer_task = asyncio.create_task(self.run_timer(time_left))
 
     async def run_timer(self, time_left):
+        self.time_left = time_left
         try:
-            while time_left > 0:
+            while self.time_left > 0:
                 await self.send(text_data=json.dumps({
                     'type': 'timerUpdate',
-                    'time_left': time_left
+                    'time_left': self.time_left
                 }))
                 await asyncio.sleep(1)
-                time_left -= 1
+                self.time_left -= 1
 
             await self.send(text_data=json.dumps({
                 'type': 'timerFinished'

@@ -353,15 +353,12 @@
 
         function buyPlayer(teamId, playerName, newBudget) {
             const gridItem = document.getElementById(teamId);
-            gridItem.childNodes[0].textContent = newBudget;
-            const playerContainer = gridItem.childNodes[1];
-            playerContainer.appendChild(createPlayer(playerName));
-            document.getElementById("current-player-id").value = 0;
-            document.getElementById("current-highest-bid").value = 0;
-            document.getElementById("current-highest-bidder").value = "None";
-            document.getElementById("current-player").textContent = "Current Player: None" ;
-            document.getElementById("estimated-value").textContent = "Estimated Value: 0";
-            document.getElementById("current-bid").textContent = "Current highest bid: None - 0";
+            if (gridItem) {
+                gridItem.childNodes[0].textContent = newBudget;
+                const playerContainer = gridItem.childNodes[1];
+                addPlayerToContainer(playerContainer, playerName);
+                resetCurrentPlayerInfo();
+            }
         }
 
         function placeBid(captainName, bidAmount) {
@@ -377,7 +374,10 @@
             document.getElementById("current-player").textContent = "Current Player: " + playerName;
             document.getElementById("estimated-value").textContent = "Estimated Value: " + playerValue;
             document.getElementById("current-bid").textContent = "Current highest bid: " + captainName + " - 0";
-            document.getElementById("player" + playerId + "-lot").remove();
+            const playerLink = document.getElementById("player" + playerId + "-lot");
+            if (playerLink) {
+                playerLink.remove();
+            }
             handleMouseOver();
         }
 
@@ -403,16 +403,31 @@
             }));
         }
 
+        function addGridItem(captainName, teamName, captainBudget) {
+            const existingItem = document.getElementById(captainName + ":" + teamName);
+            if (!existingItem) {
+                gridContainer.appendChild(createGridItem(captainName, teamName, captainBudget));
+            }
+        }
+
+        function addPlayerToContainer(playerContainer, playerName) {
+            const existingPlayers = Array.from(playerContainer.getElementsByClassName('player'));
+            const playerNames = existingPlayers.map(p => p.textContent.trim());
+            if (!playerNames.includes(playerName)) {
+                playerContainer.appendChild(createPlayer(playerName));
+            }
+        }
+
         bidders.forEach(bidder => {
-            gridContainer.appendChild(createGridItem(bidder.username, bidder.team_name, bidder.captain_budget));
-        })
+            addGridItem(bidder.username, bidder.team_name, bidder.captain_budget);
+        });
 
         biddees.forEach(biddee => {
             const gridItem = document.getElementById(biddee.team_id);
-            if (gridItem != null) {
-                gridItem.childNodes[1].appendChild(createPlayer(biddee.username));
+            if (gridItem) {
+                addPlayerToContainer(gridItem.childNodes[1], biddee.username);
             }
-        })
+        });
 
         const loc = window.location;
         let ws_start = 'ws://';
@@ -432,15 +447,13 @@
             switch (data.type) {
                 case "connection":
                     console.log("Captain joining: " + data.user);
-                    gridContainer.appendChild(createGridItem(data.user, data.teamName, data.captainBudget));
+                    addGridItem(data.user, data.teamName, data.captainBudget);
                     data.biddees.forEach(biddee => {
-                        console.log(biddee.team_id);
                         const gridItem = document.getElementById(biddee.team_id);
-                        console.log(gridItem);
-                        if (gridItem != null) {
-                            gridItem.childNodes[1].appendChild(createPlayer(biddee.username));
+                        if (gridItem) {
+                            addPlayerToContainer(gridItem.childNodes[1], biddee.username);
                         }
-                    })
+                    });
                     document.getElementById("selector").textContent = "Selector: " + data.selector;
                     break;
                 case "disconnection":
@@ -448,15 +461,16 @@
                     gridContainer.removeChild(document.getElementById(data.user + ":" + data.teamName));
                     break;
                 case "stagePlayer":
-                    stagePlayer(data.playerId, data.playerName, data.playerValue, data.captainName);
                     document.getElementById("selector").textContent = "Selector: Bidding in Progress";
+                    stagePlayer(data.playerId, data.playerName, data.playerValue, data.captainName);
                     break;
                 case "placeBid":
                     placeBid(data.captainName, data.bidAmount);
                     break;
                 case "buyPlayer":
-                    buyPlayer(data.teamId, data.playerName, data.newBudget);
+                    console.log(data.selector);
                     document.getElementById("selector").textContent = "Selector: " + data.selector;
+                    buyPlayer(data.teamId, data.playerName, data.newBudget);
                     break;
                 case "timerUpdate":
                     document.getElementById("countdown").innerHTML = "Time remaining: " + data.time_left;
@@ -464,6 +478,9 @@
                 case "timerFinished":
                     document.getElementById("countdown").innerHTML = "Time remaining: 0";
                     sendBuyPlayer();
+                    break;
+                case "complete":
+                    document.getElementById("selector").textContent = "FINISHED";
                     break;
             }
         };

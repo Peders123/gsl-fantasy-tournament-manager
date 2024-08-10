@@ -1,5 +1,6 @@
 import asyncio
 import json
+import sys
 
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -8,25 +9,35 @@ from .models import Bidder, Room, Biddee
 from tournament.models import Tournament, Captain, Player
 
 
+active_connections = {}
+
+
 class AuctionConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
 
         self.timer_task = None
         self.tournament_id = self.scope['url_route']['kwargs']['tournament_id']
-
-        tournament = await self.get_tournament_from_id(self.tournament_id)
-
-        self.auction_room = await self.get_room_from_tournament_id(tournament.tournament_id)
-        self.room_group_name = "tournament" + self.tournament_id + "auction"
         self.captain = await self.get_captain_user()
 
-        bidder = await self.get_bidder()
+        if self.captain.smite_name in active_connections:
+            await self.channel_layer.group_discard(self.room_group_name, active_connections[self.captain.smite_name])
 
-        if not bidder:
+        active_connections[self.captain.smite_name] = self.channel_name
+
+        existing_bidder = await self.get_bidder()
+        self.bidder = existing_bidder
+
+        if existing_bidder:
+            await self.set_bidder_in(False)
+
+        tournament = await self.get_tournament_from_id(self.tournament_id)
+        self.auction_room = await self.get_room_from_tournament_id(tournament.tournament_id)
+        self.room_group_name = "tournament" + self.tournament_id + "auction"
+
+        if not existing_bidder:
             self.bidder = await self.create_bidder()
         else:
-            self.bidder = bidder
             await self.set_bidder_in(True)
 
         if not await self.get_current_selector_exists():
@@ -39,7 +50,6 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         
         username = self.captain.smite_name
         team_name = self.captain.team_name
-
         biddees = await self.get_biddees()
 
         await self.channel_layer.group_send(
@@ -53,6 +63,9 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         )
 
     async def disconnect(self, code):
+
+        if self.captain.smite_name in active_connections:
+            del active_connections[self.captain.smite_name]
 
         await self.set_bidder_in(False)
 
@@ -106,7 +119,7 @@ class AuctionConsumer(AsyncWebsocketConsumer):
 
             self.auction_room = await self.refresh_auction_room()
 
-            if not await self.check_if_highest_bidder() and not await self.check_overbudget(text_data_json['bidAmount']):
+            if not await self.check_if_highest_bidder() and not await self.check_overbudget(text_data_json['bidAmount']) and not await self.check_if_team_full(self.captain):
 
                 new_bid = await self.increment_highest_bidder(self.captain, text_data_json['bidAmount'])
 
@@ -210,7 +223,6 @@ class AuctionConsumer(AsyncWebsocketConsumer):
 
         self.auction_room = await self.refresh_auction_room()
         captain = await self.get_current_selector()
-
         player = await self.get_player_from_id(int(event['playerId']))
 
         await self.send(text_data=json.dumps({
@@ -219,6 +231,12 @@ class AuctionConsumer(AsyncWebsocketConsumer):
             'teamId': event['teamId'],
             'newBudget': event['newBudget'],
             'selector': captain.smite_name
+        }))
+
+    async def complete(self, event):
+
+        await self.send(text_data=json.dumps({
+            'type': 'complete'
         }))
 
     @sync_to_async
@@ -316,7 +334,7 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         if self.timer_task and not self.timer_task.done():
             self.timer_task.cancel()
 
-        time_left = 10
+        time_left = 20
         self.timer_task = asyncio.create_task(self.run_timer(time_left))
 
     async def run_timer(self, time_left):
@@ -347,6 +365,8 @@ class AuctionConsumer(AsyncWebsocketConsumer):
     
     @sync_to_async
     def check_if_highest_bidder(self):
+        if not self.auction_room.current_highest_bidder:
+            return False
         if not self.auction_room.current_highest_bidder.captain_id:
             return False
         return self.auction_room.current_highest_bidder.captain_id == self.captain.captain_id
@@ -463,16 +483,31 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         self.auction_room.current_selector = self.auction_room.next_selector
 
         tournament = Tournament.objects.get(tournament_id=self.tournament_id)
-
         bidders = len(Bidder.objects.filter(tournament_id=tournament))
 
+        # Move to the next bidder in the draft order
         draft_order += 1
 
+        # Reset to the first bidder if we've reached the end
         if draft_order == bidders:
             draft_order = 0
 
+        # Get the next bidder
         bidder = Bidder.objects.get(tournament_id=tournament, join_order=draft_order)
 
-        self.auction_room.next_selector = bidder
+        # Check if the bidder's team is full
+        if not self.check_if_team_full(bidder.captain_id):
+            # If the team is not full, select this bidder as the next selector
+            self.auction_room.next_selector = bidder
+            self.auction_room.save()
+            return  # Exit the loop once a valid bidder is found
+        
+        else:
+            bidder = Bidder.objects.get(tournament_id=tournament, join_order=draft_order+1)
+            self.auction_room.next_selector = bidder
+            self.auction_room.save()
 
-        self.auction_room.save()
+    @sync_to_async
+    def check_if_team_full(self, captain):
+
+        return len(Player.objects.filter(captain_id=captain)) >= 4

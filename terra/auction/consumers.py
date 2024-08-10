@@ -1,6 +1,5 @@
 import asyncio
 import json
-from time import sleep
 
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -20,13 +19,7 @@ class AuctionConsumer(AsyncWebsocketConsumer):
 
         self.auction_room = await self.get_room_from_tournament_id(tournament.tournament_id)
         self.room_group_name = "tournament" + self.tournament_id + "auction"
-
-        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
-        await self.accept()
-
         self.captain = await self.get_captain_user()
-        username = self.captain.smite_name
-        team_name = self.captain.team_name
 
         bidder = await self.get_bidder()
 
@@ -35,6 +28,17 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         else:
             self.bidder = bidder
             await self.set_bidder_in(True)
+
+        if not await self.get_current_selector_exists():
+            await self.set_current_selector()
+        elif not await self.get_next_selector_exists():
+            await self.set_next_selector()
+
+        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+        await self.accept()
+        
+        username = self.captain.smite_name
+        team_name = self.captain.team_name
 
         biddees = await self.get_biddees()
 
@@ -81,16 +85,22 @@ class AuctionConsumer(AsyncWebsocketConsumer):
 
         elif data_type == "stagePlayer":
 
-            await self.set_highest_bidder(self.captain, 0)
-            await self.set_current_asset(text_data_json['playerId'])
+            sender = await self.check_if_selector()
 
-            await self.channel_layer.group_send(
-                self.room_group_name, {
-                    'type': 'stagePlayer',
-                    'playerId': text_data_json['playerId'],
-                    'captainName': self.captain.smite_name
-                }
-            )
+            if sender:
+
+                await self.set_current_selector_null()
+
+                await self.set_highest_bidder(self.captain, 0)
+                await self.set_current_asset(text_data_json['playerId'])
+
+                await self.channel_layer.group_send(
+                    self.room_group_name, {
+                        'type': 'stagePlayer',
+                        'playerId': text_data_json['playerId'],
+                        'captainName': self.captain.smite_name
+                    }
+                )
 
         elif data_type == "placeBid":
 
@@ -126,6 +136,8 @@ class AuctionConsumer(AsyncWebsocketConsumer):
                 team_id = await self.get_team_id()
                 await self.set_highest_bidder(None, 0)
 
+                await self.rotate_selectors()
+
                 await self.channel_layer.group_send(
                     self.room_group_name, {
                         'type': 'buyPlayer',
@@ -137,12 +149,16 @@ class AuctionConsumer(AsyncWebsocketConsumer):
 
     async def connection(self, event):
 
+        self.auction_room = await self.refresh_auction_room()
+        captain = await self.get_current_selector()
+
         await self.send(text_data=json.dumps({
             'type': 'connection',
             'user': event['user'],
             'teamName': event['teamName'],
             'captainBudget': event['captainBudget'],
-            'biddees': event['biddees']
+            'biddees': event['biddees'],
+            'selector': captain.smite_name
         }))
 
     async def disconnection(self, event):
@@ -192,13 +208,17 @@ class AuctionConsumer(AsyncWebsocketConsumer):
 
     async def buyPlayer(self, event):
 
+        self.auction_room = await self.refresh_auction_room()
+        captain = await self.get_current_selector()
+
         player = await self.get_player_from_id(int(event['playerId']))
 
         await self.send(text_data=json.dumps({
             'type': 'buyPlayer',
             'playerName': player.smite_name,
             'teamId': event['teamId'],
-            'newBudget': event['newBudget']
+            'newBudget': event['newBudget'],
+            'selector': captain.smite_name
         }))
 
     @sync_to_async
@@ -389,3 +409,70 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         ]
 
         return biddees_list
+    
+    @sync_to_async
+    def set_current_selector(self):
+
+        tournament = Tournament.objects.get(tournament_id=self.tournament_id)
+        bidder = Bidder.objects.get(tournament_id=tournament, captain_id=self.captain)
+        self.auction_room.current_selector = bidder
+        self.auction_room.save()
+
+    @sync_to_async
+    def set_current_selector_null(self):
+
+        self.auction_room.current_selector = None
+        self.auction_room.save()
+
+    @sync_to_async
+    def set_next_selector(self):
+
+        tournament = Tournament.objects.get(tournament_id=self.tournament_id)
+        bidder = Bidder.objects.get(tournament_id=tournament, captain_id=self.captain)
+
+        self.auction_room.next_selector = bidder
+        self.auction_room.save()
+
+    @sync_to_async
+    def get_current_selector(self):
+        if not self.auction_room.current_selector:
+            return None
+        return self.auction_room.current_selector.captain_id
+    
+    @sync_to_async
+    def get_current_selector_exists(self):
+        if self.auction_room.current_selector:
+            return True
+        return False
+    
+    @sync_to_async
+    def get_next_selector_exists(self):
+        if self.auction_room.next_selector:
+            return True
+        return False
+    
+    @sync_to_async
+    def check_if_selector(self):
+        if not self.auction_room.current_selector:
+            return False
+        return self.auction_room.current_selector.captain_id == self.captain
+    
+    @sync_to_async
+    def rotate_selectors(self):
+        draft_order = self.auction_room.next_selector.join_order
+        self.auction_room.current_selector = self.auction_room.next_selector
+
+        tournament = Tournament.objects.get(tournament_id=self.tournament_id)
+
+        bidders = len(Bidder.objects.filter(tournament_id=tournament))
+
+        draft_order += 1
+
+        if draft_order == bidders:
+            draft_order = 0
+
+        bidder = Bidder.objects.get(tournament_id=tournament, join_order=draft_order)
+
+        self.auction_room.next_selector = bidder
+
+        self.auction_room.save()

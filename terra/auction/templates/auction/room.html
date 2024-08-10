@@ -216,6 +216,14 @@
             text-align: center;
             margin-bottom: 10px;
         }
+
+        #selector {
+            color: black;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -236,6 +244,7 @@
     </div>
     <div id="main">
         <div class="central-container">
+            <div id="selector">Selector: </div>
             <div id="countdown">Time Remaining: 0</div>
             <div class="game-summary">
                 <input type="hidden" id="current-player-id" value="0">
@@ -432,6 +441,7 @@
                             gridItem.childNodes[1].appendChild(createPlayer(biddee.username));
                         }
                     })
+                    document.getElementById("selector").textContent = "Selector: " + data.selector;
                     break;
                 case "disconnection":
                     console.log("Captain leaving: " + data.user);
@@ -439,12 +449,14 @@
                     break;
                 case "stagePlayer":
                     stagePlayer(data.playerId, data.playerName, data.playerValue, data.captainName);
+                    document.getElementById("selector").textContent = "Selector: Bidding in Progress";
                     break;
                 case "placeBid":
                     placeBid(data.captainName, data.bidAmount);
                     break;
                 case "buyPlayer":
                     buyPlayer(data.teamId, data.playerName, data.newBudget);
+                    document.getElementById("selector").textContent = "Selector: " + data.selector;
                     break;
                 case "timerUpdate":
                     document.getElementById("countdown").innerHTML = "Time remaining: " + data.time_left;

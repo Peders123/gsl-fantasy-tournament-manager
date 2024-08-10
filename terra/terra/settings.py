@@ -173,7 +173,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [('redis', 6379)]
+            'hosts': [('rediss://:{password}@{hostname}:{port}'.format(password=CREDENTIALS['passwords']['redis']['password'], hostname="odin.redis.cache.windows.net", port=6380))]
         }
     }
 }

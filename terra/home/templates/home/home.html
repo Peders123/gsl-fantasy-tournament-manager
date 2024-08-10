@@ -11,6 +11,9 @@
 <p>Check out the links below to get started!</p>
 <p>This website is still under construction, so if some things don't work please bare with us. </p>{% endblock main %}
 
+{% if errno %}
+    <p style="color:red;">{{ errno }}: {{ error }}</p>
+{% endif %}
 
 {% block content %}
     {% for tournament in tournaments %}

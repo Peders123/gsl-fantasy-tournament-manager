@@ -243,7 +243,7 @@
                 <input type="hidden" id="current-highest-bidder" value="None">
                 <div id="current-player">Current Player: {% if room.current_asset %}{{ room.current_asset.smite_name }}{% else %}None{% endif %}</div>
                 <div id="estimated-value">Estimated Value: {% if room.current_asset %}{{ room.current_asset.estimated_value }}{% else %}0{% endif %}</div>
-                <div id="current-bid">Current Highest Bid: {{ room.current_highest_bidder }} - {{ room.current_highest_bid }}</div>
+                <div id="current-bid">Current Highest Bid: {{ room.current_highest_bidder.smite_name }} - {{ room.current_highest_bid }}</div>
             </div>
             <br>
             <div class="auction-buttons">
@@ -258,6 +258,7 @@
     </div>
 
     {{ bidders|json_script:"bidders" }}
+    {{ biddees|json_script:"biddees" }}
 
     <script>
         var mini = true;
@@ -311,6 +312,7 @@
         document.getElementById("my-sidebar").addEventListener("mouseout", handleMouseOut);
         const gridContainer = document.querySelector('.grid-container');
         const bidders = JSON.parse(document.getElementById('bidders').textContent);
+        const biddees = JSON.parse(document.getElementById('biddees').textContent);
         const tournament_id = JSON.parse(document.getElementById('tournament-id').textContent);
 
         function createPlayer(playerName) {
@@ -396,9 +398,21 @@
             gridContainer.appendChild(createGridItem(bidder.username, bidder.team_name, bidder.captain_budget));
         })
 
+        biddees.forEach(biddee => {
+            const gridItem = document.getElementById(biddee.team_id);
+            if (gridItem != null) {
+                gridItem.childNodes[1].appendChild(createPlayer(biddee.username));
+            }
+        })
+
+        const loc = window.location;
+        let ws_start = 'ws://';
+        if (loc.protocol == 'https:') {
+            ws_start = 'wss://'
+        }
         const chatSocket = new WebSocket(
-            'ws://'
-            + window.location.host
+            ws_start
+            + loc.host
             + '/ws/'
             + tournament_id
             + '/auction'
@@ -410,6 +424,14 @@
                 case "connection":
                     console.log("Captain joining: " + data.user);
                     gridContainer.appendChild(createGridItem(data.user, data.teamName, data.captainBudget));
+                    data.biddees.forEach(biddee => {
+                        console.log(biddee.team_id);
+                        const gridItem = document.getElementById(biddee.team_id);
+                        console.log(gridItem);
+                        if (gridItem != null) {
+                            gridItem.childNodes[1].appendChild(createPlayer(biddee.username));
+                        }
+                    })
                     break;
                 case "disconnection":
                     console.log("Captain leaving: " + data.user);

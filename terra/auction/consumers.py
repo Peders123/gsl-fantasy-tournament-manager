@@ -5,7 +5,7 @@ from time import sleep
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from .models import Bidder, Room
+from .models import Bidder, Room, Biddee
 from tournament.models import Tournament, Captain, Player
 
 
@@ -36,12 +36,15 @@ class AuctionConsumer(AsyncWebsocketConsumer):
             self.bidder = bidder
             await self.set_bidder_in(True)
 
+        biddees = await self.get_biddees()
+
         await self.channel_layer.group_send(
             self.room_group_name, {
                 'type': 'connection',
                 'user': username,
                 'teamName': team_name,
-                'captainBudget': self.captain.captain_budget
+                'captainBudget': self.captain.captain_budget,
+                'biddees': biddees
             }
         )
 
@@ -79,6 +82,7 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         elif data_type == "stagePlayer":
 
             await self.set_highest_bidder(self.captain, 0)
+            await self.set_current_asset(text_data_json['playerId'])
 
             await self.channel_layer.group_send(
                 self.room_group_name, {
@@ -113,6 +117,9 @@ class AuctionConsumer(AsyncWebsocketConsumer):
             if sender:
 
                 await self.update_budget()
+                await self.assign_player()
+                await self.create_biddee()
+                await self.set_current_asset(None)
 
                 budget = await self.get_budget_string()
 
@@ -134,7 +141,8 @@ class AuctionConsumer(AsyncWebsocketConsumer):
             'type': 'connection',
             'user': event['user'],
             'teamName': event['teamName'],
-            'captainBudget': event['captainBudget']
+            'captainBudget': event['captainBudget'],
+            'biddees': event['biddees']
         }))
 
     async def disconnection(self, event):
@@ -169,6 +177,9 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         await self.start_timer()
 
     async def placeBid(self, event):
+
+        if not self.time_left:
+            self.time_left = 5
 
         if self.time_left < 5:
             self.time_left = 6
@@ -259,6 +270,17 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         self.auction_room.save()
 
     @sync_to_async
+    def set_current_asset(self, player_id):
+
+        if not player_id:
+            self.auction_room.current_asset = None
+        else:
+            player = Player.objects.get(player_id=int(player_id))
+            self.auction_room.current_asset = player
+
+        self.auction_room.save()
+
+    @sync_to_async
     def increment_highest_bidder(self, captain, bid):
 
         current_bid = self.auction_room.current_highest_bid
@@ -305,6 +327,8 @@ class AuctionConsumer(AsyncWebsocketConsumer):
     
     @sync_to_async
     def check_if_highest_bidder(self):
+        if not self.auction_room.current_highest_bidder.captain_id:
+            return False
         return self.auction_room.current_highest_bidder.captain_id == self.captain.captain_id
     
     @sync_to_async
@@ -324,3 +348,44 @@ class AuctionConsumer(AsyncWebsocketConsumer):
     @sync_to_async
     def get_budget_string(self):
         return str(self.captain.team_name) + " - " + str(self.captain.captain_budget)
+    
+    @sync_to_async
+    def assign_player(self):
+        player = self.auction_room.current_asset
+        player.captain_id = self.captain
+        player.save()
+
+    @sync_to_async
+    def create_biddee(self):
+
+        tournament = Tournament.objects.get(tournament_id=self.tournament_id)
+        bidder = Bidder.objects.get(tournament_id=tournament, captain_id=self.auction_room.current_highest_bidder)
+        draft_order = len(Biddee.objects.filter(tournament_id=tournament, bidder_id=bidder)) + 1
+
+        biddee = Biddee(
+            bidder_id=bidder,
+            tournament_id=tournament,
+            player_id=self.auction_room.current_asset,
+            bidded_amount=self.auction_room.current_highest_bid,
+            draft_order=draft_order
+        )
+
+        biddee.save()
+
+    @sync_to_async
+    def get_biddees(self):
+
+        tournament = Tournament.objects.get(tournament_id=self.tournament_id)
+        bidder = Bidder.objects.get(tournament_id=tournament, captain_id=self.captain)
+
+        biddees = Biddee.objects.filter(bidder_id=bidder)
+
+        biddees_list = [
+            {
+                'username': biddee.player_id.smite_name,
+                'team_id': biddee.player_id.captain_id.smite_name + ":" + biddee.player_id.captain_id.team_name
+            }
+            for biddee in biddees
+        ]
+
+        return biddees_list

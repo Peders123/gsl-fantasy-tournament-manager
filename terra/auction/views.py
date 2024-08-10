@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from .models import Bidder, Room
+from .models import Bidder, Room, Biddee
 from tournament.models import Captain, Player, Tournament
 
 
@@ -38,7 +38,19 @@ def room(request, t_id):
         for bidder in bidders
     ]
 
-    players = Player.objects.all()
+    biddees = Biddee.objects.filter(
+        tournament_id=t_id
+    ).order_by('draft_order')
+
+    biddees_list = [
+        {
+            'username': biddee.player_id.smite_name,
+            'team_id': biddee.player_id.captain_id.smite_name + ":" + biddee.player_id.captain_id.team_name
+        }
+        for biddee in biddees
+    ]
+
+    players = Player.objects.filter(captain_id=None, tournament_id=tournament)
 
     current_room = Room.objects.filter(tournament_id=t_id)
     if current_room.exists():
@@ -49,6 +61,7 @@ def room(request, t_id):
 
     return render(request, 'auction/room.html', {
         'bidders': bidders_list,
+        'biddees': biddees_list,
         'players': players,
         't_id': str(t_id),
         'room': current_room

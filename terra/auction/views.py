@@ -32,7 +32,8 @@ def room(request, t_id):
     bidders_list = [
         {
             'username': bidder.captain_id.smite_name,
-            'team_name': bidder.captain_id.team_name
+            'team_name': bidder.captain_id.team_name,
+            'captain_budget': bidder.captain_id.captain_budget
         }
         for bidder in bidders
     ]

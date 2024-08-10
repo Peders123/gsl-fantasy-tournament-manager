@@ -320,14 +320,14 @@
             return player;
         }
         
-        function createGridItem(captainName, teamName) {
+        function createGridItem(captainName, teamName, captainBudget) {
             const gridItem = document.createElement('div');
             gridItem.id = captainName + ":" + teamName;
             gridItem.classList.add('grid-item');
 
             const teamNameContainer = document.createElement('div');
             teamNameContainer.classList.add('team-name');
-            teamNameContainer.textContent = teamName;
+            teamNameContainer.textContent = teamName + " - " + captainBudget;
             gridItem.appendChild(teamNameContainer);
 
             const playerContainer = document.createElement('div');
@@ -340,8 +340,9 @@
             return gridItem;
         }
 
-        function buyPlayer(teamId, playerName) {
+        function buyPlayer(teamId, playerName, newBudget) {
             const gridItem = document.getElementById(teamId);
+            gridItem.childNodes[0].textContent = newBudget;
             const playerContainer = gridItem.childNodes[1];
             playerContainer.appendChild(createPlayer(playerName));
             document.getElementById("current-player-id").value = 0;
@@ -392,7 +393,7 @@
         }
 
         bidders.forEach(bidder => {
-            gridContainer.appendChild(createGridItem(bidder.username, bidder.team_name));
+            gridContainer.appendChild(createGridItem(bidder.username, bidder.team_name, bidder.captain_budget));
         })
 
         const chatSocket = new WebSocket(
@@ -408,7 +409,7 @@
             switch (data.type) {
                 case "connection":
                     console.log("Captain joining: " + data.user);
-                    gridContainer.appendChild(createGridItem(data.user, data.teamName));
+                    gridContainer.appendChild(createGridItem(data.user, data.teamName, data.captainBudget));
                     break;
                 case "disconnection":
                     console.log("Captain leaving: " + data.user);
@@ -421,7 +422,7 @@
                     placeBid(data.captainName, data.bidAmount);
                     break;
                 case "buyPlayer":
-                    buyPlayer(data.teamId, data.playerName);
+                    buyPlayer(data.teamId, data.playerName, data.newBudget);
                     break;
                 case "timerUpdate":
                     document.getElementById("countdown").innerHTML = "Time remaining: " + data.time_left;

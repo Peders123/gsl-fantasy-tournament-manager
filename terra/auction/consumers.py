@@ -40,7 +40,8 @@ class AuctionConsumer(AsyncWebsocketConsumer):
             self.room_group_name, {
                 'type': 'connection',
                 'user': username,
-                'teamName': team_name
+                'teamName': team_name,
+                'captainBudget': self.captain.captain_budget
             }
         )
 
@@ -91,7 +92,7 @@ class AuctionConsumer(AsyncWebsocketConsumer):
 
             self.auction_room = await self.refresh_auction_room()
 
-            if not await self.check_if_highest_bidder():
+            if not await self.check_if_highest_bidder() and not await self.check_overbudget(text_data_json['bidAmount']):
 
                 new_bid = await self.increment_highest_bidder(self.captain, text_data_json['bidAmount'])
 
@@ -111,6 +112,10 @@ class AuctionConsumer(AsyncWebsocketConsumer):
 
             if sender:
 
+                await self.update_budget()
+
+                budget = await self.get_budget_string()
+
                 team_id = await self.get_team_id()
                 await self.set_highest_bidder(None, 0)
 
@@ -118,7 +123,8 @@ class AuctionConsumer(AsyncWebsocketConsumer):
                     self.room_group_name, {
                         'type': 'buyPlayer',
                         'playerId': text_data_json['playerId'],
-                        'teamId': team_id
+                        'teamId': team_id,
+                        'newBudget': budget
                     }
                 )
 
@@ -127,7 +133,8 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'type': 'connection',
             'user': event['user'],
-            'teamName': event['teamName']
+            'teamName': event['teamName'],
+            'captainBudget': event['captainBudget']
         }))
 
     async def disconnection(self, event):
@@ -179,7 +186,8 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'type': 'buyPlayer',
             'playerName': player.smite_name,
-            'teamId': event['teamId']
+            'teamId': event['teamId'],
+            'newBudget': event['newBudget']
         }))
 
     @sync_to_async
@@ -299,3 +307,20 @@ class AuctionConsumer(AsyncWebsocketConsumer):
     def check_if_highest_bidder(self):
         return self.auction_room.current_highest_bidder.captain_id == self.captain.captain_id
     
+    @sync_to_async
+    def check_overbudget(self, bid):
+        current_bid = self.auction_room.current_highest_bid
+        return int(bid) + int(current_bid) > self.captain.captain_budget
+    
+    @sync_to_async
+    def update_budget(self):
+        budget = self.captain.captain_budget
+        budget -= self.auction_room.current_highest_bid
+        self.captain.captain_budget = budget
+        self.captain.save()
+
+        return budget
+
+    @sync_to_async
+    def get_budget_string(self):
+        return str(self.captain.team_name) + " - " + str(self.captain.captain_budget)

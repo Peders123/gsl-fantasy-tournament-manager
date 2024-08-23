@@ -30,7 +30,7 @@ MIGRATION_MODULES = {
     'auction': 'mount.terra.migrations',
 }
 
-
+CSRF_TRUSTED_ORIGINS = ['https://tanukismiteleague.com']
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -173,7 +173,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [('redis', 6379)]
+            'hosts': [('rediss://:{password}@{hostname}:{port}'.format(password=CREDENTIALS['passwords']['redis']['password'], hostname="odin.redis.cache.windows.net", port=6380))]
         }
     }
 }

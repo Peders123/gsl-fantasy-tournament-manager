@@ -105,7 +105,7 @@ class Player(models.Model):
     player_id = models.AutoField(primary_key=True)
     tournament_id = models.ForeignKey(Tournament, on_delete=models.CASCADE, default=1)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    captain_id = models.ForeignKey(Captain, on_delete=models.CASCADE, null=True)
+    captain_id = models.ForeignKey(Captain, on_delete=models.CASCADE, null=True, blank=True)
     smite_name = models.CharField(max_length=32)
     role_1 = models.CharField(max_length=16, default="Fill")
     role_2 = models.CharField(max_length=16, default="Fill")
@@ -116,12 +116,3 @@ class Player(models.Model):
 
         managed = False
         db_table = "talaria_player"
-
-
-class Suggestion(models.Model):
-
-    suggestion_id = models.AutoField(primary_key=True)
-    tournament_id = models.ForeignKey(Tournament, on_delete=models.CASCADE, default=1)
-    player_name = models.CharField(max_length=32)
-    discord_nametag = models.CharField(max_length=32)
-    suggested_value = models.IntegerField(default=0)

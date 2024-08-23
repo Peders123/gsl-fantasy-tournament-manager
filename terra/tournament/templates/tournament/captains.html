@@ -18,8 +18,10 @@
     <a class="nav-link" href="{% url 'captains' t_id=tournament.tournament_id %}">Captains</a>
 </li>
 {%endblock nav%}
-{% block content %}
+{%block main%}
 <h1>{{ tournament.title }}</h1><br>
+{%endblock main%}
+{% block content %}
 <table align="left" cellspacing="10" cellpadding="10">
     <tr>
         <th>Discord</th>

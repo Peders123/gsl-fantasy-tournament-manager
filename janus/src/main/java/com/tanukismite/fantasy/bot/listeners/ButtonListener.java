@@ -2,12 +2,11 @@ package com.tanukismite.fantasy.bot.listeners;
 
 import java.io.IOException;
 
-import com.tanukismite.fantasy.bot.commands.slashCommands.CreateSignups;
-import com.tanukismite.fantasy.bot.commands.slashCommands.Edit;
+import com.tanukismite.fantasy.bot.commands.slash_commands.CreateSignups;
+import com.tanukismite.fantasy.bot.commands.slash_commands.Edit;
 import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
 import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
 import com.tanukismite.fantasy.bot.communicators.UserCommunicator;
-import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 import com.tanukismite.fantasy.bot.signup.UserSignupData;
 
@@ -173,7 +172,7 @@ public class ButtonListener extends BaseListener {
         }
 
         if (signupExists == false) {
-            Action.replyWithMessage(event, "You are not currently signed up.", true).queue();
+            event.reply("You are not currently signed up.").setEphemeral(true).queue();
         } else {
             try {
                 this.handler.executeMethod(
@@ -181,7 +180,6 @@ public class ButtonListener extends BaseListener {
                     "signout",
                     event
                 );
-                return;
             } catch (Exception e) {
                 System.out.println("ERROR");
                 e.printStackTrace();

@@ -1,8 +1,7 @@
-package com.tanukismite.fantasy.bot.commands.slashCommands;
+package com.tanukismite.fantasy.bot.commands.slash_commands;
 
 import com.tanukismite.fantasy.bot.commands.Context;
 import com.tanukismite.fantasy.bot.commands.ExtendedCommand;
-import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 import com.tanukismite.fantasy.bot.signup.TournamentData;
 
@@ -53,9 +52,8 @@ public class CreateTournament extends ExtendedCommand {
             .setMaxLength(1000)
             .build();
 
-        Modal modal = Action.createModal(modalId, "Create Tournament", inputs);
-        FluentRestAction<Void, ModalCallbackAction> action = Action.replyWithModal(event, modal);
-        this.queue(action);
+        Modal modal = Modal.create(modalId, "Create Tournament").addActionRow(inputs).build();
+        event.replyModal(modal).queue();
 
         context.setTournamentRoot(this);
 
@@ -77,15 +75,7 @@ public class CreateTournament extends ExtendedCommand {
             e.printStackTrace();
         }
 
-        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithEmbeds(modalEvent, data.toEmbed());
-        this.queue(action);
-
-    }
-
-    @Override
-    public <R> void queue(FluentRestAction<R, ?> request) {
-
-        request.queue();
+        modalEvent.replyEmbeds(data.toEmbed()).queue();
 
     }
 

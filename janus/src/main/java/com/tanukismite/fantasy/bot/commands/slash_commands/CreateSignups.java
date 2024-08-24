@@ -1,4 +1,4 @@
-package com.tanukismite.fantasy.bot.commands.slashCommands;
+package com.tanukismite.fantasy.bot.commands.slash_commands;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -12,7 +12,6 @@ import com.tanukismite.fantasy.bot.commands.ExtendedCommand;
 import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
 import com.tanukismite.fantasy.bot.communicators.MercuryCommunicator;
 import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
-import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Components;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 import com.tanukismite.fantasy.bot.signup.CaptainSignupData;
@@ -78,39 +77,27 @@ public class CreateSignups extends ExtendedCommand {
         embed.setColor(new Color(28, 19, 31, 255));
         embed.setFooter(CreateSignups.convertDate(node.get("datetime").asText()));
 
-        FluentRestAction<InteractionHook, ReplyCallbackAction> response = Action.replyWithMessage(event, "Created!", true);
-        FluentRestAction<Message, MessageCreateAction> action = Action.sendMessageWithEmbed(channel, embed.build());
+        event.reply("Created!").setEphemeral(true).queue();
+        MessageCreateAction action = channel.sendMessageEmbeds(embed.build());
 
-        action = Components.addActionRowMessage(action,
+        action.addActionRow(
             Button.primary(event.getUser().getId() + ":player-signup", "Player Signup"),
             Button.success(event.getUser().getId() + ":captain-signup", "Captain Signup"),
             Button.danger(event.getUser().getId() + ":signout", "Signout")
         );
 
-        this.queue(response);
-        this.queue(action);
+        action.queue(
+            (Message message) -> {
+                String msgId = message.getId();
+                if (this.recentMessageId == null) {
+                    this.signupRootId = msgId;
+                }
+                this.recentMessageId = msgId;
+            }
+        );
 
         context.setSignupRoot(this);
  
-    }
-
-    @Override
-    public <R> void queue(FluentRestAction<R, ?> request) {
-
-        if (request instanceof MessageCreateActionImpl) {
-            request.queue((R message) -> {
-                if (message instanceof Message) {
-                    String msgId = ((Message) message).getId();
-                    if (this.recentMessageId == null) {
-                        this.signupRootId = msgId;
-                    }
-                    this.recentMessageId = msgId;
-                }
-            });
-        } else {
-            request.queue();
-        }
-
     }
 
     // RENAME TO BE MORE DESCRIPTIVE OF THE FULL FUNCTION
@@ -121,7 +108,7 @@ public class CreateSignups extends ExtendedCommand {
         System.out.println("BUTTON ID: " + buttonEvent.getUser().getId());
         System.out.println(this.signupRootId);
 
-        if (captain) {
+        if (Boolean.TRUE.equals(captain)) {
             if (context.signupDataExists(buttonEvent.getUser().getId()) == true) {
                 context.removeUserSignupData(buttonEvent.getUser().getId());
             }
@@ -173,10 +160,8 @@ public class CreateSignups extends ExtendedCommand {
             .setMaxLength(20)
             .build();
 
-
-        Modal modal = Action.createModal(modalId, title, inputs);
-        FluentRestAction<Void, ModalCallbackAction> action = Action.replyWithModal(buttonEvent, modal);
-        this.queue(action);
+        Modal modal = Modal.create(modalId, title).addActionRow(inputs).build();
+        buttonEvent.replyModal(modal).queue();
 
     }
 
@@ -184,8 +169,7 @@ public class CreateSignups extends ExtendedCommand {
 
         String message = "You are already signed up with this discord account. If you want to re-do your signup, please first use the sign-out button!";
 
-        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(buttonEvent, message, true);
-        this.queue(action);
+        buttonEvent.reply(message).setEphemeral(true).queue();
 
     }
 
@@ -222,9 +206,9 @@ public class CreateSignups extends ExtendedCommand {
         }
 
         if (signupExists == true) {
-            Action.replyWithMessage(buttonEvent, "Error when deleting user, please contact an admin.", true).queue();
+            buttonEvent.reply("Error when deleting user, please contact an admin.").setEphemeral(true).queue();
         } else {
-            Action.replyWithMessage(buttonEvent, "Signup deleted successfully.", true).queue();
+            buttonEvent.reply("Signup deleted successfully.").setEphemeral(true).queue();
         }
 
     }
@@ -258,8 +242,7 @@ public class CreateSignups extends ExtendedCommand {
                 e.printStackTrace();
             }
 
-            FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(modalEvent, "SUBMITTED", true);
-            this.queue(action);
+            modalEvent.reply("SUBMITTED").setEphemeral(true).queue();
 
         } else if (id[2].equals("player-signup")) {
 
@@ -272,10 +255,8 @@ public class CreateSignups extends ExtendedCommand {
 
             SelectOption[] options = Components.createSelectOptions("role1");
             StringSelectMenu selection = Components.createSelectMenu("role1", options);
-            FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(modalEvent, "Choose your primary role:", true);
-            Components.addActionRowReply(action, selection);
-    
-            this.queue(action);
+
+            modalEvent.reply("Choose your primary role:").setEphemeral(true).addActionRow(selection).queue();
 
         }
 
@@ -288,14 +269,10 @@ public class CreateSignups extends ExtendedCommand {
         PlayerSignupData data = context.getUserSignupData(selectEvent.getUser().getId(), PlayerSignupData.class);
         data.setRole1(Role.valueOf(selectEvent.getValues().get(0)));
 
-        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(selectEvent, "Choose your secondary role:", true);
         StringSelectMenu selection = Components.createSelectMenu("role2", Components.createSelectOptions("role2"));
-        Components.addActionRowReply(action, selection);
 
-        action.queue(
-            hook -> {
-                selectEvent.getMessage().delete().queue();
-            },
+        selectEvent.reply("Choose your secondary role:").setEphemeral(true).addActionRow(selection).queue(
+            hook -> selectEvent.getMessage().delete().queue(),
             error -> System.out.println("OUT ERROR HANDLING")
         );
 
@@ -319,7 +296,8 @@ public class CreateSignups extends ExtendedCommand {
 
         PlayerSignupData data = context.getUserSignupData(userId, PlayerSignupData.class);
         MessageEmbed embed = data.toEmbed();
-        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithEmbeds(selectEvent, embed, true);
+
+        
 
         System.out.println(data.toMap().toString());
 
@@ -329,10 +307,8 @@ public class CreateSignups extends ExtendedCommand {
             System.out.println("FAILED TO WRITE PLAYER");
         }
 
-        action.queue(
-            hook -> {
-                selectEvent.getMessage().delete().queue();
-            },
+        selectEvent.replyEmbeds(embed).setEphemeral(true).queue(
+            hook -> selectEvent.getMessage().delete().queue(),
             error -> System.out.println("OUT ERROR HANDLING")
         );
 
@@ -341,10 +317,7 @@ public class CreateSignups extends ExtendedCommand {
     protected void sendTestMessage(Handler handler, TextChannelImpl channel) {
 
         try {
-
-            FluentRestAction<Message, MessageCreateAction> action = Action.sendMessage(channel, "Not Yet Implemented");
-            this.queue(action);
-
+            channel.sendMessage("Not Yet implemented").queue();
         } catch (Exception e) {
             System.out.println(e);
         }

@@ -1,9 +1,8 @@
-package com.tanukismite.fantasy.bot.commands.slashCommands;
+package com.tanukismite.fantasy.bot.commands.slash_commands;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.communicators.MercuryCommunicator;
-import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
 import net.dv8tion.jda.api.entities.Message;
@@ -46,19 +45,12 @@ public class User implements Command {
 
                 message = "ID: " + user.get("user_id").asText();
                 message += "\nDiscord: " + user.get("discord_name").asText();
-                action = Action.sendMessage(event.getChannel(), message);
-                this.queue(action);
+
+                event.getChannel().sendMessage(message).queue();
 
             }
 
         }
-
-    }
-
-    @Override
-    public <R> void queue(FluentRestAction<R, ?> request) {
-
-        request.queue();
 
     }
 

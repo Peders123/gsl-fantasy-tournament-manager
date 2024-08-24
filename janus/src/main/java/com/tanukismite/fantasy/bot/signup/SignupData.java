@@ -3,7 +3,7 @@ package com.tanukismite.fantasy.bot.signup;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.tanukismite.fantasy.bot.commands.slashCommands.CreateSignups;
+import com.tanukismite.fantasy.bot.commands.slash_commands.CreateSignups;
 
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;

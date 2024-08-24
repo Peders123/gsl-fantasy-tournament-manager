@@ -32,7 +32,4 @@ public class ExtendedCommand implements Command {
 
     }
 
-    @Override
-    public <R> void queue(FluentRestAction<R, ?> request) {}
-
 }

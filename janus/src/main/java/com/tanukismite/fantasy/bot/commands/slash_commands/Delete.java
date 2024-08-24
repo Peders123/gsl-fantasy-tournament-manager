@@ -1,4 +1,4 @@
-package com.tanukismite.fantasy.bot.commands.slashCommands;
+package com.tanukismite.fantasy.bot.commands.slash_commands;
 
 import java.io.IOException;
 
@@ -38,13 +38,6 @@ public class Delete implements Command {
             System.out.println("ERROR");
             e.printStackTrace();
         }
-
-    }
-
-    @Override
-    public <R> void queue(FluentRestAction<R, ?> request) {
-
-        request.queue();
 
     }
 

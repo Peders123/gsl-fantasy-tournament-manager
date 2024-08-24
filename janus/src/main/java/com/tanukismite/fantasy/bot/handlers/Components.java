@@ -14,6 +14,8 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
+import net.dv8tion.jda.api.interactions.components.text.TextInput;
+import net.dv8tion.jda.api.interactions.modals.Modal;
 import net.dv8tion.jda.api.requests.FluentRestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
@@ -65,22 +67,9 @@ public class Components {
 
     }
 
-    public static FluentRestAction<Message, MessageCreateAction> addActionRowMessage(FluentRestAction<Message, MessageCreateAction> action, ItemComponent... components) {
-        if (action instanceof MessageCreateAction) {
-            return ((MessageCreateAction)action).addActionRow(components);
-        }
+    public static Modal createModal(String id, String title, TextInput... components) {
 
-        throw new IllegalArgumentException("The action must be a MessageCreateAction");
-
-    }
- 
-    public static FluentRestAction<InteractionHook, ReplyCallbackAction> addActionRowReply(FluentRestAction<InteractionHook, ReplyCallbackAction> action, ItemComponent... components) {
-
-        if (action instanceof ReplyCallbackAction) {
-            return ((ReplyCallbackAction) action).addActionRow(components);
-        }
-        
-        throw new IllegalArgumentException("The action must be a ReplyCallbackAction");
+        return Modal.create(id, title).addActionRow(components).build();
 
     }
 

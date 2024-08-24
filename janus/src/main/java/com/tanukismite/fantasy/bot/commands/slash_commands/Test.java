@@ -1,7 +1,6 @@
-package com.tanukismite.fantasy.bot.commands.slashCommands;
+package com.tanukismite.fantasy.bot.commands.slash_commands;
 
 import com.tanukismite.fantasy.bot.commands.Command;
-import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -9,11 +8,11 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.requests.FluentRestAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
-public class Ping implements Command {
+public class Test implements Command {
 
     private SlashCommandInteractionEvent event;
 
-    public Ping(SlashCommandInteractionEvent event) {
+    public Test(SlashCommandInteractionEvent event) {
 
         this.event = event;
 
@@ -22,16 +21,13 @@ public class Ping implements Command {
     @Override
     public void execute(Handler handler) {
 
-        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, "Pong!");
+        String replyString = "";
 
-        action.queue();
+        for (int i = 0; i < event.getOption("iterations").getAsInt(); i++) {
+            replyString += event.getOption("content").getAsString() + "\n";
+        }
 
-    }
-
-    @Override
-    public <R> void queue(FluentRestAction<R, ?> request) {
-
-        request.queue();
+        event.reply(replyString).queue();
 
     }
 

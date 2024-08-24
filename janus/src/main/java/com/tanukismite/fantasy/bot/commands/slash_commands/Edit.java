@@ -1,7 +1,6 @@
-package com.tanukismite.fantasy.bot.commands.slashCommands;
+package com.tanukismite.fantasy.bot.commands.slash_commands;
 
 import com.tanukismite.fantasy.bot.commands.ExtendedCommand;
-import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Components;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
@@ -27,35 +26,17 @@ public class Edit extends ExtendedCommand {
     @Override
     public void execute(Handler handler) {
 
-        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, "Testing Buttons");
-
-        action = Components.addActionRowReply(action,
+        event.reply("Testing Buttons").addActionRow(
             Button.primary(event.getUser().getId() + ":edit", "EDIT"),
             Button.danger(event.getUser().getId() + ":delete", "DELETE")
-        );
-
-        this.queue(action);
+        ).queue();
  
-    }
-
-
-    @Override
-    public <R> void queue(FluentRestAction<R, ?> request) {
-
-        request.queue();
-
     }
 
     protected void editMessage(Handler handler, TextChannelImpl channel, String id) {
 
         try {
-
-            String message = "SUCCESS!";
-
-            RestAction<Message> action = Action.editMessage(channel, id, message);
-
-            action.queue();
-
+            channel.sendMessage("SUCCESS!").queue();
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -65,11 +46,7 @@ public class Edit extends ExtendedCommand {
     protected void deleteMessage(Handler handler, TextChannelImpl channel, String id) {
 
         try {
-
-            RestAction<Void> action = Action.deleteMessage(channel, id);
-
-            action.queue();
-
+            channel.deleteMessageById(id).queue();
         } catch (Exception e) {
             System.out.println(e);
         }

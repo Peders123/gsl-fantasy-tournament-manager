@@ -1,4 +1,4 @@
-package com.tanukismite.fantasy.bot.commands.slashCommands;
+package com.tanukismite.fantasy.bot.commands.slash_commands;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import com.tanukismite.fantasy.bot.commands.Command;
-import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -55,17 +54,8 @@ public class Volumes implements Command {
                 e.printStackTrace();
             }
         }
-
-        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(event, message);
-
-        action.queue();
-
-    }
-
-    @Override
-    public <R> void queue(FluentRestAction<R, ?> request) {
-
-        request.queue();
+        
+        event.reply(message).queue();
 
     }
 

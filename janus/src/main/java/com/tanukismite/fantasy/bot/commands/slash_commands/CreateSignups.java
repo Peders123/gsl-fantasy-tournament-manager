@@ -7,8 +7,8 @@ import java.time.format.DateTimeFormatter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.tanukismite.fantasy.bot.Role;
+import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.commands.Context;
-import com.tanukismite.fantasy.bot.commands.ExtendedCommand;
 import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
 import com.tanukismite.fantasy.bot.communicators.MercuryCommunicator;
 import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
@@ -40,7 +40,7 @@ import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 import net.dv8tion.jda.internal.requests.restaction.MessageCreateActionImpl;
 
-public class CreateSignups extends ExtendedCommand {
+public class CreateSignups implements Command {
 
     private SlashCommandInteractionEvent event;
     private int tournamentId;
@@ -101,7 +101,7 @@ public class CreateSignups extends ExtendedCommand {
     }
 
     // RENAME TO BE MORE DESCRIPTIVE OF THE FULL FUNCTION
-    protected void createModal(Handler handler, ButtonInteractionEvent buttonEvent, Boolean captain) {
+    public void createModal(Handler handler, ButtonInteractionEvent buttonEvent, Boolean captain) {
 
         Context context = handler.getContext();
 
@@ -160,12 +160,11 @@ public class CreateSignups extends ExtendedCommand {
             .setMaxLength(20)
             .build();
 
-        Modal modal = Modal.create(modalId, title).addActionRow(inputs).build();
-        buttonEvent.replyModal(modal).queue();
+        buttonEvent.replyModal(Components.createModal(modalId, title, inputs)).queue();
 
     }
 
-    protected void alreadySignedUp(Handler handler, ButtonInteractionEvent buttonEvent) {
+    public void alreadySignedUp(Handler handler, ButtonInteractionEvent buttonEvent) {
 
         String message = "You are already signed up with this discord account. If you want to re-do your signup, please first use the sign-out button!";
 
@@ -173,7 +172,7 @@ public class CreateSignups extends ExtendedCommand {
 
     }
 
-    protected void signout(Handler handler, ButtonInteractionEvent buttonEvent) {
+    public void signout(Handler handler, ButtonInteractionEvent buttonEvent) {
 
         Long longId = Long.parseLong(buttonEvent.getUser().getId());
 
@@ -213,7 +212,7 @@ public class CreateSignups extends ExtendedCommand {
 
     }
 
-    protected void submitModal(Handler handler, ModalInteractionEvent modalEvent) {
+    public void submitModal(Handler handler, ModalInteractionEvent modalEvent) {
 
         Context context = handler.getContext();
 
@@ -262,7 +261,7 @@ public class CreateSignups extends ExtendedCommand {
 
     }
 
-    protected void submitFirstRole(Handler handler, StringSelectInteractionEvent selectEvent) {
+    public void submitFirstRole(Handler handler, StringSelectInteractionEvent selectEvent) {
 
         Context context = handler.getContext();
 
@@ -278,7 +277,7 @@ public class CreateSignups extends ExtendedCommand {
 
     }
 
-    protected void submitSecondRole(Handler handler, StringSelectInteractionEvent selectEvent) {
+    public void submitSecondRole(Handler handler, StringSelectInteractionEvent selectEvent) {
 
         Context context = handler.getContext();
 
@@ -314,7 +313,7 @@ public class CreateSignups extends ExtendedCommand {
 
     }
 
-    protected void sendTestMessage(Handler handler, TextChannelImpl channel) {
+    public static void sendTestMessage(Handler handler, MessageChannel channel) {
 
         try {
             channel.sendMessage("Not Yet implemented").queue();

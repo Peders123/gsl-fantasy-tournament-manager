@@ -67,9 +67,15 @@ public class Components {
 
     }
 
-    public static Modal createModal(String id, String title, TextInput... components) {
+    public static Modal createModal(String id, String title, TextInput... inputs) {
 
-        return Modal.create(id, title).addActionRow(components).build();
+        Modal.Builder modal = Modal.create(id, title);
+
+        for (TextInput input : inputs) {
+            modal.addActionRow(input);
+        }
+
+        return modal.build();
 
     }
 

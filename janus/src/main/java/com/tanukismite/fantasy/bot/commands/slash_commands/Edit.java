@@ -1,10 +1,11 @@
 package com.tanukismite.fantasy.bot.commands.slash_commands;
 
-import com.tanukismite.fantasy.bot.commands.ExtendedCommand;
+import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.handlers.Components;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
@@ -13,7 +14,7 @@ import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 
-public class Edit extends ExtendedCommand {
+public class Edit implements Command {
 
     private SlashCommandInteractionEvent event;
 
@@ -33,7 +34,7 @@ public class Edit extends ExtendedCommand {
  
     }
 
-    protected void editMessage(Handler handler, TextChannelImpl channel, String id) {
+    public static void editMessage(Handler handler, MessageChannel channel, String id) {
 
         try {
             channel.sendMessage("SUCCESS!").queue();
@@ -43,7 +44,7 @@ public class Edit extends ExtendedCommand {
 
     }
 
-    protected void deleteMessage(Handler handler, TextChannelImpl channel, String id) {
+    public static void deleteMessage(Handler handler, MessageChannel channel, String id) {
 
         try {
             channel.deleteMessageById(id).queue();

@@ -66,12 +66,7 @@ public class ButtonListener extends BaseListener {
     private void edit(ButtonInteractionEvent event) {
 
         try {
-            this.handler.executeMethod(
-                new Edit(null),
-                "editMessage",
-                event.getMessageChannel(),
-                event.getMessageId()
-            );
+            Edit.editMessage(handler, event.getMessageChannel(), event.getMessageId());
         } catch (Exception e) {
             System.out.println("ERROR");
             System.out.println(e);
@@ -82,12 +77,7 @@ public class ButtonListener extends BaseListener {
     private void delete(ButtonInteractionEvent event) {
 
         try {
-            this.handler.executeMethod(
-                new Edit(null),
-                "deleteMessage",
-                event.getMessageChannel(),
-                event.getMessageId()
-            );
+            Edit.deleteMessage(handler, event.getMessageChannel(), event.getMessageId());
         } catch (Exception e) {
             System.out.println("ERROR");
             System.out.println(e);
@@ -117,12 +107,8 @@ public class ButtonListener extends BaseListener {
 
         if (signupExists == true) {
             try {
-                this.handler.executeMethod(
-                    this.handler.getContext().getSignupRoot(),
-                    "alreadySignedUp",
-                    event
-                );
-                return;
+                System.out.println("REFLECTION TESTING");
+                this.handler.getContext().getSignupRoot().alreadySignedUp(handler, event);
             } catch (Exception e) {
                 System.out.println("ERROR");
                 e.printStackTrace();
@@ -140,12 +126,7 @@ public class ButtonListener extends BaseListener {
         }
 
         try {
-            this.handler.executeMethod(
-                this.handler.getContext().getSignupRoot(),
-                "createModal",
-                event,
-                captain
-            );
+            this.handler.getContext().getSignupRoot().createModal(handler, event, captain);
         } catch (Exception e) {
             System.out.println("ERROR");
             e.printStackTrace();
@@ -175,11 +156,7 @@ public class ButtonListener extends BaseListener {
             event.reply("You are not currently signed up.").setEphemeral(true).queue();
         } else {
             try {
-                this.handler.executeMethod(
-                    this.handler.getContext().getSignupRoot(),
-                    "signout",
-                    event
-                );
+                this.handler.getContext().getSignupRoot().signout(handler, event);
             } catch (Exception e) {
                 System.out.println("ERROR");
                 e.printStackTrace();
@@ -191,11 +168,7 @@ public class ButtonListener extends BaseListener {
     private void notImplemented(MessageChannel channel) {
 
         try {
-            this.handler.executeMethod(
-                new CreateSignups(null),
-                "sendTestMessage",
-                channel
-            );
+            CreateSignups.sendTestMessage(handler, channel);
         } catch (Exception e) {
             System.out.println("ERROR");
             e.printStackTrace();

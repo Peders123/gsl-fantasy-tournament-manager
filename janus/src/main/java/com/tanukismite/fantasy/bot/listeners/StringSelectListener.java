@@ -20,11 +20,7 @@ public class StringSelectListener extends BaseListener {
 
             case "role1":
                 try {
-                    this.handler.executeMethod(
-                        signUpSession,
-                        "submitFirstRole",
-                        event
-                    );
+                    signUpSession.submitFirstRole(handler, event);
                 } catch (Exception e) {
                     System.out.println("ERROR");
                     e.printStackTrace();
@@ -33,11 +29,7 @@ public class StringSelectListener extends BaseListener {
 
             case "role2":
                 try {
-                    this.handler.executeMethod(
-                        signUpSession,
-                        "submitSecondRole",
-                        event
-                    );
+                    signUpSession.submitSecondRole(handler, event);
                 } catch (Exception e) {
                     System.out.println("ERROR");
                     e.printStackTrace();

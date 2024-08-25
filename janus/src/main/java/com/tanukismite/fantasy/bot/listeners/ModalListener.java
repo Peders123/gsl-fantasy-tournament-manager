@@ -20,39 +20,19 @@ public class ModalListener extends BaseListener {
 
             case "signup-modal":
 
-                if (id[2] == "captain-signup") {
-                    try {
-                        this.handler.executeMethod(
-                            this.handler.getContext().getSignupRoot(),
-                            "submitModal",
-                            event
-                        );
-                    } catch (Exception e) {
-                        System.out.println("ERROR");
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        this.handler.executeMethod(
-                            this.handler.getContext().getSignupRoot(),
-                            "submitModal",
-                            event
-                        );
-                    } catch (Exception e) {
-                        System.out.println("ERROR");
-                        e.printStackTrace();
-                    }
+                try {
+                    this.handler.getContext().getSignupRoot().submitModal(handler, event);
+                } catch (Exception e) {
+                    System.out.println("ERROR");
+                    e.printStackTrace();
                 }
+
                 break;
 
             case "tournament-modal":
 
                 try {
-                    this.handler.executeMethod(
-                        this.handler.getContext().getTournamentRoot(),
-                        "submitModal",
-                        event
-                    );
+                    this.handler.getContext().getTournamentRoot().submitModal(handler, event);
                 } catch (Exception e) {
                     System.out.println("ERROR");
                     e.printStackTrace();

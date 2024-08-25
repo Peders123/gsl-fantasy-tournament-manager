@@ -10,10 +10,14 @@ import com.tanukismite.fantasy.bot.communicators.UserCommunicator;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 import com.tanukismite.fantasy.bot.signup.UserSignupData;
 
-import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class ButtonListener extends BaseListener {
+
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
 
     public ButtonListener(Handler handler) {
         super(handler);
@@ -28,11 +32,11 @@ public class ButtonListener extends BaseListener {
         switch (type) {
 
             case "test":
-                System.out.println("TEST");
+                logger.info("Testing button.");
                 break;
 
             case "bad":
-                System.out.println("BAD");
+                logger.info("Bad button.");
                 break;
 
             case "edit":
@@ -66,9 +70,8 @@ public class ButtonListener extends BaseListener {
 
         try {
             Edit.editMessage(event.getMessageChannel(), event.getMessageId());
-        } catch (Exception e) {
-            System.out.println("ERROR");
-            System.out.println(e);
+        } catch (Exception error) {
+            logger.error("Error editing message with id {}", event.getMessageId(), error);
         }
 
     }
@@ -77,9 +80,8 @@ public class ButtonListener extends BaseListener {
 
         try {
             Edit.deleteMessage(event.getMessageChannel(), event.getMessageId());
-        } catch (Exception e) {
-            System.out.println("ERROR");
-            System.out.println(e);
+        } catch (Exception error) {
+            logger.error("Error deleting message with id {}", event.getMessageId(), error);
         }
 
     }
@@ -94,24 +96,25 @@ public class ButtonListener extends BaseListener {
 
         PlayerCommunicator playerCommunicator = (PlayerCommunicator) this.handler.getCommunicator("player");
         CaptainCommunicator captainCommunicator = (CaptainCommunicator) this.handler.getCommunicator("captain");
+
+        boolean playerExists;
+        boolean captainExists;
+
         try {
-            System.out.println("Player exists:" + Boolean.toString(playerCommunicator.getPlayerUserExists(longId)));
-            System.out.println("Captain exists:" + Boolean.toString(captainCommunicator.getCaptainUserExists(longId)));
-            signupExists = playerCommunicator.getPlayerUserExists(longId) || captainCommunicator.getCaptainUserExists(longId);
-            System.out.println(Boolean.toString(signupExists));
-        } catch (IOException e) {
-            System.out.println("HANDLE ERROR");
+            playerExists = playerCommunicator.getPlayerUserExists(longId);
+            captainExists = captainCommunicator.getCaptainUserExists(longId);
+        } catch (IOException error) {
+            logger.error("Error determining whether or not user is signed up.", error);
             return;
         }
 
+        logger.debug("Player exists: {}", playerExists);
+        logger.debug("Captain exists: {}", captainExists);
+
+        signupExists = playerExists || captainExists;
+
         if (signupExists) {
-            try {
-                System.out.println("REFLECTION TESTING");
-                this.handler.getContext().getSignupRoot().alreadySignedUp(event);
-            } catch (Exception e) {
-                System.out.println("ERROR");
-                e.printStackTrace();
-            }
+            this.handler.getContext().getSignupRoot().alreadySignedUp(event);
         }
 
         if (!exists) {
@@ -119,17 +122,12 @@ public class ButtonListener extends BaseListener {
                 UserSignupData data = new UserSignupData(event.getUser().getId(), event.getUser().getName());
                 userCommunicator.post(data);
             } catch (IOException e) {
-                System.out.println("HANDLE ERROR");
+                logger.error("Error creating user with id: {}", event.getUser().getId());
                 return;
             }
         }
 
-        try {
-            this.handler.getContext().getSignupRoot().createModal(handler, event, captain);
-        } catch (Exception e) {
-            System.out.println("ERROR");
-            e.printStackTrace();
-        }
+        this.handler.getContext().getSignupRoot().createModal(handler, event, captain);
 
     }
 
@@ -141,25 +139,28 @@ public class ButtonListener extends BaseListener {
 
         PlayerCommunicator playerCommunicator = (PlayerCommunicator) this.handler.getCommunicator("player");
         CaptainCommunicator captainCommunicator = (CaptainCommunicator) this.handler.getCommunicator("captain");
+
+        boolean playerExists;
+        boolean captainExists;
+
         try {
-            System.out.println("Player exists:" + Boolean.toString(playerCommunicator.getPlayerUserExists(longId)));
-            System.out.println("Captain exists:" + Boolean.toString(captainCommunicator.getCaptainUserExists(longId)));
-            signupExists = playerCommunicator.getPlayerUserExists(longId) || captainCommunicator.getCaptainUserExists(longId);
-            System.out.println(Boolean.toString(signupExists));
-        } catch (IOException e) {
-            System.out.println("HANDLE ERROR");
+            playerExists = playerCommunicator.getPlayerUserExists(longId);
+            captainExists = captainCommunicator.getCaptainUserExists(longId);
+        } catch (IOException error) {
+            logger.error("Error determining whether or not user is signed up.", error);
             return;
         }
+
+        logger.debug("Player exists: {}", playerExists);
+        logger.debug("Captain exists: {}", captainExists);
+
+        signupExists = playerExists || captainExists;
 
         if (!signupExists) {
             event.reply("You are not currently signed up.").setEphemeral(true).queue();
         } else {
-            try {
-                this.handler.getContext().getSignupRoot().signout(handler, event);
-            } catch (Exception e) {
-                System.out.println("ERROR");
-                e.printStackTrace();
-            }
+            logger.info("Deleting user signup with id {}", event.getUser().getId());
+            this.handler.getContext().getSignupRoot().signout(handler, event);
         }
 
     }

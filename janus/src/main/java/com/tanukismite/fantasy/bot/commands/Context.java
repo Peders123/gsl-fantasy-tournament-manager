@@ -29,10 +29,7 @@ public class Context {
     }
 
     public boolean signupDataExists(String id) {
-        if (userSignupSessions.get(id) == null) {
-            return false;
-        }
-        return true;
+        return userSignupSessions.get(id) == null;
     }
 
     public CreateSignups getSignupRoot() {

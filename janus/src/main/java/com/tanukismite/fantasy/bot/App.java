@@ -23,9 +23,15 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
-import static net.dv8tion.jda.api.interactions.commands.OptionType.*; 
+import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class App {
+
+    private static final Logger consoleLogger = LogManager.getLogger("ConsoleLogger");
+    private static final Logger fileLogger = LogManager.getLogger("FileLogger");
 
     public static OptionType getOptionType(int option) {
 
@@ -98,7 +104,8 @@ public class App {
 
         commands.queue();
 
-        System.out.println("Commands created");
+        fileLogger.info("Commands created");
+        consoleLogger.info("Commands created");
 
     }
 

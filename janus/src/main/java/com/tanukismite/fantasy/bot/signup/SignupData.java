@@ -5,10 +5,14 @@ import java.util.Map;
 
 import com.tanukismite.fantasy.bot.commands.slash_commands.CreateSignups;
 
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public abstract class SignupData implements PostData {
+
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
 
     protected String id;
     protected int tournamentId;
@@ -16,17 +20,13 @@ public abstract class SignupData implements PostData {
     protected CreateSignups signupRoot;
     protected GenericComponentInteractionCreateEvent signupSession;
 
-    protected SignupData() {
-        System.out.println("ERROR");
-    }
+    protected SignupData() {}
 
     protected SignupData(CreateSignups currentSession) {
 
-        System.out.println("CREATING");
-        System.out.println(currentSession);
+        logger.info("Creating signup data.");
 
         this.signupRoot = currentSession;
-
         this.ign = null;
 
     }
@@ -66,15 +66,11 @@ public abstract class SignupData implements PostData {
     public void setSignupSession(GenericComponentInteractionCreateEvent signupSession) {
         this.signupSession = signupSession;
     }
-
-    public abstract MessageEmbed toEmbed();
     
     @Override
     public String toString() {
 
-        String str = this.signupRoot.toString();
-
-        return str;
+        return this.signupRoot.toString();
 
     }
 

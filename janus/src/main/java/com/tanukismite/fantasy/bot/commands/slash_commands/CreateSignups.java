@@ -33,7 +33,12 @@ import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class CreateSignups implements Command {
+
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
 
     private SlashCommandInteractionEvent event;
     private int tournamentId;
@@ -52,12 +57,15 @@ public class CreateSignups implements Command {
     @Override
     public void execute(Handler handler) {
 
+        logger.info("Running command: CreateSignups");
+
         JsonNode node = null;
 
         try{
             node = handler.getCommunicator("tournament").getDetailed(this.tournamentId);
         } catch (IOException e) {
             e.printStackTrace();
+            logger.error("Error fetching tournament details for ID: {}", this.tournamentId, e);
         }
 
         Context context = handler.getContext();
@@ -97,8 +105,8 @@ public class CreateSignups implements Command {
 
         Context context = handler.getContext();
 
-        System.out.println("BUTTON ID: " + buttonEvent.getUser().getId());
-        System.out.println(this.signupRootId);
+        logger.debug("Button ID: {}", buttonEvent.getUser().getId());
+        logger.debug(this.signupRootId);
 
         if (captain) {
             if (context.signupDataExists(buttonEvent.getUser().getId())) {
@@ -173,32 +181,30 @@ public class CreateSignups implements Command {
 
         try {
             if (playerCommunicator.getPlayerUserExists(longId)) {
-                System.out.println("DELETING PLAYER");
+                logger.info("Deleting player from user: {}", longId);
                 playerCommunicator.delete(playerCommunicator.getPlayerUser(longId).get("player_id").asInt());
             } else if (captainCommunicator.getCaptainUserExists(longId)) {
-                System.out.println(tournamentId);
+                logger.info("Deleting captain from user: {}", longId);
                 captainCommunicator.delete(captainCommunicator.getCaptainUser(longId).get("captain_id").asInt());
             }
-        } catch (IOException e) {
-            System.out.println("ERROR");
-            e.printStackTrace();
+        } catch (IOException error) {
+            logger.error("Error when deleting player/captain: {}", longId, error);
         }
         
         boolean signupExists = false;
 
         try {
-            System.out.println("Player exists:" + Boolean.toString(playerCommunicator.getPlayerUserExists(longId)));
-            System.out.println("Captain exists:" + Boolean.toString(captainCommunicator.getCaptainUserExists(longId)));
             signupExists = playerCommunicator.getPlayerUserExists(longId) || captainCommunicator.getCaptainUserExists(longId);
-            System.out.println(Boolean.toString(signupExists));
-        } catch (IOException e) {
-            System.out.println("HANDLE ERROR");
+        } catch (IOException error) {
+            logger.error("Error determining whether account exists.", error);
             return;
         }
 
         if (signupExists) {
+            logger.warn("User was not deleted when they should have been for user: {}.", longId);
             buttonEvent.reply("Error when deleting user, please contact an admin.").setEphemeral(true).queue();
         } else {
+            logger.info("Deleted user signup successfully.");
             buttonEvent.reply("Signup deleted successfully.").setEphemeral(true).queue();
         }
 
@@ -209,10 +215,6 @@ public class CreateSignups implements Command {
         Context context = handler.getContext();
 
         String[] id = modalEvent.getModalId().split(":");
-
-        for (String i : id) {
-            System.out.println(i);
-        }
 
         SignupData data = null;
 
@@ -228,9 +230,8 @@ public class CreateSignups implements Command {
 
             try {
                 handler.getCommunicator("captain").post(CaptainSignupData.class.cast(data));
-            } catch (IOException e) {
-                System.out.println("ERROR");
-                e.printStackTrace();
+            } catch (IOException error) {
+                logger.error("Unable to write Captain to the database for user: {}", modalEvent.getUser().getId(), error);
             }
 
             modalEvent.reply("SUBMITTED").setEphemeral(true).queue();
@@ -263,8 +264,7 @@ public class CreateSignups implements Command {
         StringSelectMenu selection = Components.createSelectMenu("role2", Components.createSelectOptions("role2"));
 
         selectEvent.reply("Choose your secondary role:").setEphemeral(true).addActionRow(selection).queue(
-            hook -> selectEvent.getMessage().delete().queue(),
-            error -> System.out.println("OUT ERROR HANDLING")
+            hook -> selectEvent.getMessage().delete().queue()
         );
 
     }
@@ -288,30 +288,15 @@ public class CreateSignups implements Command {
         PlayerSignupData data = context.getUserSignupData(userId, PlayerSignupData.class);
         MessageEmbed embed = data.toEmbed();
 
-        
-
-        System.out.println(data.toMap().toString());
-
         try {
             communicator.post(data);
-        } catch (IOException e) {
-            System.out.println("FAILED TO WRITE PLAYER");
+        } catch (IOException error) {
+            logger.error("Failed to write Player to the database for user: {}", userId, error);
         }
 
         selectEvent.replyEmbeds(embed).setEphemeral(true).queue(
-            hook -> selectEvent.getMessage().delete().queue(),
-            error -> System.out.println("OUT ERROR HANDLING")
+            hook -> selectEvent.getMessage().delete().queue()
         );
-
-    }
-
-    public static void sendTestMessage(MessageChannel channel) {
-
-        try {
-            channel.sendMessage("Not Yet implemented").queue();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
 
     }
 
@@ -324,7 +309,7 @@ public class CreateSignups implements Command {
         try {
             response = communicator.getDetailed(userId);
         } catch (IOException e) {
-            System.out.println("Could not communicate, please try later.");
+            logger.error("Could not communicate, please try again later.");
             return false;
         }
 
@@ -336,7 +321,7 @@ public class CreateSignups implements Command {
             return false;
         }
 
-        System.out.println(response.toString());
+        logger.info("Found user: {}", response);
 
         int received = response.get("userId").asInt();
 

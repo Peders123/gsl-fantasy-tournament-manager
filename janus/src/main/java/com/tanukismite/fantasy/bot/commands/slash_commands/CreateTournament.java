@@ -11,7 +11,12 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class CreateTournament implements Command {
+
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
     
     private SlashCommandInteractionEvent event;
 
@@ -64,9 +69,8 @@ public class CreateTournament implements Command {
         
         try {
             handler.getCommunicator("tournament").post(data);
-        } catch (Exception e) {
-            System.out.println("ERROR");
-            e.printStackTrace();
+        } catch (Exception error) {
+            logger.error("Unable to write tournament to database", error);
         }
 
         modalEvent.replyEmbeds(data.toEmbed()).queue();

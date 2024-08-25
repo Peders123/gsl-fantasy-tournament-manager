@@ -12,7 +12,12 @@ import com.tanukismite.fantasy.bot.handlers.Handler;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Volumes implements Command {
+
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
     
     private SlashCommandInteractionEvent event;
 
@@ -47,9 +52,8 @@ public class Volumes implements Command {
                 writer.write(testMessage);
                 writer.close();
                 message.append("Written to file.");
-            } catch (IOException e) {
-                System.out.println("Could not write to test file");
-                e.printStackTrace();
+            } catch (IOException error) {
+                logger.error("Could not write to test file.", error);
             }
         }
         

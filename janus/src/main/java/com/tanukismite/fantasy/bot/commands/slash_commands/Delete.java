@@ -9,7 +9,12 @@ import com.tanukismite.fantasy.bot.signup.UserSignupData;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Delete implements Command {
+    
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
     
     private SlashCommandInteractionEvent event;
 
@@ -28,14 +33,11 @@ public class Delete implements Command {
 
         try {
             boolean success = communicator.post(data);
-            System.out.println(success);
-            System.out.println(communicator.get().toString());
+            logger.debug("User created: {}", success);
             success = communicator.delete(Long.parseLong(data.getId()));
-            System.out.println(success);
-            System.out.println(communicator.get().toString());
-        } catch (IOException e) {
-            System.out.println("ERROR");
-            e.printStackTrace();
+            logger.debug("User deleted: {}", success);
+        } catch (IOException error) {
+            logger.error("Issue when creating and deleting user.", error);
         }
 
     }

@@ -11,7 +11,12 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class HttpHandler {
+
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
 
     private URL url;
     private HttpURLConnection conn;
@@ -84,9 +89,7 @@ public class HttpHandler {
         }
         errorInput.close();
 
-        System.out.println("POST request not worked");
-        System.out.println("Response Code: " + responseCode);
-        System.out.println("Error Response: " + errorResponse.toString());
+        logger.error("Failed post. Code: {}\n{}", responseCode, errorResponse);
 
     }
 

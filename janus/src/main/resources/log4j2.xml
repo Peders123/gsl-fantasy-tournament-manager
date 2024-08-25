@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" name="tsl">
+    <Appenders>
+        <!-- Console Appender -->
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss} [%F:%L] %-5level %logger{36} - %msg {%t}%n"/>
+        </Console>
+
+        <!-- File Appender -->
+        <File name="FileAppender" fileName="/data/janus/logs/janus.log" append="true">
+            <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss} [%F:%L] %-5level %logger{36} - %msg {%t}%n"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <!-- Logger for console-only logging -->
+        <Logger name="ConsoleLogger" level="info" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Logger>
+
+        <!-- Logger for file-only logging -->
+        <Logger name="FileLogger" level="info" additivity="false">
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>

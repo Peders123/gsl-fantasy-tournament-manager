@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,7 +12,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tanukismite.fantasy.bot.HttpHandler;
 import com.tanukismite.fantasy.bot.signup.PostData;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public abstract class MercuryCommunicator {
+
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
 
     private String username;
     private String password;
@@ -23,6 +26,8 @@ public abstract class MercuryCommunicator {
 
     protected MercuryCommunicator() {
 
+        final String buildType = System.getenv("BUILD_TYPE");
+
         JsonNode configNode;
         JsonNode secretNode;
 
@@ -30,15 +35,14 @@ public abstract class MercuryCommunicator {
             ObjectMapper objectMapper = new ObjectMapper();
             configNode = objectMapper.readTree(new File("config.json"));
             secretNode = objectMapper.readTree(new File("secrets.json"));
-        } catch (IOException e) {
-            System.out.println("Could not read config files.");
-            e.printStackTrace();
+        } catch (IOException error) {
+            logger.error("Could not read config files.", error);
             return;
         }
         
-        this.username = configNode.get("proc").get("username").get(System.getenv("BUILD_TYPE")).asText();
-        this.password = secretNode.get("passwords").get("proc").get(System.getenv("BUILD_TYPE")).asText();
-        this.baseUrl = configNode.get("endpoint").get(System.getenv("BUILD_TYPE")).asText();
+        this.username = configNode.get("proc").get("username").get(buildType).asText();
+        this.password = secretNode.get("passwords").get("proc").get(buildType).asText();
+        this.baseUrl = configNode.get("endpoint").get(buildType).asText();
 
     }
 
@@ -55,12 +59,7 @@ public abstract class MercuryCommunicator {
         inputMap.put("password", this.password);
 
         tokenGrabber.writeFromMap(inputMap);
-
-        JsonNode response = tokenGrabber.readToJson();
-
-        System.out.println(response.get("token").asText());
-
-        this.token = response.get("token").asText();
+        this.token = tokenGrabber.readToJson().get("token").asText();
 
     }
 
@@ -82,9 +81,10 @@ public abstract class MercuryCommunicator {
     protected JsonNode genericGet(URL url) throws IOException {
 
         HttpHandler getter = createHttpHandler(url, "GET", null);
+        int responseCode = getter.getResponseCode();
 
-        if (getter.getResponseCode() != HttpURLConnection.HTTP_OK) {
-            System.out.println("ERROR - NOT SUCCESSFUL GET");
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            logger.error("Unsuccessful get: {}", responseCode);
             return getter.readToJson();
         }
         return getter.readToJson();
@@ -94,12 +94,10 @@ public abstract class MercuryCommunicator {
     protected boolean genericPost(URL url, Map<String, Object> inputMap) throws IOException {
 
         HttpHandler poster = createHttpHandler(url, "POST", inputMap);
+        int responseCode = poster.getResponseCode();
 
-        System.out.println(poster.getResponseCode());
-
-        if (poster.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
-            System.out.println("ERROR - NOT SUCCESSFUL POST");
-            poster.readError();
+        if (responseCode != HttpURLConnection.HTTP_CREATED) {
+            logger.error("Unsuccessful post: {}", responseCode);
             return false;
         }
         return true;
@@ -113,7 +111,7 @@ public abstract class MercuryCommunicator {
         if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
             return getter.readToJson();
         } else {
-            System.out.println("ERROR - NOT SUCCESSFUL GET");
+            logger.error("Unsuccessful get: {}", responseCode);
             return getter.readToJson();
         }
 

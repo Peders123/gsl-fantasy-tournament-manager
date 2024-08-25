@@ -1,6 +1,5 @@
 package com.tanukismite.fantasy.bot.listeners;
 
-import com.tanukismite.fantasy.bot.commands.slash_commands.CreateSignups;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
@@ -10,11 +9,7 @@ public class BaseListener extends ListenerAdapter {
 
     protected Handler handler;
 
-    public BaseListener() {
-
-        System.out.println("ERROR");
-
-    }
+    public BaseListener() {}
 
     public BaseListener(Handler handler) {
 
@@ -32,13 +27,8 @@ public class BaseListener extends ListenerAdapter {
 
     protected static void notImplemented(MessageChannel channel) {
 
-        try {
-            CreateSignups.sendTestMessage(channel);
-        } catch (Exception e) {
-            System.out.println("ERROR");
-            e.printStackTrace();
-        }
-
+        channel.sendMessage("Not Yet implemented").queue();
+  
     }
 
 }

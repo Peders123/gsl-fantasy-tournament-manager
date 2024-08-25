@@ -19,21 +19,13 @@ public class StringSelectListener extends BaseListener {
         switch (id) {
 
             case "role1":
-                try {
-                    signUpSession.submitFirstRole(handler, event);
-                } catch (Exception e) {
-                    System.out.println("ERROR");
-                    e.printStackTrace();
-                }
+
+                signUpSession.submitFirstRole(handler, event);
                 break;
 
             case "role2":
-                try {
-                    signUpSession.submitSecondRole(handler, event);
-                } catch (Exception e) {
-                    System.out.println("ERROR");
-                    e.printStackTrace();
-                }
+
+                signUpSession.submitSecondRole(handler, event);
                 break;
 
             default:

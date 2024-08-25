@@ -13,9 +13,7 @@ public class CaptainSignupData extends SignupData {
     private String reason;
     private String teamName;
 
-    public CaptainSignupData() {
-        System.out.println("ERROR");
-    }
+    public CaptainSignupData() {}
 
     public CaptainSignupData(CreateSignups currentSession) {
         super(currentSession);

@@ -26,19 +26,12 @@ import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
-import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
-import net.dv8tion.jda.api.interactions.modals.Modal;
-import net.dv8tion.jda.api.requests.FluentRestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
-import net.dv8tion.jda.api.requests.restaction.interactions.ModalCallbackAction;
-import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
-import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
-import net.dv8tion.jda.internal.requests.restaction.MessageCreateActionImpl;
 
 public class CreateSignups implements Command {
 
@@ -100,21 +93,20 @@ public class CreateSignups implements Command {
  
     }
 
-    // RENAME TO BE MORE DESCRIPTIVE OF THE FULL FUNCTION
-    public void createModal(Handler handler, ButtonInteractionEvent buttonEvent, Boolean captain) {
+    public void createModal(Handler handler, ButtonInteractionEvent buttonEvent, boolean captain) {
 
         Context context = handler.getContext();
 
         System.out.println("BUTTON ID: " + buttonEvent.getUser().getId());
         System.out.println(this.signupRootId);
 
-        if (Boolean.TRUE.equals(captain)) {
-            if (context.signupDataExists(buttonEvent.getUser().getId()) == true) {
+        if (captain) {
+            if (context.signupDataExists(buttonEvent.getUser().getId())) {
                 context.removeUserSignupData(buttonEvent.getUser().getId());
             }
             context.putUserSignupData(buttonEvent.getUser().getId(), new CaptainSignupData(this), CaptainSignupData.class);
         } else {
-            if (context.signupDataExists(buttonEvent.getUser().getId()) == true) {
+            if (context.signupDataExists(buttonEvent.getUser().getId())) {
                 context.removeUserSignupData(buttonEvent.getUser().getId());
             }
             context.putUserSignupData(buttonEvent.getUser().getId(), new PlayerSignupData(this), PlayerSignupData.class);
@@ -164,7 +156,7 @@ public class CreateSignups implements Command {
 
     }
 
-    public void alreadySignedUp(Handler handler, ButtonInteractionEvent buttonEvent) {
+    public void alreadySignedUp(ButtonInteractionEvent buttonEvent) {
 
         String message = "You are already signed up with this discord account. If you want to re-do your signup, please first use the sign-out button!";
 
@@ -204,7 +196,7 @@ public class CreateSignups implements Command {
             return;
         }
 
-        if (signupExists == true) {
+        if (signupExists) {
             buttonEvent.reply("Error when deleting user, please contact an admin.").setEphemeral(true).queue();
         } else {
             buttonEvent.reply("Signup deleted successfully.").setEphemeral(true).queue();
@@ -313,7 +305,7 @@ public class CreateSignups implements Command {
 
     }
 
-    public static void sendTestMessage(Handler handler, MessageChannel channel) {
+    public static void sendTestMessage(MessageChannel channel) {
 
         try {
             channel.sendMessage("Not Yet implemented").queue();
@@ -323,14 +315,14 @@ public class CreateSignups implements Command {
 
     }
 
-    public static boolean checkUserExists(Handler handler, long user_id) {
+    public static boolean checkUserExists(Handler handler, long userId) {
 
         MercuryCommunicator communicator = handler.getCommunicator("user");
 
         JsonNode response;
 
         try {
-            response = communicator.getDetailed(user_id);
+            response = communicator.getDetailed(userId);
         } catch (IOException e) {
             System.out.println("Could not communicate, please try later.");
             return false;
@@ -340,19 +332,15 @@ public class CreateSignups implements Command {
             return false;
         }
 
-        if (response.findValue("user_id") == null) {
+        if (response.findValue("userId") == null) {
             return false;
         }
 
         System.out.println(response.toString());
 
-        int received = response.get("user_id").asInt();
+        int received = response.get("userId").asInt();
 
-        if (received == user_id) {
-            return true;
-        }
-
-        return false;
+        return received == userId;
 
     }
 

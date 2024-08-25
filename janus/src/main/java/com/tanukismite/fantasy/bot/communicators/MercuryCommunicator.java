@@ -44,7 +44,7 @@ public abstract class MercuryCommunicator {
 
     public void initialise() throws IOException {
 
-        Dictionary<String, String> headers = new Hashtable<String, String>();
+        Map<String, String> headers = new HashMap<>();
         headers.put("User-Agent", "Mozilla/5.0");
         headers.put("Content-Type", "application/json");
 
@@ -66,7 +66,7 @@ public abstract class MercuryCommunicator {
 
     protected HttpHandler createHttpHandler(URL url, String method, Map<String, Object> inputMap) throws IOException {
 
-        Dictionary<String, String> headers = new Hashtable<>();
+        Map<String, String> headers = new HashMap<>();
         headers.put("User-Agent", "Mozilla/5.0");
         headers.put("Content-Type", "application/json");
         headers.put("Authorization", "Token " + this.token);

@@ -4,9 +4,6 @@ import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.requests.FluentRestAction;
-import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
 public class Test implements Command {
 
@@ -21,13 +18,13 @@ public class Test implements Command {
     @Override
     public void execute(Handler handler) {
 
-        String replyString = "";
+        StringBuilder replyString = new StringBuilder("");
 
         for (int i = 0; i < event.getOption("iterations").getAsInt(); i++) {
-            replyString += event.getOption("content").getAsString() + "\n";
+            replyString.append(event.getOption("content").getAsString() + "\n");
         }
 
-        event.reply(replyString).queue();
+        event.reply(replyString.toString()).queue();
 
     }
 

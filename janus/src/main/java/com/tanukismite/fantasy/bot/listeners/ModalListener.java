@@ -26,7 +26,6 @@ public class ModalListener extends BaseListener {
                     System.out.println("ERROR");
                     e.printStackTrace();
                 }
-
                 break;
 
             case "tournament-modal":
@@ -37,6 +36,10 @@ public class ModalListener extends BaseListener {
                     System.out.println("ERROR");
                     e.printStackTrace();
                 }
+                break;
+
+            default:
+                BaseListener.notImplemented(event.getChannel());
 
         }
 

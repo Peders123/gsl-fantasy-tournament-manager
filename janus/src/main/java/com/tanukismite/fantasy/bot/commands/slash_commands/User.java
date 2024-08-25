@@ -5,10 +5,7 @@ import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.communicators.MercuryCommunicator;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.requests.FluentRestAction;
-import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 
 import java.io.IOException;
 
@@ -25,8 +22,7 @@ public class User implements Command {
     @Override
     public void execute(Handler handler) {
 
-        String message;
-        FluentRestAction<Message, MessageCreateAction> action;
+        StringBuilder message;
 
         if (event.getOption("method").getAsString().equals("get")) {
 
@@ -43,8 +39,8 @@ public class User implements Command {
 
             for (JsonNode user : response) {
 
-                message = "ID: " + user.get("user_id").asText();
-                message += "\nDiscord: " + user.get("discord_name").asText();
+                message = new StringBuilder();
+                message.append("\nDiscord: " + user.get("discord_name").asText());
 
                 event.getChannel().sendMessage(message).queue();
 

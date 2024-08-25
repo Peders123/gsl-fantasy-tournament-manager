@@ -8,28 +8,24 @@ import org.jetbrains.annotations.Nullable;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
-import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.modals.Modal;
-import net.dv8tion.jda.api.requests.FluentRestAction;
-import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
-import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
 public class Components {
 
+    private Components() {
+        throw new IllegalStateException("Utility class");
+    }
+
     private static SelectOption createSelectOptionFromJson(JsonNode data) {
 
-        SelectOption option = SelectOption.of(data.get("label").asText(), data.get("value").asText())
+        return SelectOption.of(data.get("label").asText(), data.get("value").asText())
             .withDefault(data.get("isDefault").asBoolean())
             .withDescription(data.get("description").asText())
             .withEmoji(Emoji.fromFormatted(data.get("emoji").asText()));
-
-        return option;
 
     }
 

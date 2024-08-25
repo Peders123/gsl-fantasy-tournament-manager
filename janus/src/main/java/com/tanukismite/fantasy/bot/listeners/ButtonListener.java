@@ -51,13 +51,12 @@ public class ButtonListener extends BaseListener {
                 this.signup(event, true);
                 break;
 
-            case "players":
-                this.notImplemented(event.getChannel());
-                break;
-
             case "signout":
                 this.signout(event);
                 break;
+
+            default:
+                BaseListener.notImplemented(event.getChannel());
 
         }
 
@@ -66,7 +65,7 @@ public class ButtonListener extends BaseListener {
     private void edit(ButtonInteractionEvent event) {
 
         try {
-            Edit.editMessage(handler, event.getMessageChannel(), event.getMessageId());
+            Edit.editMessage(event.getMessageChannel(), event.getMessageId());
         } catch (Exception e) {
             System.out.println("ERROR");
             System.out.println(e);
@@ -77,7 +76,7 @@ public class ButtonListener extends BaseListener {
     private void delete(ButtonInteractionEvent event) {
 
         try {
-            Edit.deleteMessage(handler, event.getMessageChannel(), event.getMessageId());
+            Edit.deleteMessage(event.getMessageChannel(), event.getMessageId());
         } catch (Exception e) {
             System.out.println("ERROR");
             System.out.println(e);
@@ -105,17 +104,17 @@ public class ButtonListener extends BaseListener {
             return;
         }
 
-        if (signupExists == true) {
+        if (signupExists) {
             try {
                 System.out.println("REFLECTION TESTING");
-                this.handler.getContext().getSignupRoot().alreadySignedUp(handler, event);
+                this.handler.getContext().getSignupRoot().alreadySignedUp(event);
             } catch (Exception e) {
                 System.out.println("ERROR");
                 e.printStackTrace();
             }
         }
 
-        if (exists == false) {
+        if (!exists) {
             try {
                 UserSignupData data = new UserSignupData(event.getUser().getId(), event.getUser().getName());
                 userCommunicator.post(data);
@@ -152,7 +151,7 @@ public class ButtonListener extends BaseListener {
             return;
         }
 
-        if (signupExists == false) {
+        if (!signupExists) {
             event.reply("You are not currently signed up.").setEphemeral(true).queue();
         } else {
             try {
@@ -161,17 +160,6 @@ public class ButtonListener extends BaseListener {
                 System.out.println("ERROR");
                 e.printStackTrace();
             }
-        }
-
-    }
-
-    private void notImplemented(MessageChannel channel) {
-
-        try {
-            CreateSignups.sendTestMessage(handler, channel);
-        } catch (Exception e) {
-            System.out.println("ERROR");
-            e.printStackTrace();
         }
 
     }

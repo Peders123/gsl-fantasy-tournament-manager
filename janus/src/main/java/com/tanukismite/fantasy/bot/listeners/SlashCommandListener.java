@@ -65,6 +65,9 @@ public class SlashCommandListener extends BaseListener {
                 this.handler.execute(new Volumes(event));
                 break;
 
+            default:
+                BaseListener.notImplemented(event.getChannel());
+
         }
 
     }

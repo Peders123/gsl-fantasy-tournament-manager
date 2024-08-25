@@ -56,7 +56,6 @@ public class App {
 
         Handler handler = new Handler();
         jda.addEventListener(new ButtonListener(handler));
-        jda.addEventListener(new MessageListener(handler));
         jda.addEventListener(new ModalListener(handler));
         jda.addEventListener(new SlashCommandListener(handler));
         jda.addEventListener(new StringSelectListener(handler));
@@ -72,14 +71,14 @@ public class App {
             "src/main/java/com/tanukismite/fantasy/bot/config/slashCommands.json"
         ));
 
-        SlashCommandData slash_command;
+        SlashCommandData slashCommand;
         
         for (JsonNode commandNode : arrayNode) {
 
-            slash_command = Commands.slash(commandNode.get("name").asText(), commandNode.get("description").asText());
+            slashCommand = Commands.slash(commandNode.get("name").asText(), commandNode.get("description").asText());
 
             for (JsonNode optionNode : commandNode.get("options")) {
-                slash_command.addOption(
+                slashCommand.addOption(
                     App.getOptionType(optionNode.get("type").asInt()),
                     optionNode.get("name").asText(),
                     optionNode.get("description").asText(),
@@ -87,13 +86,13 @@ public class App {
                 );
             }
 
-            slash_command.setGuildOnly(commandNode.get("guildOnly").asBoolean());
-            slash_command.setDefaultPermissions(commandNode.get("adminOnly").asBoolean() ?
+            slashCommand.setGuildOnly(commandNode.get("guildOnly").asBoolean());
+            slashCommand.setDefaultPermissions(commandNode.get("adminOnly").asBoolean() ?
                 DefaultMemberPermissions.DISABLED : DefaultMemberPermissions.ENABLED
             );
 
             commands.addCommands(
-                slash_command
+                slashCommand
             );
         }
 

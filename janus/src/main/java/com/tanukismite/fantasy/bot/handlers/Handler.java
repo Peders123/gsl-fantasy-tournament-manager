@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.commands.Context;
-import com.tanukismite.fantasy.bot.commands.ExtendedCommand;
 import com.tanukismite.fantasy.bot.communicators.MercuryCommunicator;
 
 public class Handler {
@@ -19,10 +18,6 @@ public class Handler {
 
     public void execute(Command command) {
         command.execute(this);
-    }
-
-    public void executeMethod(ExtendedCommand command, String methodName, Object... params) throws Exception {
-        command.executeMethod(methodName, this, params);
     }
 
     public Context getContext() {

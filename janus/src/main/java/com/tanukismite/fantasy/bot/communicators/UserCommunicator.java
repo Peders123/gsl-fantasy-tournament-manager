@@ -7,7 +7,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.tanukismite.fantasy.bot.signup.PostData;
 import com.tanukismite.fantasy.bot.signup.UserSignupData;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class UserCommunicator extends MercuryCommunicator {
+
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
+    private static final String ID_ERROR = "Malformed userId in request: expected long, got {}";
 
     public UserCommunicator() {
 
@@ -16,7 +22,7 @@ public class UserCommunicator extends MercuryCommunicator {
         try {
             this.initialise();
         } catch (IOException e) {
-            System.out.println("ERROR ON CONSTRUCTION");
+            logger.error("Error on construction.");
         }
 
     }
@@ -33,9 +39,8 @@ public class UserCommunicator extends MercuryCommunicator {
 
     @Override
     public boolean post(PostData data) throws IOException {
-        System.out.println(data.getClass());
         if (!(data instanceof UserSignupData)) {
-            System.out.println("MALFORMED DATA SIGNUP FORMAT");
+            logger.error("Malformed user signup data format.");
             return false;
         }
         return genericPost(new URL(this.getBaseEndpoint()), data.toMap());
@@ -45,7 +50,7 @@ public class UserCommunicator extends MercuryCommunicator {
         if (userId instanceof Long) {
             return genericDetailedGet(new URL(this.getBaseEndpoint() + userId));
         } else {
-            System.out.println("ERROR: Malformed userId in request, expected long.");
+            logger.error(ID_ERROR, userId);
             return null;
         }
     }
@@ -55,7 +60,7 @@ public class UserCommunicator extends MercuryCommunicator {
         if (userId instanceof Long) {
             return genericDelete(new URL(this.getBaseEndpoint() + userId));
         } else {
-            System.out.println("ERROR: Malformed userId in request, expected long.");
+            logger.error(ID_ERROR, userId);
             return false;
         }
     }
@@ -64,12 +69,12 @@ public class UserCommunicator extends MercuryCommunicator {
     public <T> boolean put(T userId, PostData data) throws IOException {
         if (userId instanceof Long) {
             if (!(data instanceof UserSignupData)) {
-                System.out.println("MALFORMED DATA SIGNUP FORMAT");
+                logger.error("Malformed user signup data format.");
                 return false;
             }
             return genericPut(new URL(this.getBaseEndpoint() + userId), data.toMap());
         } else {
-            System.out.println("ERROR: Malformed userId in request, expected long.");
+            logger.error(ID_ERROR, userId);
             return false;
         }
     }

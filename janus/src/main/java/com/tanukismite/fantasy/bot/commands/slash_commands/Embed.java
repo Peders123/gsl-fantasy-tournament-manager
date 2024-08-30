@@ -1,18 +1,13 @@
-package com.tanukismite.fantasy.bot.commands.slashCommands;
+package com.tanukismite.fantasy.bot.commands.slash_commands;
 
 import java.awt.Color;
 
 import com.tanukismite.fantasy.bot.commands.Command;
-import com.tanukismite.fantasy.bot.handlers.Action;
-import com.tanukismite.fantasy.bot.handlers.Components;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
-import net.dv8tion.jda.api.requests.FluentRestAction;
-import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
 public class Embed implements Command {
     
@@ -35,17 +30,9 @@ public class Embed implements Command {
         embed.setColor(new Color(28, 19, 31, 255));
         embed.setFooter("June 14th");
 
-        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithEmbeds(event, embed.build());
-        action = Components.addActionRowReply(action,  Button.secondary(event.getUser().getId() + ":test", "TESTING"));
-
-        this.queue(action);
-
-    }
-
-    @Override
-    public <R> void queue(FluentRestAction<R, ?> request) {
-
-        request.queue();
+        event.replyEmbeds(embed.build()).addActionRow(
+            Button.secondary(event.getUser().getId() + ":test", "TESTING")
+        ).queue();
 
     }
 

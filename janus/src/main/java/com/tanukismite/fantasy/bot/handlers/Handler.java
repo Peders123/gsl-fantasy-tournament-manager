@@ -6,13 +6,15 @@ import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.commands.Context;
 import com.tanukismite.fantasy.bot.communicators.MercuryCommunicator;
 
+import net.dv8tion.jda.api.JDA;
+
 public class Handler {
 
     private Context context;
     private HashMap<String, MercuryCommunicator> communicators;
 
-    public Handler() {
-        this.context = new Context();
+    public Handler(JDA jda) {
+        this.context = new Context(jda);
         this.communicators = new HashMap<>();
     }
 

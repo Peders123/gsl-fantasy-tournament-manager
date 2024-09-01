@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String
 from Database import Base
 
-class Books(Base):
-    __tablename__ = "books"
+class Users(Base):
+    __tablename__ = "users"
 
-    id = Column(String, primary_key=True, index=True)
-    discord_id = Column(String)
+    id = Column(String, primary_key=True)
+    discord_name = Column(String)

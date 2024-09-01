@@ -23,13 +23,13 @@ class User(BaseModel):
     id: str = Field(max_length=64)
     discord_name: str = Field(max_length=32)
 
-@app.get("/")
+@app.get("/Users")
 def read_api(db: Session = Depends(get_db)):
     return db.query(models.Users).all()
 
 USERS = []
 
-@app.post("/")
+@app.post("/Users")
 def create_User(user: User, db:Session = Depends(get_db)):
     
     user_model = models.Users()
@@ -42,7 +42,7 @@ def create_User(user: User, db:Session = Depends(get_db)):
 
     return user
 
-@app.put("/{user_id}")
+@app.put("/Users/{user_id}")
 def update_User(user_id: str, user: User, db: Session = Depends(get_db)):
 
     user_model = db.query(models.Users).filter(models.Users.id == user_id).first()
@@ -62,7 +62,7 @@ def update_User(user_id: str, user: User, db: Session = Depends(get_db)):
     return user
 
 
-@app.delete("/{user_id}")
+@app.delete("/Users/{user_id}")
 def delete_user(user_id: str, db: Session = Depends(get_db)):
         
     user_model =  db.query(models.Users).filter(models.Users.id == user_id).first()

@@ -77,7 +77,6 @@ ENTRYPOINT ["./startTerra.sh"]
 
 FROM python:3.12-slim-bookworm AS mercury
 
-RUN mkdir -p /data/mercury
 
 RUN apt-get update
 RUN apt-get install -y expect
@@ -86,11 +85,8 @@ COPY --from=python-builder /opt/venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"
 
+COPY mercury /data/mercury
 COPY mercury/startMercury.sh /data/mercury
-COPY mercury/mercury /data/mercury/mercury
-COPY mercury/talaria /data/mercury/talaria
-COPY mercury/manage.py /data/mercury/.
-COPY mercury/dData.json /data/mercury/.
 COPY secrets.json /data/mercury/secrets.json
 
 EXPOSE 80 2222

@@ -53,7 +53,7 @@ class Captains(Base):
     team_name = Column(String)
     reason = Column(String)
     captain_budget = Column(Integer)
-    
+
 
 class Players(Base):
     __tablename__ = "Player"

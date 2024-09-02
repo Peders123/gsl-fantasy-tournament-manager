@@ -3,7 +3,6 @@ import os
 
 from django.apps import apps
 from django.core.management.base import BaseCommand
-from django.db import router
 
 from talaria.models import Tournament, User, Captain, Player
 

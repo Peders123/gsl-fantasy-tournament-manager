@@ -60,7 +60,7 @@ public class App {
         JDA jda = build.enableIntents(GatewayIntent.MESSAGE_CONTENT)
             .build();
 
-        Handler handler = new Handler();
+        Handler handler = new Handler(jda);
         jda.addEventListener(new ButtonListener(handler));
         jda.addEventListener(new ModalListener(handler));
         jda.addEventListener(new SlashCommandListener(handler));

@@ -1,11 +1,17 @@
 package com.tanukismite.fantasy.bot.commands.slash_commands;
 
 import java.awt.Color;
+import java.io.File;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.tanukismite.fantasy.bot.Role;
 import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.commands.Context;
@@ -19,8 +25,9 @@ import com.tanukismite.fantasy.bot.signup.PlayerSignupData;
 import com.tanukismite.fantasy.bot.signup.SignupData;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -39,18 +46,38 @@ import org.apache.logging.log4j.Logger;
 public class CreateSignups implements Command {
 
     private static final Logger logger = LogManager.getLogger("ConsoleLogger");
+    public static final String SIGNUP_STATE_FILE = "/data/janus/mount/janus/saves/signupRoot.ser";
 
+    @JsonIgnore
     private SlashCommandInteractionEvent event;
+    @JsonIgnore
+    private MessageChannel messageChannel;
+    @JsonIgnore
+    private User user;
+
     private int tournamentId;
-    private String signupRootId;
-    private String recentMessageId;
+    private String channelId;
+    private String userId;
+
+    @JsonCreator
+    public CreateSignups(
+        @JsonProperty("channelId") String channelId,
+        @JsonProperty("userId") String userId,
+        @JsonProperty("tournamentId") int tournamentId) {
+        this.channelId = channelId;
+        this.userId = userId;
+        this.tournamentId = tournamentId;
+    }
 
     public CreateSignups(SlashCommandInteractionEvent event) {
 
         this.event = event;
-        this.signupRootId = "TESTING ROOT ID";
-        this.recentMessageId = null;
         this.tournamentId = event.getOption("tournamentid").getAsInt();
+
+        this.messageChannel = event.getMessageChannel();
+        this.channelId = messageChannel.getId();
+        this.user = event.getUser();
+        this.userId = user.getId();
 
     }
 
@@ -63,14 +90,11 @@ public class CreateSignups implements Command {
 
         try{
             node = handler.getCommunicator("tournament").getDetailed(this.tournamentId);
-        } catch (IOException e) {
-            e.printStackTrace();
-            logger.error("Error fetching tournament details for ID: {}", this.tournamentId, e);
+        } catch (IOException error) {
+            logger.error("Error fetching tournament details for ID: {}", this.tournamentId, error);
         }
 
         Context context = handler.getContext();
-
-        MessageChannel channel = event.getMessageChannel();
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle(node.get("title").asText());
@@ -78,27 +102,21 @@ public class CreateSignups implements Command {
         embed.setColor(new Color(28, 19, 31, 255));
         embed.setFooter(CreateSignups.convertDate(node.get("datetime").asText()));
 
-        event.reply("Created!").setEphemeral(true).queue();
-        MessageCreateAction action = channel.sendMessageEmbeds(embed.build());
+        this.event.reply("Created!").setEphemeral(true).queue();
+        MessageCreateAction action = this.messageChannel.sendMessageEmbeds(embed.build());
 
         action.addActionRow(
-            Button.primary(event.getUser().getId() + ":player-signup", "Player Signup"),
-            Button.success(event.getUser().getId() + ":captain-signup", "Captain Signup"),
-            Button.danger(event.getUser().getId() + ":signout", "Signout")
+            Button.primary(this.user.getId() + ":player-signup", "Player Signup"),
+            Button.success(this.user.getId() + ":captain-signup", "Captain Signup"),
+            Button.danger(this.user.getId() + ":signout", "Signout")
         );
 
-        action.queue(
-            (Message message) -> {
-                String msgId = message.getId();
-                if (this.recentMessageId == null) {
-                    this.signupRootId = msgId;
-                }
-                this.recentMessageId = msgId;
-            }
-        );
+        action.queue();
 
         context.setSignupRoot(this);
- 
+
+        this.writeObject();
+
     }
 
     public void createModal(Handler handler, ButtonInteractionEvent buttonEvent, boolean captain) {
@@ -106,7 +124,6 @@ public class CreateSignups implements Command {
         Context context = handler.getContext();
 
         logger.debug("Button ID: {}", buttonEvent.getUser().getId());
-        logger.debug(this.signupRootId);
 
         if (captain) {
             if (context.signupDataExists(buttonEvent.getUser().getId())) {
@@ -126,7 +143,6 @@ public class CreateSignups implements Command {
         String title = captain ? "Captain Signup" : "Player signup";
         TextInput[] inputs;
 
-        
         if (captain) {
 
             inputs = new TextInput[3];
@@ -190,7 +206,7 @@ public class CreateSignups implements Command {
         } catch (IOException error) {
             logger.error("Error when deleting player/captain: {}", longId, error);
         }
-        
+
         boolean signupExists = false;
 
         try {
@@ -338,10 +354,52 @@ public class CreateSignups implements Command {
 
     }
 
-    public String toString() {
+    private void writeObject() {
 
-        return this.signupRootId;
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            objectMapper.writeValue(new File(CreateSignups.SIGNUP_STATE_FILE), this);
+            logger.info("Saved current signups to a file successfully.");
+        } catch (IOException error) {
+            logger.error("Error saving current signups to a file.", error);
+        }
 
+    }
+
+    public static CreateSignups readObject() {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        File file = new File(CreateSignups.SIGNUP_STATE_FILE);
+        if (!file.exists()) {
+            return null;
+        }
+
+        try {
+            return objectMapper.readValue(file, CreateSignups.class);
+        } catch (IOException error) {
+            logger.error("Error loading saved signups.", error);
+            return null;
+        }
+
+    }
+
+    public void initialiseNonSerializedFields(JDA jda) {
+
+        this.messageChannel = jda.getTextChannelById(this.channelId);
+        this.user = jda.getUserById(this.userId);
+
+    }
+
+    public int getTournamentId() {
+        return this.tournamentId;
+    }
+
+    public String getChannelId() {
+        return this.channelId;
+    }
+
+    public String getUserId() {
+        return this.userId;
     }
 
 }

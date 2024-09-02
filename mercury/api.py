@@ -8,25 +8,30 @@ app = FastAPI()
 
 models.Base.metadata.create_all(bind=engine)
 
+
 def get_db():
     try:
         db = SessionLocal()
         yield db
     finally:
         db.close()
+        
 
 @app.get("/ping")
 def ping():
     return ("Hey looks like all is well")
 
+
 class User(BaseModel):
     id: str = Field(max_length=64)
     discord_name: str = Field(max_length=32)
 
+
 class Tournament(BaseModel):
-    #date
+    # date
     title: str = Field(min_length=1, max_length=64)
     description: str = Field(max_length=256)
+
 
 class Captain(BaseModel):
     tournament_id: int = Field()
@@ -36,11 +41,12 @@ class Captain(BaseModel):
     reason: str = Field()
     captain_budget: int = Field()
 
+
 class Player(BaseModel):
     tournament_id: int = Field()
     user_id: str = Field()
     captain_id: str = Field()
-    smite_name: str = Field ()
+    smite_name: str = Field()
     role_1: str = Field()
     role_2: str = Field()
     smite_guru: str = Field()
@@ -52,10 +58,9 @@ def read_api(db: Session = Depends(get_db)):
     return db.query(models.Users).all()
 
 
-
 @app.post("/Users")
 def create_User(user: User, db:Session = Depends(get_db)):
-    
+
     user_model = models.Users()
     user_model.id = user.id
     user_model.discord_name = user.discord_name

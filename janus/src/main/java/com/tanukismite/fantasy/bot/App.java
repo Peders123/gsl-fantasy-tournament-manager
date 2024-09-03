@@ -23,9 +23,15 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
-import static net.dv8tion.jda.api.interactions.commands.OptionType.*; 
+import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class App {
+
+    private static final Logger consoleLogger = LogManager.getLogger("ConsoleLogger");
+    private static final Logger fileLogger = LogManager.getLogger("FileLogger");
 
     public static OptionType getOptionType(int option) {
 
@@ -54,9 +60,8 @@ public class App {
         JDA jda = build.enableIntents(GatewayIntent.MESSAGE_CONTENT)
             .build();
 
-        Handler handler = new Handler();
+        Handler handler = new Handler(jda);
         jda.addEventListener(new ButtonListener(handler));
-        jda.addEventListener(new MessageListener(handler));
         jda.addEventListener(new ModalListener(handler));
         jda.addEventListener(new SlashCommandListener(handler));
         jda.addEventListener(new StringSelectListener(handler));
@@ -72,14 +77,14 @@ public class App {
             "src/main/java/com/tanukismite/fantasy/bot/config/slashCommands.json"
         ));
 
-        SlashCommandData slash_command;
+        SlashCommandData slashCommand;
         
         for (JsonNode commandNode : arrayNode) {
 
-            slash_command = Commands.slash(commandNode.get("name").asText(), commandNode.get("description").asText());
+            slashCommand = Commands.slash(commandNode.get("name").asText(), commandNode.get("description").asText());
 
             for (JsonNode optionNode : commandNode.get("options")) {
-                slash_command.addOption(
+                slashCommand.addOption(
                     App.getOptionType(optionNode.get("type").asInt()),
                     optionNode.get("name").asText(),
                     optionNode.get("description").asText(),
@@ -87,19 +92,20 @@ public class App {
                 );
             }
 
-            slash_command.setGuildOnly(commandNode.get("guildOnly").asBoolean());
-            slash_command.setDefaultPermissions(commandNode.get("adminOnly").asBoolean() ?
+            slashCommand.setGuildOnly(commandNode.get("guildOnly").asBoolean());
+            slashCommand.setDefaultPermissions(commandNode.get("adminOnly").asBoolean() ?
                 DefaultMemberPermissions.DISABLED : DefaultMemberPermissions.ENABLED
             );
 
             commands.addCommands(
-                slash_command
+                slashCommand
             );
         }
 
         commands.queue();
 
-        System.out.println("Commands created");
+        fileLogger.info("Commands created");
+        consoleLogger.info("Commands created");
 
     }
 

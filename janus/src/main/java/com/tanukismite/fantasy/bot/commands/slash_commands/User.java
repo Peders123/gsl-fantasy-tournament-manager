@@ -1,19 +1,20 @@
-package com.tanukismite.fantasy.bot.commands.slashCommands;
+package com.tanukismite.fantasy.bot.commands.slash_commands;
+
+import java.io.IOException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.communicators.MercuryCommunicator;
-import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.requests.FluentRestAction;
-import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 
-import java.io.IOException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class User implements Command {
+
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
 
     private SlashCommandInteractionEvent event;
 
@@ -26,8 +27,7 @@ public class User implements Command {
     @Override
     public void execute(Handler handler) {
 
-        String message;
-        FluentRestAction<Message, MessageCreateAction> action;
+        StringBuilder message;
 
         if (event.getOption("method").getAsString().equals("get")) {
 
@@ -36,29 +36,21 @@ public class User implements Command {
             MercuryCommunicator communicator = handler.getCommunicator("user");
             try {
                 response = communicator.get();
-            } catch (IOException e) {
-                System.out.println("ERROR");
-                e.printStackTrace();
+            } catch (IOException error) {
+                logger.error("Error getting users.", error);
                 return;
             }
 
             for (JsonNode user : response) {
 
-                message = "ID: " + user.get("user_id").asText();
-                message += "\nDiscord: " + user.get("discord_name").asText();
-                action = Action.sendMessage(event.getChannel(), message);
-                this.queue(action);
+                message = new StringBuilder();
+                message.append("\nDiscord: " + user.get("discord_name").asText());
+
+                event.getChannel().sendMessage(message).queue();
 
             }
 
         }
-
-    }
-
-    @Override
-    public <R> void queue(FluentRestAction<R, ?> request) {
-
-        request.queue();
 
     }
 

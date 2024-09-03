@@ -9,7 +9,13 @@ import com.tanukismite.fantasy.bot.HttpHandler;
 import com.tanukismite.fantasy.bot.signup.PlayerSignupData;
 import com.tanukismite.fantasy.bot.signup.PostData;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class PlayerCommunicator extends MercuryCommunicator {
+
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
+    private static final String ID_ERROR = "Malformed playerId in request: expected integer, got {}";
 
     public PlayerCommunicator() {
 
@@ -18,7 +24,7 @@ public class PlayerCommunicator extends MercuryCommunicator {
         try {
             this.initialise();
         } catch (IOException e) {
-            System.out.println("ERROR ON CONSTRUCTION");
+            logger.error("Error on construction.");
         }
 
     }
@@ -36,7 +42,7 @@ public class PlayerCommunicator extends MercuryCommunicator {
     @Override
     public boolean post(PostData data) throws IOException {
         if (!(data instanceof PlayerSignupData)) {
-            System.out.println("MALFORMED DATA SIGNUP FORMAT");
+            logger.error("Malformed player signup data format.");
             return false;
         }
         return genericPost(new URL(this.getBaseEndpoint()), data.toMap());
@@ -47,7 +53,7 @@ public class PlayerCommunicator extends MercuryCommunicator {
         if (playerId instanceof Integer) {
             return genericDetailedGet(new URL(this.getBaseEndpoint() + playerId.toString()));
         } else {
-            System.out.println("ERROR: Malformed playerId in request, expected integer.");
+            logger.error(ID_ERROR, playerId);
             return null;
         }
     }
@@ -57,7 +63,7 @@ public class PlayerCommunicator extends MercuryCommunicator {
         if (playerId instanceof Integer) {
             return genericDelete(new URL(this.getBaseEndpoint() + playerId.toString()));
         } else {
-            System.out.println("ERROR: Malformed playerId in request, expected integer.");
+            logger.error(ID_ERROR, playerId);
             return false;
         }
     }
@@ -66,12 +72,12 @@ public class PlayerCommunicator extends MercuryCommunicator {
     public <T> boolean put(T playerId, PostData data) throws IOException {
         if (playerId instanceof Integer) {
             if (!(data instanceof PlayerSignupData)) {
-                System.out.println("MALFORMED DATA SIGNUP FORMAT");
+                logger.error("Malformed player signup data format.");
                 return false;
             }
             return genericPut(new URL(this.getBaseEndpoint() + playerId), data.toMap());
         } else {
-            System.out.println("ERROR: Malformed playerId in request, expected integer.");
+            logger.error(ID_ERROR, playerId);
             return false;
         }
     }
@@ -83,13 +89,14 @@ public class PlayerCommunicator extends MercuryCommunicator {
     public boolean getPlayerUserExists(long userId) throws IOException {
         URL url = new URL(this.getBaseEndpoint() + "by-user/" + userId);
         HttpHandler getter = createHttpHandler(url, "GET", null);
+        int responseCode = getter.getResponseCode();
 
-        if (getter.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
+        if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
             return false;
-        } else if (getter.getResponseCode() == HttpURLConnection.HTTP_OK) {
+        } else if (responseCode == HttpURLConnection.HTTP_OK) {
             return true;
         }
-        System.out.println("ERROR");
+        logger.error("Got unexpected response code: {}", responseCode);
         return false;
     }
 

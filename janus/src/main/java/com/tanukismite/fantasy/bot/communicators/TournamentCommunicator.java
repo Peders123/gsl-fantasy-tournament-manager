@@ -7,7 +7,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.tanukismite.fantasy.bot.signup.PostData;
 import com.tanukismite.fantasy.bot.signup.TournamentData;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class TournamentCommunicator extends MercuryCommunicator {
+
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
+    private static final String ID_ERROR = "Malformed tournamentId in request: expected integer, got {}";
 
     public TournamentCommunicator() {
 
@@ -16,7 +22,7 @@ public class TournamentCommunicator extends MercuryCommunicator {
         try {
             this.initialise();
         } catch (IOException e) {
-            System.out.println("ERROR ON CONSTRUCTION");
+            logger.error("Error on construction.");
         }
 
     }
@@ -33,9 +39,8 @@ public class TournamentCommunicator extends MercuryCommunicator {
 
     @Override
     public boolean post(PostData data) throws IOException {
-        System.out.println(data.toMap());
         if (!(data instanceof TournamentData)) {
-            System.out.println("MALFORMED DATA SIGNUP FORMAT");
+            logger.error("Malformed tournament signup data format.");
             return false;
         }
         return genericPost(new URL(this.getBaseEndpoint()), data.toMap());
@@ -46,7 +51,7 @@ public class TournamentCommunicator extends MercuryCommunicator {
         if (tournamentId instanceof Integer) {
             return genericDetailedGet(new URL(this.getBaseEndpoint() + tournamentId));
         } else {
-            System.out.println("ERROR: Malformed tournamentId in request, expected integer.");
+            logger.error(ID_ERROR, tournamentId);
             return null;
         }
     }
@@ -56,7 +61,7 @@ public class TournamentCommunicator extends MercuryCommunicator {
         if (tournamentId instanceof Integer) {
             return genericDelete(new URL(this.getBaseEndpoint() + tournamentId));
         } else {
-            System.out.println("ERROR: Malformed tournamentId in request, expected integer.");
+            logger.error(ID_ERROR, tournamentId);
             return false;
         }
     }
@@ -65,12 +70,12 @@ public class TournamentCommunicator extends MercuryCommunicator {
     public <T> boolean put(T tournamentId, PostData data) throws IOException {
         if (tournamentId instanceof Integer) {
             if (!(data instanceof TournamentData)) {
-                System.out.println("MALFORMED DATA SIGNUP FORMAT");
+                logger.error("Malformed tournament signup data format.");
                 return false;
             }
             return genericPut(new URL(this.getBaseEndpoint() + tournamentId), data.toMap());
         } else {
-            System.out.println("ERROR: Malformed tournamentId in request, expected integer.");
+            logger.error(ID_ERROR, tournamentId);
             return false;
         }
     }

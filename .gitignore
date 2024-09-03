@@ -10,6 +10,8 @@ secrets.json
 .vscode
 .venv
 .pylintrc
+.ser
+.log
 environment.sh
 
 migrations

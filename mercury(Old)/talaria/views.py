@@ -1,5 +1,3 @@
-import os
-
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
@@ -56,7 +54,7 @@ class PlayerViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             return PlayerPostSerializer
         return PlayerGetSerializer
-    
+
     @action(detail=False, methods=['get'], url_path='by-user/(?P<user_id>[^/.]+)')
     def get_by_user_id(self, request, user_id=None):
         try:

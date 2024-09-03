@@ -40,7 +40,7 @@ public class HttpHandler {
         String input = mapper.writeValueAsString(inputMap);
 
         this.conn.setDoOutput(true);
-        try (OutputStream os = conn.getOutputStream()) {
+        try (OutputStream os = conn.getOutputStream())                               {
             os.write(input.getBytes());
             os.flush();
         }
@@ -53,7 +53,7 @@ public class HttpHandler {
 
     }
 
-    public JsonNode readToJson() throws IOException {
+    public JsonNode readToJson()                                       throws IOException {
 
         int responseCode = this.conn.getResponseCode();
 

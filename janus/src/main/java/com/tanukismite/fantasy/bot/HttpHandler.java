@@ -49,6 +49,68 @@ public class HttpHandler {
 
     public int getResponseCode() throws IOException {
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
         return this.conn.getResponseCode();
 
     }
@@ -79,6 +141,56 @@ public class HttpHandler {
 
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     public void readError() throws IOException {
 
         int responseCode = this.conn.getResponseCode();

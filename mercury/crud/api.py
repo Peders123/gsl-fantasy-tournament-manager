@@ -1,3 +1,4 @@
+
 from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel, Field
 import models
@@ -15,7 +16,6 @@ def get_db():
         yield db
     finally:
         db.close()
-        
 
 
 @app.get("/ping")

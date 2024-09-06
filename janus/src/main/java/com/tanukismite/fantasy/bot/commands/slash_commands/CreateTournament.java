@@ -1,22 +1,22 @@
-package com.tanukismite.fantasy.bot.commands.slashCommands;
+package com.tanukismite.fantasy.bot.commands.slash_commands;
 
 import com.tanukismite.fantasy.bot.commands.Context;
-import com.tanukismite.fantasy.bot.commands.ExtendedCommand;
-import com.tanukismite.fantasy.bot.handlers.Action;
+import com.tanukismite.fantasy.bot.commands.Command;
+import com.tanukismite.fantasy.bot.handlers.Components;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 import com.tanukismite.fantasy.bot.signup.TournamentData;
 
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
-import net.dv8tion.jda.api.interactions.modals.Modal;
-import net.dv8tion.jda.api.requests.FluentRestAction;
-import net.dv8tion.jda.api.requests.restaction.interactions.ModalCallbackAction;
-import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
-public class CreateTournament extends ExtendedCommand {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public class CreateTournament implements Command {
+
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
     
     private SlashCommandInteractionEvent event;
 
@@ -53,39 +53,27 @@ public class CreateTournament extends ExtendedCommand {
             .setMaxLength(1000)
             .build();
 
-        Modal modal = Action.createModal(modalId, "Create Tournament", inputs);
-        FluentRestAction<Void, ModalCallbackAction> action = Action.replyWithModal(event, modal);
-        this.queue(action);
+        event.replyModal(Components.createModal(modalId, modalId, inputs)).queue();
 
         context.setTournamentRoot(this);
 
     }
 
-    protected void submitModal(Handler handler, ModalInteractionEvent modalEvent) {
+    public void submitModal(Handler handler, ModalInteractionEvent modalEvent) {
 
         TournamentData data = new TournamentData();
 
         data.setDateTime(modalEvent.getValue("datetime").getAsString());
         data.setTitle(modalEvent.getValue("title").getAsString());
         data.setDescription(modalEvent.getValue("description").getAsString());
-
         
         try {
             handler.getCommunicator("tournament").post(data);
-        } catch (Exception e) {
-            System.out.println("ERROR");
-            e.printStackTrace();
+        } catch (Exception error) {
+            logger.error("Unable to write tournament to database", error);
         }
 
-        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithEmbeds(modalEvent, data.toEmbed());
-        this.queue(action);
-
-    }
-
-    @Override
-    public <R> void queue(FluentRestAction<R, ?> request) {
-
-        request.queue();
+        modalEvent.replyEmbeds(data.toEmbed()).queue();
 
     }
 

@@ -1,4 +1,4 @@
-package com.tanukismite.fantasy.bot.commands.slashCommands;
+package com.tanukismite.fantasy.bot.commands.slash_commands;
 
 import java.io.IOException;
 
@@ -8,9 +8,13 @@ import com.tanukismite.fantasy.bot.handlers.Handler;
 import com.tanukismite.fantasy.bot.signup.UserSignupData;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.requests.FluentRestAction;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Delete implements Command {
+    
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
     
     private SlashCommandInteractionEvent event;
 
@@ -29,22 +33,12 @@ public class Delete implements Command {
 
         try {
             boolean success = communicator.post(data);
-            System.out.println(success);
-            System.out.println(communicator.get().toString());
+            logger.debug("User created: {}", success);
             success = communicator.delete(Long.parseLong(data.getId()));
-            System.out.println(success);
-            System.out.println(communicator.get().toString());
-        } catch (IOException e) {
-            System.out.println("ERROR");
-            e.printStackTrace();
+            logger.debug("User deleted: {}", success);
+        } catch (IOException error) {
+            logger.error("Issue when creating and deleting user.", error);
         }
-
-    }
-
-    @Override
-    public <R> void queue(FluentRestAction<R, ?> request) {
-
-        request.queue();
 
     }
 

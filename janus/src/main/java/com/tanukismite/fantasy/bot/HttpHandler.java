@@ -6,30 +6,29 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class HttpHandler {
+
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
 
     private URL url;
     private HttpURLConnection conn;
 
-    public HttpHandler(URL url, String requestMethod, Dictionary<String, String> headers) throws IOException {
+    public HttpHandler(URL url, String requestMethod, Map<String, String> headers) throws IOException {
 
         this.url = url;
         this.conn = (HttpURLConnection) this.url.openConnection();
         this.conn.setRequestMethod(requestMethod);
 
-        Enumeration<String> keys = headers.keys();
-        String key;
-
-        while(keys.hasMoreElements()) {
-            key = (String) keys.nextElement();
-            conn.setRequestProperty(key, headers.get(key));
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            this.conn.setRequestProperty(entry.getKey(), entry.getValue());
         }
 
     }
@@ -69,9 +68,7 @@ public class HttpHandler {
             reader.close();
 
             ObjectMapper mapper = new ObjectMapper();
-            JsonNode unwrappedResponse = mapper.readTree((response.toString()));
-
-            return unwrappedResponse;
+            return mapper.readTree((response.toString()));
 
         }
 
@@ -92,9 +89,7 @@ public class HttpHandler {
         }
         errorInput.close();
 
-        System.out.println("POST request not worked");
-        System.out.println("Response Code: " + responseCode);
-        System.out.println("Error Response: " + errorResponse.toString());
+        logger.error("Failed post. Code: {}\n{}", responseCode, errorResponse);
 
     }
 

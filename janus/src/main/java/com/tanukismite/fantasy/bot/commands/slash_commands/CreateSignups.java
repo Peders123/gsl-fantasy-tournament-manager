@@ -1,18 +1,23 @@
-package com.tanukismite.fantasy.bot.commands.slashCommands;
+package com.tanukismite.fantasy.bot.commands.slash_commands;
 
 import java.awt.Color;
+import java.io.File;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.tanukismite.fantasy.bot.Role;
+import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.commands.Context;
-import com.tanukismite.fantasy.bot.commands.ExtendedCommand;
 import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
 import com.tanukismite.fantasy.bot.communicators.MercuryCommunicator;
 import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
-import com.tanukismite.fantasy.bot.handlers.Action;
 import com.tanukismite.fantasy.bot.handlers.Components;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 import com.tanukismite.fantasy.bot.signup.CaptainSignupData;
@@ -20,57 +25,76 @@ import com.tanukismite.fantasy.bot.signup.PlayerSignupData;
 import com.tanukismite.fantasy.bot.signup.SignupData;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
-import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
-import net.dv8tion.jda.api.interactions.modals.Modal;
-import net.dv8tion.jda.api.requests.FluentRestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
-import net.dv8tion.jda.api.requests.restaction.interactions.ModalCallbackAction;
-import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
-import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
-import net.dv8tion.jda.internal.requests.restaction.MessageCreateActionImpl;
 
-public class CreateSignups extends ExtendedCommand {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+public class CreateSignups implements Command {
+
+    private static final Logger logger = LogManager.getLogger("ConsoleLogger");
+    public static final String SIGNUP_STATE_FILE = "/data/janus/mount/janus/saves/signupRoot.ser";
+
+    @JsonIgnore
     private SlashCommandInteractionEvent event;
+    @JsonIgnore
+    private MessageChannel messageChannel;
+    @JsonIgnore
+    private User user;
+
     private int tournamentId;
-    private String signupRootId;
-    private String recentMessageId;
+    private String channelId;
+    private String userId;
+
+    @JsonCreator
+    public CreateSignups(
+        @JsonProperty("channelId") String channelId,
+        @JsonProperty("userId") String userId,
+        @JsonProperty("tournamentId") int tournamentId) {
+        this.channelId = channelId;
+        this.userId = userId;
+        this.tournamentId = tournamentId;
+    }
 
     public CreateSignups(SlashCommandInteractionEvent event) {
 
         this.event = event;
-        this.signupRootId = "TESTING ROOT ID";
-        this.recentMessageId = null;
         this.tournamentId = event.getOption("tournamentid").getAsInt();
+
+        this.messageChannel = event.getMessageChannel();
+        this.channelId = messageChannel.getId();
+        this.user = event.getUser();
+        this.userId = user.getId();
 
     }
 
     @Override
     public void execute(Handler handler) {
 
+        logger.info("Running command: CreateSignups");
+
         JsonNode node = null;
 
         try{
             node = handler.getCommunicator("tournament").getDetailed(this.tournamentId);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException error) {
+            logger.error("Error fetching tournament details for ID: {}", this.tournamentId, error);
         }
 
         Context context = handler.getContext();
-
-        MessageChannel channel = event.getMessageChannel();
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle(node.get("title").asText());
@@ -78,56 +102,36 @@ public class CreateSignups extends ExtendedCommand {
         embed.setColor(new Color(28, 19, 31, 255));
         embed.setFooter(CreateSignups.convertDate(node.get("datetime").asText()));
 
-        FluentRestAction<InteractionHook, ReplyCallbackAction> response = Action.replyWithMessage(event, "Created!", true);
-        FluentRestAction<Message, MessageCreateAction> action = Action.sendMessageWithEmbed(channel, embed.build());
+        this.event.reply("Created!").setEphemeral(true).queue();
+        MessageCreateAction action = this.messageChannel.sendMessageEmbeds(embed.build());
 
-        action = Components.addActionRowMessage(action,
-            Button.primary(event.getUser().getId() + ":player-signup", "Player Signup"),
-            Button.success(event.getUser().getId() + ":captain-signup", "Captain Signup"),
-            Button.danger(event.getUser().getId() + ":signout", "Signout")
+        action.addActionRow(
+            Button.primary(this.user.getId() + ":player-signup", "Player Signup"),
+            Button.success(this.user.getId() + ":captain-signup", "Captain Signup"),
+            Button.danger(this.user.getId() + ":signout", "Signout")
         );
 
-        this.queue(response);
-        this.queue(action);
+        action.queue();
 
         context.setSignupRoot(this);
- 
-    }
 
-    @Override
-    public <R> void queue(FluentRestAction<R, ?> request) {
-
-        if (request instanceof MessageCreateActionImpl) {
-            request.queue((R message) -> {
-                if (message instanceof Message) {
-                    String msgId = ((Message) message).getId();
-                    if (this.recentMessageId == null) {
-                        this.signupRootId = msgId;
-                    }
-                    this.recentMessageId = msgId;
-                }
-            });
-        } else {
-            request.queue();
-        }
+        this.writeObject();
 
     }
 
-    // RENAME TO BE MORE DESCRIPTIVE OF THE FULL FUNCTION
-    protected void createModal(Handler handler, ButtonInteractionEvent buttonEvent, Boolean captain) {
+    public void createModal(Handler handler, ButtonInteractionEvent buttonEvent, boolean captain) {
 
         Context context = handler.getContext();
 
-        System.out.println("BUTTON ID: " + buttonEvent.getUser().getId());
-        System.out.println(this.signupRootId);
+        logger.debug("Button ID: {}", buttonEvent.getUser().getId());
 
         if (captain) {
-            if (context.signupDataExists(buttonEvent.getUser().getId()) == true) {
+            if (context.signupDataExists(buttonEvent.getUser().getId())) {
                 context.removeUserSignupData(buttonEvent.getUser().getId());
             }
             context.putUserSignupData(buttonEvent.getUser().getId(), new CaptainSignupData(this), CaptainSignupData.class);
         } else {
-            if (context.signupDataExists(buttonEvent.getUser().getId()) == true) {
+            if (context.signupDataExists(buttonEvent.getUser().getId())) {
                 context.removeUserSignupData(buttonEvent.getUser().getId());
             }
             context.putUserSignupData(buttonEvent.getUser().getId(), new PlayerSignupData(this), PlayerSignupData.class);
@@ -139,7 +143,6 @@ public class CreateSignups extends ExtendedCommand {
         String title = captain ? "Captain Signup" : "Player signup";
         TextInput[] inputs;
 
-        
         if (captain) {
 
             inputs = new TextInput[3];
@@ -173,23 +176,19 @@ public class CreateSignups extends ExtendedCommand {
             .setMaxLength(20)
             .build();
 
-
-        Modal modal = Action.createModal(modalId, title, inputs);
-        FluentRestAction<Void, ModalCallbackAction> action = Action.replyWithModal(buttonEvent, modal);
-        this.queue(action);
+        buttonEvent.replyModal(Components.createModal(modalId, title, inputs)).queue();
 
     }
 
-    protected void alreadySignedUp(Handler handler, ButtonInteractionEvent buttonEvent) {
+    public void alreadySignedUp(ButtonInteractionEvent buttonEvent) {
 
         String message = "You are already signed up with this discord account. If you want to re-do your signup, please first use the sign-out button!";
 
-        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(buttonEvent, message, true);
-        this.queue(action);
+        buttonEvent.reply(message).setEphemeral(true).queue();
 
     }
 
-    protected void signout(Handler handler, ButtonInteractionEvent buttonEvent) {
+    public void signout(Handler handler, ButtonInteractionEvent buttonEvent) {
 
         Long longId = Long.parseLong(buttonEvent.getUser().getId());
 
@@ -198,46 +197,40 @@ public class CreateSignups extends ExtendedCommand {
 
         try {
             if (playerCommunicator.getPlayerUserExists(longId)) {
-                System.out.println("DELETING PLAYER");
+                logger.info("Deleting player from user: {}", longId);
                 playerCommunicator.delete(playerCommunicator.getPlayerUser(longId).get("player_id").asInt());
             } else if (captainCommunicator.getCaptainUserExists(longId)) {
-                System.out.println(tournamentId);
+                logger.info("Deleting captain from user: {}", longId);
                 captainCommunicator.delete(captainCommunicator.getCaptainUser(longId).get("captain_id").asInt());
             }
-        } catch (IOException e) {
-            System.out.println("ERROR");
-            e.printStackTrace();
+        } catch (IOException error) {
+            logger.error("Error when deleting player/captain: {}", longId, error);
         }
-        
+
         boolean signupExists = false;
 
         try {
-            System.out.println("Player exists:" + Boolean.toString(playerCommunicator.getPlayerUserExists(longId)));
-            System.out.println("Captain exists:" + Boolean.toString(captainCommunicator.getCaptainUserExists(longId)));
             signupExists = playerCommunicator.getPlayerUserExists(longId) || captainCommunicator.getCaptainUserExists(longId);
-            System.out.println(Boolean.toString(signupExists));
-        } catch (IOException e) {
-            System.out.println("HANDLE ERROR");
+        } catch (IOException error) {
+            logger.error("Error determining whether account exists.", error);
             return;
         }
 
-        if (signupExists == true) {
-            Action.replyWithMessage(buttonEvent, "Error when deleting user, please contact an admin.", true).queue();
+        if (signupExists) {
+            logger.warn("User was not deleted when they should have been for user: {}.", longId);
+            buttonEvent.reply("Error when deleting user, please contact an admin.").setEphemeral(true).queue();
         } else {
-            Action.replyWithMessage(buttonEvent, "Signup deleted successfully.", true).queue();
+            logger.info("Deleted user signup successfully.");
+            buttonEvent.reply("Signup deleted successfully.").setEphemeral(true).queue();
         }
 
     }
 
-    protected void submitModal(Handler handler, ModalInteractionEvent modalEvent) {
+    public void submitModal(Handler handler, ModalInteractionEvent modalEvent) {
 
         Context context = handler.getContext();
 
         String[] id = modalEvent.getModalId().split(":");
-
-        for (String i : id) {
-            System.out.println(i);
-        }
 
         SignupData data = null;
 
@@ -253,13 +246,11 @@ public class CreateSignups extends ExtendedCommand {
 
             try {
                 handler.getCommunicator("captain").post(CaptainSignupData.class.cast(data));
-            } catch (IOException e) {
-                System.out.println("ERROR");
-                e.printStackTrace();
+            } catch (IOException error) {
+                logger.error("Unable to write Captain to the database for user: {}", modalEvent.getUser().getId(), error);
             }
 
-            FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(modalEvent, "SUBMITTED", true);
-            this.queue(action);
+            modalEvent.reply("SUBMITTED").setEphemeral(true).queue();
 
         } else if (id[2].equals("player-signup")) {
 
@@ -272,36 +263,29 @@ public class CreateSignups extends ExtendedCommand {
 
             SelectOption[] options = Components.createSelectOptions("role1");
             StringSelectMenu selection = Components.createSelectMenu("role1", options);
-            FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(modalEvent, "Choose your primary role:", true);
-            Components.addActionRowReply(action, selection);
-    
-            this.queue(action);
+
+            modalEvent.reply("Choose your primary role:").setEphemeral(true).addActionRow(selection).queue();
 
         }
 
     }
 
-    protected void submitFirstRole(Handler handler, StringSelectInteractionEvent selectEvent) {
+    public void submitFirstRole(Handler handler, StringSelectInteractionEvent selectEvent) {
 
         Context context = handler.getContext();
 
         PlayerSignupData data = context.getUserSignupData(selectEvent.getUser().getId(), PlayerSignupData.class);
         data.setRole1(Role.valueOf(selectEvent.getValues().get(0)));
 
-        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithMessage(selectEvent, "Choose your secondary role:", true);
         StringSelectMenu selection = Components.createSelectMenu("role2", Components.createSelectOptions("role2"));
-        Components.addActionRowReply(action, selection);
 
-        action.queue(
-            hook -> {
-                selectEvent.getMessage().delete().queue();
-            },
-            error -> System.out.println("OUT ERROR HANDLING")
+        selectEvent.reply("Choose your secondary role:").setEphemeral(true).addActionRow(selection).queue(
+            hook -> selectEvent.getMessage().delete().queue()
         );
 
     }
 
-    protected void submitSecondRole(Handler handler, StringSelectInteractionEvent selectEvent) {
+    public void submitSecondRole(Handler handler, StringSelectInteractionEvent selectEvent) {
 
         Context context = handler.getContext();
 
@@ -319,48 +303,29 @@ public class CreateSignups extends ExtendedCommand {
 
         PlayerSignupData data = context.getUserSignupData(userId, PlayerSignupData.class);
         MessageEmbed embed = data.toEmbed();
-        FluentRestAction<InteractionHook, ReplyCallbackAction> action = Action.replyWithEmbeds(selectEvent, embed, true);
-
-        System.out.println(data.toMap().toString());
 
         try {
             communicator.post(data);
-        } catch (IOException e) {
-            System.out.println("FAILED TO WRITE PLAYER");
+        } catch (IOException error) {
+            logger.error("Failed to write Player to the database for user: {}", userId, error);
         }
 
-        action.queue(
-            hook -> {
-                selectEvent.getMessage().delete().queue();
-            },
-            error -> System.out.println("OUT ERROR HANDLING")
+        selectEvent.replyEmbeds(embed).setEphemeral(true).queue(
+            hook -> selectEvent.getMessage().delete().queue()
         );
 
     }
 
-    protected void sendTestMessage(Handler handler, TextChannelImpl channel) {
-
-        try {
-
-            FluentRestAction<Message, MessageCreateAction> action = Action.sendMessage(channel, "Not Yet Implemented");
-            this.queue(action);
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-    }
-
-    public static boolean checkUserExists(Handler handler, long user_id) {
+    public static boolean checkUserExists(Handler handler, long userId) {
 
         MercuryCommunicator communicator = handler.getCommunicator("user");
 
         JsonNode response;
 
         try {
-            response = communicator.getDetailed(user_id);
+            response = communicator.getDetailed(userId);
         } catch (IOException e) {
-            System.out.println("Could not communicate, please try later.");
+            logger.error("Could not communicate, please try again later.");
             return false;
         }
 
@@ -368,19 +333,15 @@ public class CreateSignups extends ExtendedCommand {
             return false;
         }
 
-        if (response.findValue("user_id") == null) {
+        if (response.findValue("userId") == null) {
             return false;
         }
 
-        System.out.println(response.toString());
+        logger.info("Found user: {}", response);
 
-        int received = response.get("user_id").asInt();
+        int received = response.get("userId").asInt();
 
-        if (received == user_id) {
-            return true;
-        }
-
-        return false;
+        return received == userId;
 
     }
 
@@ -393,10 +354,52 @@ public class CreateSignups extends ExtendedCommand {
 
     }
 
-    public String toString() {
+    private void writeObject() {
 
-        return this.signupRootId;
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            objectMapper.writeValue(new File(CreateSignups.SIGNUP_STATE_FILE), this);
+            logger.info("Saved current signups to a file successfully.");
+        } catch (IOException error) {
+            logger.error("Error saving current signups to a file.", error);
+        }
 
+    }
+
+    public static CreateSignups readObject() {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        File file = new File(CreateSignups.SIGNUP_STATE_FILE);
+        if (!file.exists()) {
+            return null;
+        }
+
+        try {
+            return objectMapper.readValue(file, CreateSignups.class);
+        } catch (IOException error) {
+            logger.error("Error loading saved signups.", error);
+            return null;
+        }
+
+    }
+
+    public void initialiseNonSerializedFields(JDA jda) {
+
+        this.messageChannel = jda.getTextChannelById(this.channelId);
+        this.user = jda.getUserById(this.userId);
+
+    }
+
+    public int getTournamentId() {
+        return this.tournamentId;
+    }
+
+    public String getChannelId() {
+        return this.channelId;
+    }
+
+    public String getUserId() {
+        return this.userId;
     }
 
 }

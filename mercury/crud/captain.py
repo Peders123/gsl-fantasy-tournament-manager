@@ -1,13 +1,14 @@
-from sqlalchemy.orm import Session
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from models import Captain
 
 
-def get_captain(database: Session, captain_id: int):
+async def get_captain(database: AsyncSession, captain_id: int):
 
-    return database.query(Captain).filter(Captain.captain_id==captain_id).first()
+    return (await database.scalars(select(Captain).where(Captain.captain_id==captain_id))).first()
 
 
-def get_captains(database: Session):
+async def get_captains(database: AsyncSession):
 
-    return database.query(Captain).all()
+    return (await database.scalars(select(Captain))).all()

@@ -6,7 +6,7 @@ from models import Captain
 
 async def get_captain(database: AsyncSession, captain_id: int):
 
-    return (await database.scalars(select(Captain).where(Captain.captain_id==captain_id))).first()
+    return (await database.scalars(select(Captain).where(Captain.captain_id == captain_id))).first()
 
 
 async def get_captains(database: AsyncSession):

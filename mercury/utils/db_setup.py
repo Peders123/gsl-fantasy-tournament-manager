@@ -29,7 +29,7 @@ class DatabaseSessionManager:
     async def connect(self) -> AsyncIterator[AsyncConnection]:
         if self._engine is None:
             raise Exception("DatabaseSessionManager is not initialised.")
-        
+
         async with self._engine.begin() as connection:
             try:
                 yield connection
@@ -41,7 +41,7 @@ class DatabaseSessionManager:
     async def session(self) -> AsyncIterator[AsyncSession]:
         if self._sessionmaker is None:
             raise Exception("DatabaseSessionManager is not initialised.")
-        
+
         session = self._sessionmaker()
         try:
             yield session
@@ -72,5 +72,5 @@ def construct_host_url(db_tech: str) -> str:
         dialect: str = "postgresql"
         driver: str = "asyncpg"
         connection_information: str = load_postgres_data()
-    
+
     return f"{dialect}+{driver}://{connection_information}"

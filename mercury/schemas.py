@@ -3,49 +3,61 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 
 
-class User(BaseModel):
+class _User(BaseModel):
 
-    user_id: str
+    id: str
     discord_name: str
 
 
-class UserView(User):
+class UserView(_User):
 
     model_config = ConfigDict(from_attributes=True)
 
 
-class Tournament(BaseModel):
+class UserCreate(_User):
+    pass
+
+
+class _Tournament(BaseModel):
 
     datetime: datetime
     title: str
     description: str
 
 
-class TournamentView(Tournament):
+class TournamentView(_Tournament):
 
     model_config = ConfigDict(from_attributes=True)
 
-    tournament_id: int
+    id: int
 
 
-class Captain(BaseModel):
+class TournamentCreate(_Tournament):
+    pass
 
-    tournament_id_id: int | None
-    user_id_id: str | None
+
+class _Captain(BaseModel):
+
+    tournament_id: int | None
+    user_id: str | None
     smite_name: str
     team_name: str
     reason: str
     captain_budget: int
 
 
-class CaptainView(Captain):
+class CaptainView(_Captain):
 
     model_config = ConfigDict(from_attributes=True)
 
-    captain_id: int
+    id: int
 
 
-class Player(BaseModel):
+class CaptainCreate(_Captain):
+    pass
+
+
+class _Player(BaseModel):
 
     tournament_id: int
     user_id: str
@@ -56,6 +68,12 @@ class Player(BaseModel):
     smite_guru: str
 
 
-class PlayerView(Player):
+class PlayerView(_Player):
 
     model_config = ConfigDict(from_attributes=True)
+
+    id: int
+
+
+class PlayerCreate(_Player):
+    pass

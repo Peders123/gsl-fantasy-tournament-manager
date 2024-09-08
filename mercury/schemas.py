@@ -38,8 +38,8 @@ class TournamentCreate(_Tournament):
 
 class _Captain(BaseModel):
 
-    tournament_id: int | None
-    user_id: str | None
+    tournament_id: int | None = None
+    user_id: str | None = None
     smite_name: str
     team_name: str
     reason: str
@@ -54,7 +54,8 @@ class CaptainView(_Captain):
 
 
 class CaptainCreate(_Captain):
-    pass
+
+    captain_budget: int = 0
 
 
 class _Player(BaseModel):

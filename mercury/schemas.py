@@ -15,7 +15,7 @@ class UserView(User):
 
 
 class Tournament(BaseModel):
-    
+
     datetime: datetime
     title: str
     description: str
@@ -39,7 +39,7 @@ class Captain(BaseModel):
 
 
 class CaptainView(Captain):
-    
+
     model_config = ConfigDict(from_attributes=True)
 
     captain_id: int
@@ -57,5 +57,5 @@ class Player(BaseModel):
 
 
 class PlayerView(Player):
-    
+
     model_config = ConfigDict(from_attributes=True)

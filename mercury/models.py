@@ -4,7 +4,6 @@ from sqlalchemy.orm import relationship
 from utils.db_setup import Base
 
 
-
 class User(Base):
     __tablename__ = "talaria_user"
 
@@ -56,7 +55,8 @@ class Captain(Base):
         captain_budget (IntegerField): Budget the captain will begin the tournament with.
     """
     captain_id = Column(Integer, primary_key=True, index=True)
-    tournament_id_id = Column(Integer, ForeignKey("talaria_tournament.tournament_id", ondelete="CASCADE"), nullable=False)
+    tournament_id_id = Column(Integer, ForeignKey("talaria_tournament.tournament_id", ondelete="CASCADE"),
+                              nullable=False)
     user_id_id = Column(String, ForeignKey("talaria_user.user_id", ondelete="CASCADE"), nullable=False)
     smite_name = Column(String)
     team_name = Column(String)
@@ -85,7 +85,8 @@ class Player(Base):
         estimated_value (IntegerField): How much we estimate the player is worth.
     """
     player_id = Column(Integer, primary_key=True, index=True)
-    tournament_id_id = Column(Integer, ForeignKey("talaria_tournament.tournament_id", ondelete="CASCADE"), nullable=False)
+    tournament_id_id = Column(Integer, ForeignKey("talaria_tournament.tournament_id", ondelete="CASCADE"),
+                              nullable=False)
     user_id_id = Column(String, ForeignKey("talaria_user.user_id", ondelete="CASCADE"), nullable=False)
     captain_id_id = Column(Integer, ForeignKey("talaria_captain.captain_id", ondelete="CASCADE"))
     smite_name = Column(String)

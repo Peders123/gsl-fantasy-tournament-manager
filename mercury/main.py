@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from routers.captains import captain_router
+from mercury.routers.captain import captain_router
 
 
 app = FastAPI()

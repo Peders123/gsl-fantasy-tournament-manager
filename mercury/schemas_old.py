@@ -36,28 +36,6 @@ class TournamentCreate(_Tournament):
     pass
 
 
-class _Captain(BaseModel):
-
-    tournament_id: int | None = None
-    user_id: str | None = None
-    smite_name: str
-    team_name: str
-    reason: str
-    captain_budget: int
-
-
-class CaptainView(_Captain):
-
-    model_config = ConfigDict(from_attributes=True)
-
-    id: int
-
-
-class CaptainCreate(_Captain):
-
-    captain_budget: int = 0
-
-
 class _Player(BaseModel):
 
     tournament_id: int

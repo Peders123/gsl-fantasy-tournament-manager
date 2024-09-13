@@ -40,3 +40,11 @@ jobs:
           VALIDATE_JAVASCRIPT_ES: true
           VALIDATE_HTML: true
           VALIDATE_PYTHON: true
+
+      - name: Install Ruff
+        run: |
+          python3 -m pip install ruff
+      
+      - name: Run Ruff
+        run: |
+          ruff check . --line-length 120

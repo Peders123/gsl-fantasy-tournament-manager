@@ -10,10 +10,10 @@ def get_settings():
     return Settings()
 
 
+SESSIONMANAGER = DatabaseSessionManager(construct_host_url(get_settings().database_tech))
+
+
 async def get_db_session():
 
-    settings = get_settings()
-
-    sessionmanager = DatabaseSessionManager(construct_host_url(settings.database_tech))
-    async with sessionmanager.session() as session:
+    async with SESSIONMANAGER.session() as session:
         yield session

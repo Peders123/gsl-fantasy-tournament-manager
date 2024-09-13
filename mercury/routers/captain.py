@@ -8,28 +8,28 @@ from dependencies import get_db_session
 from schemas.captain import CaptainView, CaptainCreate, CaptainUpdate
 
 
-captain_router = APIRouter(
+router = APIRouter(
     prefix='/captain',
-    tags=['captain']
+    tags=['Captain']
 )
 
 
-@captain_router.get('/{captain_id}', response_model=CaptainView)
+@router.get('/{captain_id}', response_model=CaptainView)
 async def read_captain(captain_id: int, database: Annotated[AsyncSession, Depends(get_db_session)]):
     return await crud_captain.get_captain(database, captain_id)
 
 
-@captain_router.get('/', response_model=list[CaptainView])
+@router.get('/', response_model=list[CaptainView])
 async def read_captains(database: Annotated[AsyncSession, Depends(get_db_session)]):
     return await crud_captain.get_captains(database)
 
 
-@captain_router.post('/', status_code=201, response_model=CaptainView)
+@router.post('/', status_code=201, response_model=CaptainView)
 async def write_captain(captain_data: CaptainCreate, database: Annotated[AsyncSession, Depends(get_db_session)]):
     return await crud_captain.create_captain(database, captain_data)
 
 
-@captain_router.delete('/{captain_id}', status_code=204)
+@router.delete('/{captain_id}', status_code=204)
 async def delete_captain(captain_id: int, database: Annotated[AsyncSession, Depends(get_db_session)]):
     db_captain = await crud_captain.get_captain(database, captain_id)
     if not db_captain:
@@ -37,7 +37,7 @@ async def delete_captain(captain_id: int, database: Annotated[AsyncSession, Depe
     await crud_captain.delete_captain(database)
 
 
-@captain_router.put('/{captain_id}', status_code=201)
+@router.put('/{captain_id}', status_code=201)
 async def replace_captain(captain_id: int, captain_data: CaptainCreate,
                           database: Annotated[AsyncSession, Depends(get_db_session)]):
     db_captain = await crud_captain.get_captain(database, captain_id)
@@ -46,7 +46,7 @@ async def replace_captain(captain_id: int, captain_data: CaptainCreate,
     return await crud_captain.replace_captain(database, db_captain, captain_data)
 
 
-@captain_router.patch('/{captain_id}')
+@router.patch('/{captain_id}')
 async def update_captain(captain_id: int, captain_data: CaptainUpdate,
                          database: Annotated[AsyncSession, Depends(get_db_session)]):
     db_captain = await crud_captain.get_captain(database, captain_id)

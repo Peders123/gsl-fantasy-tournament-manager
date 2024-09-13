@@ -42,3 +42,4 @@ jobs:
           VALIDATE_PYTHON_BLACK: true
           VALIDATE_PYTHON_FLAKE8: true
           VALIDATE_PYTHON_ISORT: true
+          VALIDATE_PYTHON_PYLINE: true

@@ -1,3 +1,4 @@
+asyncpg==0.29.0
 asgiref==3.8.1
 channels==4.1.0
 channels-redis==4.2.0
@@ -5,8 +6,12 @@ daphne==4.1.2
 Django
 djangorestframework
 gunicorn
+uvicorn
+sqlalchemy
 psycopg2-binary
 selenium==4.23.1
 whitenoise==6.7.0
 requests==2.32.3
 pytz
+fastapi
+pydantic_settings==2.4.0

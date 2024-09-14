@@ -2,8 +2,8 @@ package com.tanukismite.fantasy.bot.listeners;
 
 import java.io.IOException;
 
-import com.tanukismite.fantasy.bot.commands.slash_commands.CreateSignups;
-import com.tanukismite.fantasy.bot.commands.slash_commands.Edit;
+import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
+import com.tanukismite.fantasy.bot.commands.slashcommands.Edit;
 import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
 import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
 import com.tanukismite.fantasy.bot.communicators.UserCommunicator;

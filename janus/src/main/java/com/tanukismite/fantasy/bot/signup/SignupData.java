@@ -3,12 +3,12 @@ package com.tanukismite.fantasy.bot.signup;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.tanukismite.fantasy.bot.commands.slash_commands.CreateSignups;
-
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
 
 public abstract class SignupData implements PostData {
 

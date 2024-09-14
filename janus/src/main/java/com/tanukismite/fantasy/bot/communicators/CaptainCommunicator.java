@@ -5,12 +5,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.tanukismite.fantasy.bot.HttpHandler;
 import com.tanukismite.fantasy.bot.signup.CaptainSignupData;
 import com.tanukismite.fantasy.bot.signup.PostData;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class CaptainCommunicator extends MercuryCommunicator {
 

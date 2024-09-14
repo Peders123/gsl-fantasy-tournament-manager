@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.Map;
 
 import com.tanukismite.fantasy.bot.Role;
-import com.tanukismite.fantasy.bot.commands.slash_commands.CreateSignups;
+import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;

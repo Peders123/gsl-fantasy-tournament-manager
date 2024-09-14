@@ -1,15 +1,15 @@
 package com.tanukismite.fantasy.bot.listeners;
 
-import com.tanukismite.fantasy.bot.commands.slash_commands.ButtonTest;
-import com.tanukismite.fantasy.bot.commands.slash_commands.CreateSignups;
-import com.tanukismite.fantasy.bot.commands.slash_commands.CreateTournament;
-import com.tanukismite.fantasy.bot.commands.slash_commands.Delete;
-import com.tanukismite.fantasy.bot.commands.slash_commands.Edit;
-import com.tanukismite.fantasy.bot.commands.slash_commands.Embed;
-import com.tanukismite.fantasy.bot.commands.slash_commands.Ping;
-import com.tanukismite.fantasy.bot.commands.slash_commands.Test;
-import com.tanukismite.fantasy.bot.commands.slash_commands.User;
-import com.tanukismite.fantasy.bot.commands.slash_commands.Volumes;
+import com.tanukismite.fantasy.bot.commands.slashcommands.ButtonTest;
+import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
+import com.tanukismite.fantasy.bot.commands.slashcommands.CreateTournament;
+import com.tanukismite.fantasy.bot.commands.slashcommands.Delete;
+import com.tanukismite.fantasy.bot.commands.slashcommands.Edit;
+import com.tanukismite.fantasy.bot.commands.slashcommands.Embed;
+import com.tanukismite.fantasy.bot.commands.slashcommands.Ping;
+import com.tanukismite.fantasy.bot.commands.slashcommands.Test;
+import com.tanukismite.fantasy.bot.commands.slashcommands.User;
+import com.tanukismite.fantasy.bot.commands.slashcommands.Volumes;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

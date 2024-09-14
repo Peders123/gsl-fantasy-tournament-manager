@@ -2,8 +2,8 @@ package com.tanukismite.fantasy.bot.commands;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.tanukismite.fantasy.bot.commands.slash_commands.CreateSignups;
-import com.tanukismite.fantasy.bot.commands.slash_commands.CreateTournament;
+import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
+import com.tanukismite.fantasy.bot.commands.slashcommands.CreateTournament;
 import com.tanukismite.fantasy.bot.signup.SignupData;
 
 import net.dv8tion.jda.api.JDA;

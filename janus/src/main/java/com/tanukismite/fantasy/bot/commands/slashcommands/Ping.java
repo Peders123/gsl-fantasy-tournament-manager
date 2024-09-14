@@ -1,4 +1,4 @@
-package com.tanukismite.fantasy.bot.commands.slash_commands;
+package com.tanukismite.fantasy.bot.commands.slashcommands;
 
 import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.handlers.Handler;

@@ -38,4 +38,5 @@ jobs:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_JAVA: true
-          JAVA_CHECKSTYLE_FILE: .github/linters/checkstyle.xml
+          LINTER_RULES_PATH: config/
+          JAVA_CHECKSTYLE_CONFIG_FILE: config/linters/java/checkstyle.xml

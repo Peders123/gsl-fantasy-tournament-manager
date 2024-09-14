@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 
 public class ButtonTest implements Command {
 
-    private SlashCommandInteractionEvent event;
+    private final SlashCommandInteractionEvent event;
 
     public ButtonTest(SlashCommandInteractionEvent event) {
 

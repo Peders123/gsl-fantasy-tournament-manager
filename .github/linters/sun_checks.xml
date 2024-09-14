@@ -5,13 +5,12 @@
 
 <module name="Checker">
     <module name="TreeWalker">
-        <!-- Other checks can go here -->
-
-        <!-- Line length check -->
         <module name="LineLength">
             <property name="max" value="100"/>
             <property name="severity" value="warning"/>
         </module>
-
+        <module name="HiddenField">
+            <property name="tokens" value="VARIABLE_DEF"/>
+          </module>
     </module>
 </module>

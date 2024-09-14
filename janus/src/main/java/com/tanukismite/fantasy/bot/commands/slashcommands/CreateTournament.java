@@ -7,7 +7,6 @@ import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.tanukismite.fantasy.bot.commands.Context;
 import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.handlers.Components;
 import com.tanukismite.fantasy.bot.handlers.Handler;

@@ -187,8 +187,8 @@ public class CreateSignups implements Command {
 
     public void alreadySignedUp(ButtonInteractionEvent buttonEvent) {
 
-        String message = "You are already signed up with this discord account." +
-                         "If you want to re-do your signup, please first use the sign-out button!";
+        String message = "You are already signed up with this discord account."
+                         + "If you want to re-do your signup, please first use the sign-out button!";
 
         buttonEvent.reply(message).setEphemeral(true).queue();
 

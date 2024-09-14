@@ -23,7 +23,10 @@ import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
 import com.tanukismite.fantasy.bot.communicators.TournamentCommunicator;
 import com.tanukismite.fantasy.bot.communicators.UserCommunicator;
 import com.tanukismite.fantasy.bot.handlers.Handler;
-import com.tanukismite.fantasy.bot.listeners.*;
+import com.tanukismite.fantasy.bot.listeners.ButtonListener;
+import com.tanukismite.fantasy.bot.listeners.ModalListener;
+import com.tanukismite.fantasy.bot.listeners.SlashCommandListener;
+import com.tanukismite.fantasy.bot.listeners.StringSelectListener;
 
 
 public class App {

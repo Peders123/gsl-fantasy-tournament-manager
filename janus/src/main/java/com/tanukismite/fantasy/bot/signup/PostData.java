@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 public interface PostData {
 
     Map<String, Object> toMap();
+
     MessageEmbed toEmbed();
 
 }

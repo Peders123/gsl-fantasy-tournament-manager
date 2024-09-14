@@ -11,19 +11,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.tanukismite.fantasy.bot.Role;
-import com.tanukismite.fantasy.bot.commands.Command;
-import com.tanukismite.fantasy.bot.commands.Context;
-import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
-import com.tanukismite.fantasy.bot.communicators.MercuryCommunicator;
-import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
-import com.tanukismite.fantasy.bot.handlers.Components;
-import com.tanukismite.fantasy.bot.handlers.Handler;
-import com.tanukismite.fantasy.bot.signup.CaptainSignupData;
-import com.tanukismite.fantasy.bot.signup.PlayerSignupData;
-import com.tanukismite.fantasy.bot.signup.SignupData;
-
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -39,9 +26,21 @@ import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.tanukismite.fantasy.bot.Role;
+import com.tanukismite.fantasy.bot.commands.Command;
+import com.tanukismite.fantasy.bot.commands.Context;
+import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
+import com.tanukismite.fantasy.bot.communicators.MercuryCommunicator;
+import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
+import com.tanukismite.fantasy.bot.handlers.Components;
+import com.tanukismite.fantasy.bot.handlers.Handler;
+import com.tanukismite.fantasy.bot.signup.CaptainSignupData;
+import com.tanukismite.fantasy.bot.signup.PlayerSignupData;
+import com.tanukismite.fantasy.bot.signup.SignupData;
+
 
 public class CreateSignups implements Command {
 
@@ -88,13 +87,11 @@ public class CreateSignups implements Command {
 
         JsonNode node = null;
 
-        try{
+        try {
             node = handler.getCommunicator("tournament").getDetailed(this.tournamentId);
         } catch (IOException error) {
             logger.error("Error fetching tournament details for ID: {}", this.tournamentId, error);
         }
-
-        Context context = handler.getContext();
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle(node.get("title").asText());
@@ -113,7 +110,7 @@ public class CreateSignups implements Command {
 
         action.queue();
 
-        context.setSignupRoot(this);
+        handler.getContext().setSignupRoot(this);
 
         this.writeObject();
 
@@ -129,12 +126,20 @@ public class CreateSignups implements Command {
             if (context.signupDataExists(buttonEvent.getUser().getId())) {
                 context.removeUserSignupData(buttonEvent.getUser().getId());
             }
-            context.putUserSignupData(buttonEvent.getUser().getId(), new CaptainSignupData(this), CaptainSignupData.class);
+            context.putUserSignupData(
+                buttonEvent.getUser().getId(),
+                new CaptainSignupData(this),
+                CaptainSignupData.class
+            );
         } else {
             if (context.signupDataExists(buttonEvent.getUser().getId())) {
                 context.removeUserSignupData(buttonEvent.getUser().getId());
             }
-            context.putUserSignupData(buttonEvent.getUser().getId(), new PlayerSignupData(this), PlayerSignupData.class);
+            context.putUserSignupData(
+                buttonEvent.getUser().getId(),
+                new PlayerSignupData(this),
+                PlayerSignupData.class
+            );
         }
 
         String modalId = buttonEvent.getUser().getId() + ":signup-modal";
@@ -182,7 +187,8 @@ public class CreateSignups implements Command {
 
     public void alreadySignedUp(ButtonInteractionEvent buttonEvent) {
 
-        String message = "You are already signed up with this discord account. If you want to re-do your signup, please first use the sign-out button!";
+        String message = "You are already signed up with this discord account." +
+                         "If you want to re-do your signup, please first use the sign-out button!";
 
         buttonEvent.reply(message).setEphemeral(true).queue();
 
@@ -194,12 +200,21 @@ public class CreateSignups implements Command {
 
         PlayerCommunicator playerCommunicator = (PlayerCommunicator) handler.getCommunicator("player");
         CaptainCommunicator captainCommunicator = (CaptainCommunicator) handler.getCommunicator("captain");
+        boolean playerExists;
+        boolean captainExists;
+        try {
+            playerExists = playerCommunicator.getPlayerUserExists(longId);
+            captainExists = captainCommunicator.getCaptainUserExists(longId);
+        } catch (IOException error) {
+            logger.error("Error determining whether account exists.", error);
+            return;
+        }
 
         try {
-            if (playerCommunicator.getPlayerUserExists(longId)) {
+            if (playerExists) {
                 logger.info("Deleting player from user: {}", longId);
                 playerCommunicator.delete(playerCommunicator.getPlayerUser(longId).get("player_id").asInt());
-            } else if (captainCommunicator.getCaptainUserExists(longId)) {
+            } else if (captainExists) {
                 logger.info("Deleting captain from user: {}", longId);
                 captainCommunicator.delete(captainCommunicator.getCaptainUser(longId).get("captain_id").asInt());
             }
@@ -207,14 +222,7 @@ public class CreateSignups implements Command {
             logger.error("Error when deleting player/captain: {}", longId, error);
         }
 
-        boolean signupExists = false;
-
-        try {
-            signupExists = playerCommunicator.getPlayerUserExists(longId) || captainCommunicator.getCaptainUserExists(longId);
-        } catch (IOException error) {
-            logger.error("Error determining whether account exists.", error);
-            return;
-        }
+        boolean signupExists = playerExists || captainExists;
 
         if (signupExists) {
             logger.warn("User was not deleted when they should have been for user: {}.", longId);
@@ -242,12 +250,16 @@ public class CreateSignups implements Command {
 
             data.setId(modalEvent.getUser().getId());
             data.setTournamentId(this.tournamentId);
-            data.setIGN(modalEvent.getValue("ign").getAsString());
+            data.setIgn(modalEvent.getValue("ign").getAsString());
 
             try {
                 handler.getCommunicator("captain").post(CaptainSignupData.class.cast(data));
             } catch (IOException error) {
-                logger.error("Unable to write Captain to the database for user: {}", modalEvent.getUser().getId(), error);
+                logger.error(
+                    "Unable to write Captain to the database for user: {}",
+                    modalEvent.getUser().getId(),
+                    error
+                );
             }
 
             modalEvent.reply("SUBMITTED").setEphemeral(true).queue();
@@ -259,7 +271,7 @@ public class CreateSignups implements Command {
 
             data.setId(modalEvent.getUser().getId());
             data.setTournamentId(this.tournamentId);
-            data.setIGN(modalEvent.getValue("ign").getAsString());
+            data.setIgn(modalEvent.getValue("ign").getAsString());
 
             SelectOption[] options = Components.createSelectOptions("role1");
             StringSelectMenu selection = Components.createSelectMenu("role1", options);

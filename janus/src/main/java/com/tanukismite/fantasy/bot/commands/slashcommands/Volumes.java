@@ -7,13 +7,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class Volumes implements Command {
 

@@ -9,11 +9,12 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.tanukismite.fantasy.bot.HttpHandler;
 import com.tanukismite.fantasy.bot.signup.PostData;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public abstract class MercuryCommunicator {
 
@@ -132,9 +133,13 @@ public abstract class MercuryCommunicator {
     }
 
     public abstract JsonNode get() throws IOException;
+
     public abstract boolean post(PostData data) throws IOException;
+
     public abstract <T> JsonNode getDetailed(T id) throws IOException;
+
     public abstract <T> boolean delete(T id) throws IOException;
+
     public abstract <T> boolean put(T id, PostData data) throws IOException;
 
     protected abstract String getBaseEndpoint();

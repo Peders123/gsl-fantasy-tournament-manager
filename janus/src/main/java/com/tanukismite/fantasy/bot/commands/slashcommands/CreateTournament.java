@@ -1,18 +1,18 @@
 package com.tanukismite.fantasy.bot.commands.slashcommands;
 
+import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.components.text.TextInput;
+import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.tanukismite.fantasy.bot.commands.Context;
 import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.handlers.Components;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 import com.tanukismite.fantasy.bot.signup.TournamentData;
 
-import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.components.text.TextInput;
-import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class CreateTournament implements Command {
 
@@ -28,10 +28,6 @@ public class CreateTournament implements Command {
 
     @Override
     public void execute(Handler handler) {
-
-        Context context = handler.getContext();
-
-        String modalId = event.getUser().getId() + ":tournament-modal";
 
         TextInput[] inputs = new TextInput[3];
 
@@ -53,9 +49,13 @@ public class CreateTournament implements Command {
             .setMaxLength(1000)
             .build();
 
-        event.replyModal(Components.createModal(modalId, modalId, inputs)).queue();
+        event.replyModal(Components.createModal(
+            event.getUser().getId() + ":tournament-modal",
+            "Create Tournament",
+            inputs
+        )).queue();
 
-        context.setTournamentRoot(this);
+        handler.getContext().setTournamentRoot(this);
 
     }
 

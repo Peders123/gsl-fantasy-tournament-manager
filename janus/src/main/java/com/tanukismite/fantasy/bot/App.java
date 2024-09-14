@@ -5,13 +5,6 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
-import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
-import com.tanukismite.fantasy.bot.communicators.TournamentCommunicator;
-import com.tanukismite.fantasy.bot.communicators.UserCommunicator;
-import com.tanukismite.fantasy.bot.handlers.Handler;
-import com.tanukismite.fantasy.bot.listeners.*;
-
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -22,11 +15,16 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
-
-import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
+import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
+import com.tanukismite.fantasy.bot.communicators.TournamentCommunicator;
+import com.tanukismite.fantasy.bot.communicators.UserCommunicator;
+import com.tanukismite.fantasy.bot.handlers.Handler;
+import com.tanukismite.fantasy.bot.listeners.*;
+
 
 public class App {
 
@@ -37,11 +35,11 @@ public class App {
 
         switch (option) {
             case 3:
-                return STRING;
+                return OptionType.STRING;
             case 4:
-                return INTEGER;
+                return OptionType.INTEGER;
             default:
-                return UNKNOWN;
+                return OptionType.UNKNOWN;
         }
 
     }
@@ -93,8 +91,9 @@ public class App {
             }
 
             slashCommand.setGuildOnly(commandNode.get("guildOnly").asBoolean());
-            slashCommand.setDefaultPermissions(commandNode.get("adminOnly").asBoolean() ?
-                DefaultMemberPermissions.DISABLED : DefaultMemberPermissions.ENABLED
+            slashCommand.setDefaultPermissions(commandNode.get("adminOnly").asBoolean()
+                ? DefaultMemberPermissions.DISABLED
+                : DefaultMemberPermissions.ENABLED
             );
 
             commands.addCommands(

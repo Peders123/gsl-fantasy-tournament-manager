@@ -4,11 +4,12 @@ import java.io.IOException;
 import java.net.URL;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.tanukismite.fantasy.bot.signup.PostData;
 import com.tanukismite.fantasy.bot.signup.UserSignupData;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class UserCommunicator extends MercuryCommunicator {
 

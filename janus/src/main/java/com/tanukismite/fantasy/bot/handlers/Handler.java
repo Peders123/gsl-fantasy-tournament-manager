@@ -2,11 +2,12 @@ package com.tanukismite.fantasy.bot.handlers;
 
 import java.util.HashMap;
 
+import net.dv8tion.jda.api.JDA;
+
 import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.commands.Context;
 import com.tanukismite.fantasy.bot.communicators.MercuryCommunicator;
 
-import net.dv8tion.jda.api.JDA;
 
 public class Handler {
 

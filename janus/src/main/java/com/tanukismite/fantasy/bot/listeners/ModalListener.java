@@ -1,8 +1,9 @@
 package com.tanukismite.fantasy.bot.listeners;
 
+import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
+
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
-import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 
 public class ModalListener extends BaseListener {
 

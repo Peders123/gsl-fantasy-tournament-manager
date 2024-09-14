@@ -1,9 +1,10 @@
 package com.tanukismite.fantasy.bot.listeners;
 
-import com.tanukismite.fantasy.bot.handlers.Handler;
-
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
+import com.tanukismite.fantasy.bot.handlers.Handler;
+
 
 public class BaseListener extends ListenerAdapter {
 

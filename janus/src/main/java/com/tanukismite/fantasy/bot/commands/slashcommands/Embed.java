@@ -2,12 +2,13 @@ package com.tanukismite.fantasy.bot.commands.slashcommands;
 
 import java.awt.Color;
 
-import com.tanukismite.fantasy.bot.commands.Command;
-import com.tanukismite.fantasy.bot.handlers.Handler;
-
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+
+import com.tanukismite.fantasy.bot.commands.Command;
+import com.tanukismite.fantasy.bot.handlers.Handler;
+
 
 public class Embed implements Command {
     

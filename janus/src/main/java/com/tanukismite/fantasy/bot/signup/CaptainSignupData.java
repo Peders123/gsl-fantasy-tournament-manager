@@ -3,10 +3,11 @@ package com.tanukismite.fantasy.bot.signup;
 import java.awt.Color;
 import java.util.Map;
 
-import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
-
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+
+import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
+
 
 public class CaptainSignupData extends SignupData {
 

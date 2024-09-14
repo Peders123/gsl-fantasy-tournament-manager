@@ -1,9 +1,10 @@
 package com.tanukismite.fantasy.bot.commands.slashcommands;
 
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+
 import com.tanukismite.fantasy.bot.commands.Command;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class Ping implements Command {
 

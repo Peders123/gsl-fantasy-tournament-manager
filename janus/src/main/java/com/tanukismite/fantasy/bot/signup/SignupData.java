@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
+
 
 public abstract class SignupData implements PostData {
 
@@ -47,11 +47,11 @@ public abstract class SignupData implements PostData {
         this.tournamentId = tournamentId;
     }
 
-    public String getIGN() {
+    public String getIgn() {
         return this.ign;
     }
 
-    public void setIGN(String ign) {
+    public void setIgn(String ign) {
         this.ign = ign;
     }
 

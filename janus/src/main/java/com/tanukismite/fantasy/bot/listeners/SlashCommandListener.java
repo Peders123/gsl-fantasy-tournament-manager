@@ -1,5 +1,7 @@
 package com.tanukismite.fantasy.bot.listeners;
 
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+
 import com.tanukismite.fantasy.bot.commands.slashcommands.ButtonTest;
 import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
 import com.tanukismite.fantasy.bot.commands.slashcommands.CreateTournament;
@@ -12,7 +14,6 @@ import com.tanukismite.fantasy.bot.commands.slashcommands.User;
 import com.tanukismite.fantasy.bot.commands.slashcommands.Volumes;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class SlashCommandListener extends BaseListener {
 

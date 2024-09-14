@@ -2,18 +2,17 @@ package com.tanukismite.fantasy.bot.listeners;
 
 import java.io.IOException;
 
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
 import com.tanukismite.fantasy.bot.commands.slashcommands.Edit;
 import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
 import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
-import com.tanukismite.fantasy.bot.communicators.UserCommunicator;
 import com.tanukismite.fantasy.bot.handlers.Handler;
 import com.tanukismite.fantasy.bot.signup.UserSignupData;
 
-import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class ButtonListener extends BaseListener {
 
@@ -90,10 +89,6 @@ public class ButtonListener extends BaseListener {
 
         Long longId = Long.parseLong(event.getUser().getId());
 
-        UserCommunicator userCommunicator = (UserCommunicator) this.handler.getCommunicator("user");
-        boolean exists = CreateSignups.checkUserExists(this.handler, longId);
-        boolean signupExists = false;
-
         PlayerCommunicator playerCommunicator = (PlayerCommunicator) this.handler.getCommunicator("player");
         CaptainCommunicator captainCommunicator = (CaptainCommunicator) this.handler.getCommunicator("captain");
 
@@ -111,16 +106,17 @@ public class ButtonListener extends BaseListener {
         logger.debug("Player exists: {}", playerExists);
         logger.debug("Captain exists: {}", captainExists);
 
-        signupExists = playerExists || captainExists;
+        boolean signupExists = playerExists || captainExists;
 
         if (signupExists) {
             this.handler.getContext().getSignupRoot().alreadySignedUp(event);
         }
 
-        if (!exists) {
+        if (!CreateSignups.checkUserExists(this.handler, longId)) {
             try {
-                UserSignupData data = new UserSignupData(event.getUser().getId(), event.getUser().getName());
-                userCommunicator.post(data);
+                this.handler.getCommunicator("user").post(
+                    new UserSignupData(event.getUser().getId(), event.getUser().getName())
+                );
             } catch (IOException e) {
                 logger.error("Error creating user with id: {}", event.getUser().getId());
                 return;
@@ -135,8 +131,6 @@ public class ButtonListener extends BaseListener {
 
         Long longId = Long.parseLong(event.getUser().getId());
 
-        boolean signupExists = false;
-
         PlayerCommunicator playerCommunicator = (PlayerCommunicator) this.handler.getCommunicator("player");
         CaptainCommunicator captainCommunicator = (CaptainCommunicator) this.handler.getCommunicator("captain");
 
@@ -154,7 +148,7 @@ public class ButtonListener extends BaseListener {
         logger.debug("Player exists: {}", playerExists);
         logger.debug("Captain exists: {}", captainExists);
 
-        signupExists = playerExists || captainExists;
+        boolean signupExists = playerExists || captainExists;
 
         if (!signupExists) {
             event.reply("You are not currently signed up.").setEphemeral(true).queue();

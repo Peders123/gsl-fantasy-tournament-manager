@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
-import com.tanukismite.fantasy.bot.commands.slashcommands.Edit;
 import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
 import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
 import com.tanukismite.fantasy.bot.handlers.Handler;
@@ -30,22 +29,6 @@ public class ButtonListener extends BaseListener {
 
         switch (type) {
 
-            case "test":
-                logger.info("Testing button.");
-                break;
-
-            case "bad":
-                logger.info("Bad button.");
-                break;
-
-            case "edit":
-                this.edit(event);
-                break;
-
-            case "delete":
-                this.delete(event);
-                break;
-
             case "player-signup":
                 this.signup(event, false);
                 break;
@@ -61,26 +44,6 @@ public class ButtonListener extends BaseListener {
             default:
                 BaseListener.notImplemented(event.getChannel());
 
-        }
-
-    }
-
-    private void edit(ButtonInteractionEvent event) {
-
-        try {
-            Edit.editMessage(event.getMessageChannel(), event.getMessageId());
-        } catch (Exception error) {
-            logger.error("Error editing message with id {}", event.getMessageId(), error);
-        }
-
-    }
-
-    private void delete(ButtonInteractionEvent event) {
-
-        try {
-            Edit.deleteMessage(event.getMessageChannel(), event.getMessageId());
-        } catch (Exception error) {
-            logger.error("Error deleting message with id {}", event.getMessageId(), error);
         }
 
     }

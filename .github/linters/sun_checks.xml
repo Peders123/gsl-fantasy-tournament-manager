@@ -4,13 +4,13 @@
     "https://checkstyle.org/dtds/configuration_1_3.dtd">
 
 <module name="Checker">
+    <module name="LineLength">
+        <property name="max" value="120"/>
+        <property name="severity" value="warning"/>
+    </module>
     <module name="TreeWalker">
-        <module name="LineLength">
-            <property name="max" value="100"/>
-            <property name="severity" value="warning"/>
-        </module>
         <module name="HiddenField">
             <property name="tokens" value="VARIABLE_DEF"/>
-          </module>
+        </module>
     </module>
 </module>

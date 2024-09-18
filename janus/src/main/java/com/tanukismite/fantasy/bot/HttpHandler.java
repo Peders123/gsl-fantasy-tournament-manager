@@ -18,10 +18,10 @@ import org.apache.logging.log4j.Logger;
  * The {@code HttpHandler} class manages HTTP connections and handles requests/responses 
  * with an external server. It provides utility methods to send data, retrieve responses, 
  * and handle error responses.
- * 
+ *
  * <p>This class can be used to perform HTTP requests (GET, POST) for interaction 
  * with web APIs, handling both success and error responses.</p>
- * 
+ *
  * @see HttpURLConnection
  * @see ObjectMapper
  *

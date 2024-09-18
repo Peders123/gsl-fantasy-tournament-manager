@@ -13,9 +13,9 @@ import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
 /**
  * This class extends {@link SignupData} and provides specific fields 
  * for player signups, such as roles and SmiteGuru profile.
- * 
+ *
  * <p>It overrides the methods to convert the player sign-up data into a Discord embed and a map.</p>
- * 
+ *
  * @see SignupData
  *
  * @author Rory Caston

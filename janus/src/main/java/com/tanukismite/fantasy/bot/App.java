@@ -30,11 +30,11 @@ import com.tanukismite.fantasy.bot.listeners.StringSelectListener;
 
 
 /**
- * The {@code App} class initialises the Discord bot, configures the JDA (Java Discord API) instance,
- * and registers various event listeners and slash commands. It is the main entry point for 
- * running the bot and handles the bot's online status, activity, and command registration.
- * 
- * <p>It reads necessary configuration (such as bot tokens and commands) from external JSON files 
+ * The {@code App} class initialises the Discord bot, configures the JDA (Java Discord API)
+ * instance, and registers various event listeners and slash commands. It is the main entry point
+ * for running the bot and handles the bot's online status, activity, and command registration.
+ *
+ * <p>It reads necessary configuration (such as bot tokens and commands) from external JSON files
  * and sets up appropriate handlers and communicators for user interactions via the bot.</p>
  *
  * @author Rory Caston

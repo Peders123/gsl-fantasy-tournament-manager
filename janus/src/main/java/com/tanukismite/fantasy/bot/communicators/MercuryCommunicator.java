@@ -18,16 +18,14 @@ import com.tanukismite.fantasy.bot.signup.PostData;
 
 /**
  * This class is an abstract base class for communicating with the Mercury REST APIs.
- * <p>
- * It provides common functionalities for HTTP GET, POST, PUT and DELETE requests using token-based
- * authentication. Subclasses of {@code MercuryCommunicator} should provide specific concrete
- * implementations for the required API interactions.
- * </p>
- * <p>
- * This class automatically initialises the API credentials and endpoint URLs by reading from
+ *
+ * <p>It provides common functionalities for HTTP GET, POST, PUT and DELETE requests using
+ * token-based authentication. Subclasses of {@code MercuryCommunicator} should provide specific
+ * concrete implementations for the required API interactions.</p>
+ *
+ * <p>This class automatically initialises the API credentials and endpoint URLs by reading from
  * the configuration files: {@code config.json} and {@code secrets.json} at run time. It also
- * handles the process of obtaining an authentication token.
- * </p>
+ * handles the process of obtaining an authentication token.</p>
  *
  * @author Rory Caston
  * @since 1.0

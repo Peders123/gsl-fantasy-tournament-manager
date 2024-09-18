@@ -12,10 +12,10 @@ import com.tanukismite.fantasy.bot.handlers.Handler;
  * The {@code SlashCommandListener} class extends {@link BaseListener} and listens for slash commands 
  * within Discord. It handles various commands like {@code /ping}, {@code /create-signups}, and 
  * {@code /create-tournament} by executing the appropriate command handler.
- * 
+ *
  * <p><b>Usage:</b> This class processes Discord slash commands and invokes the respective command 
  * classes to handle the bot's functionality for each command.</p>
- * 
+ *
  * @see BaseListener
  *
  * @author Rory Caston

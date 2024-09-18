@@ -10,10 +10,10 @@ import com.tanukismite.fantasy.bot.handlers.Handler;
  * The {@code StringSelectListener} class extends {@link BaseListener} and listens for string select 
  * menu interactions within Discord. It handles role selection by invoking appropriate methods in 
  * the {@link CreateSignups} class.
- * 
+ *
  * <p><b>Usage:</b> This class processes interactions from string select menus and manages user role 
  * selections during signup sessions.</p>
- * 
+ *
  * @see BaseListener
  *
  * @author Rory Caston

@@ -17,7 +17,7 @@ import com.tanukismite.fantasy.bot.signup.UserSignupData;
  * The {@code ButtonListener} class extends {@link BaseListener} and handles interactions 
  * triggered by button clicks within Discord. It manages signups and signouts based on 
  * user button interactions.
- * 
+ *
  * <p><b>Usage:</b> This class is automatically triggered when a button is clicked in Discord, and
  * it processes the event based on the type of button clicked (e.g., player signup, captain
  * signup).</p>

@@ -9,10 +9,10 @@ import com.tanukismite.fantasy.bot.handlers.Handler;
  * The {@code ModalListener} class extends {@link BaseListener} and handles interactions 
  * triggered by modal submissions within Discord. It processes various modal types such as 
  * user signups or tournament data submission.
- * 
+ *
  * <p><b>Usage:</b> This class is automatically triggered when a modal is submitted in Discord,
  * and it processes the event based on the modal type (e.g., signup modal, tournament modal).</p>
- * 
+ *
  * @see BaseListener
  *
  * @author Rory Caston

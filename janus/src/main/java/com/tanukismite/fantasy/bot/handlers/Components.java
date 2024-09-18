@@ -15,11 +15,11 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * This class is a utility class to support Java Discord components.
- * <p>
- * It provides methods for creating components such as: select menus, modals, and select options
+ *
+ * <p>It provides methods for creating components such as: select menus, modals, and select options
  * for use in interactions with the Discord API. This class primarily interacts with JSON config
- * files to dynamically build options based on pre-defined values.
- * </p>
+ * files to dynamically build options based on pre-defined values.</p>
+ *
  * <p><b>Note:</b> This class is not intended to be instantiated.</p>
  *
  * @author Rory Caston

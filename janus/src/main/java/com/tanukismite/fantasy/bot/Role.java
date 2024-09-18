@@ -6,10 +6,10 @@ package com.tanukismite.fantasy.bot;
  * Each role is associated with an emote ID and an emote name that can be
  * used in Discord. The enum provides utility methods to access these values 
  * and return a formatted emote string.
- * 
+ *
  * <p>Roles are commonly used for player selection and designation within
  * the game, and this enum facilitates linking game roles to Discord emotes.</p>
- * 
+ *
  * <ul>
  *     <li>{@link #ADC} - The Hunter role (Attack Damage Carry).</li>
  *     <li>{@link #SUPPORT} - The Guardian role, providing team support.</li>

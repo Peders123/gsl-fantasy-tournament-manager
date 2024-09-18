@@ -12,10 +12,10 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
  * This class represents user-specific signup information, including 
  * the user's ID and their Discord username. It implements the {@link PostData} interface to 
  * convert this data into a map and a {@link MessageEmbed} for rich representation in Discord.
- * 
+ *
  * <p>This class can be used to store and display user signup information in a structured format, 
  * either for database storage or presentation in Discord messages.</p>
- * 
+ *
  * @see PostData
  * @see MessageEmbed
  * @see EmbedBuilder

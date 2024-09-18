@@ -14,9 +14,9 @@ import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
  * The {@code SignupData} abstract class provides a base implementation of {@link PostData} 
  * for storing and processing user signup information. It includes common fields such as 
  * user ID, tournament ID, in-game name (IGN), and the root signup session.
- * 
+ *
  * <p>This class can be extended to create specific types of signup data like player signups.</p>
- * 
+ *
  * @see PostData
  *
  * @author Rory Caston

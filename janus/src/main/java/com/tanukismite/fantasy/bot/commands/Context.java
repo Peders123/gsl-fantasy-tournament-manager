@@ -11,11 +11,10 @@ import com.tanukismite.fantasy.bot.signup.SignupData;
 
 /**
  * This class manages session data for the bot commands.
- * <p>
- * It acts as a central data store for managing user sign-up sessions and provides methods for
+ * <p>It acts as a central data store for managing user sign-up sessions and provides methods for
  * retrieving, adding, and removing {@link SignupData}. Additionally, it holds the command roots
- * for the sign-up and tournament creation processes, facilitating the execution of these commands.
- * </p>
+ * for the sign-up and tournament creation processes, facilitating the execution of these
+ * commands.</p>
  *
  * @author Rory Caston
  * @since 1.0

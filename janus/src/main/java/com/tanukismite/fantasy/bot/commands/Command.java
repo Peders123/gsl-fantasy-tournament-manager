@@ -5,15 +5,13 @@ import com.tanukismite.fantasy.bot.handlers.Handler;
 
 /**
  * An interface for a command within the TSL discord bot.
- * <p>
- * Implementing classes define specific actions or behaviours that shoudl be triggered when the
+ *
+ * <p>Implementing classes define specific actions or behaviours that shoudl be triggered when the
  * command is invoked. Whenever a command in instantiated, the {@link #execute(Handler)} method
- * should be called.
- * </p>
- * <p>
- * Commands are dealt with by the {@link Handler} which provides the necessary context and
- * resources for executing the command.
- * </p>
+ * should be called.</p>
+ *
+ * <p>Commands are dealt with by the {@link Handler} which provides the necessary context and
+ * resources for executing the command.</p>
  *
  * @author Rory Caston
  * @since 1.0

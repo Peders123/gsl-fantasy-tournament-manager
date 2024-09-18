@@ -8,10 +8,9 @@ import com.tanukismite.fantasy.bot.handlers.Handler;
 
 /**
  * A simple ping command to test the connectivity of the bot.
- * <p>
- * This class implements the {@link Command} interface and provides a basic implementation that
- * replies to the user command with the message "Pong!".
- * </p>
+ *
+ * <p>This class implements the {@link Command} interface and provides a basic implementation that
+ * replies to the user command with the message "Pong!".</p>
  *
  * @author Rory Caston
  * @since 1.0

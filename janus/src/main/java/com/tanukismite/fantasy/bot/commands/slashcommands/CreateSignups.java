@@ -345,11 +345,11 @@ public class CreateSignups implements Command {
 
     /**
      * Gathers and handles the data the user submitted in the sign up modal.
-     * <p>
-     * The data is processed differently depending on if the user is signing up as a captain or as
-     * a player. If the user is a captain, the steps are finished and the data is send to the API
-     * via a POST and written to the database. If the user is signing up as a player, the modal
-     * data is saved and the method builds a select menu which is used for the next step.
+     *
+     * <p>The data is processed differently depending on if the user is signing up as a captain or
+     * as a player. If the user is a captain, the steps are finished and the data is send to the
+     * API via a POST and written to the database. If the user is signing up as a player, the modal
+     * data is saved and the method builds a select menu which is used for the next step.</p>
      *
      * @param handler    The {@link Handler} used to managed the state of the Commands. Here it is
      *                   used to retrieve the Context for the sign up data, as well as communciate
@@ -410,11 +410,10 @@ public class CreateSignups implements Command {
 
     /**
      * Processes the player's selection of their primary role.
-     * <p>
-     * Once the user has selected their primary role from the selection menu, this method stores
+     * 
+     * <p>Once the user has selected their primary role from the selection menu, this method stores
      * that information in the context and sends another selection menu to select the player's
-     * secondary role. When the message is sent, the original selection message is deleted.
-     * </p>
+     * secondary role. When the message is sent, the original selection message is deleted.</p>
      *
      * @param context     The {@link Context} which stores the user's current sign up data.
      * @param selectEvent The {@link StringSelectInteractionEvent} triggered by the user selecting
@@ -442,11 +441,10 @@ public class CreateSignups implements Command {
 
     /**
      * Processes the player's selection of their secondary role.
-     * <p>
-     * After the user selects their secondary role, this method stores that information in the
+     *
+     * <p>After the user selects their secondary role, this method stores that information in the
      * context and finalises the sign up process. It sends the data to the method to finish the
-     * data submission.
-     * </p>
+     * data submission.</p>
      *
      * @param handler     The {@link Handler} which contains the context. Forwarded on to the final
      *                    submission method.
@@ -470,11 +468,10 @@ public class CreateSignups implements Command {
 
     /**
      * Submits the player's sign-up data to the API.
-     * <p>
-     * This method handles the final submission of the player sign-up data after both the primary
-     * and secondary roles have been selected. After submission, and embed containing the data is
-     * also sent to the user and the previous selection menu is deleted.
-     * </p>
+     *
+     * <p>This method handles the final submission of the player sign-up data after both the
+     * primary and secondary roles have been selected. After submission, and embed containing the
+     * data is also sent to the user and the previous selection menu is deleted.</p>
      *
      * @param handler
      * @param userId
@@ -503,11 +500,10 @@ public class CreateSignups implements Command {
 
     /**
      * Checks if the user exists in the database.
-     * <p>
-     * This method is not intended to be used internally when written. However, it is used in an
+     *
+     * <p>This method is not intended to be used internally when written. However, it is used in an
      * external class in reference to the user sign-up process so its scope falls within this
-     * class. The method sends a query to the API with the user ID to see if the record exists.
-     * </p>
+     * class. The method sends a query to the API with the user ID to see if the record exists.</p>
      *
      * @param communicator The {@link MercuryCommunicator} for a user to communicate with the API.
      * @param userId       The ID of the user to check in the database.
@@ -537,11 +533,10 @@ public class CreateSignups implements Command {
 
     /**
      * Converts an ISO 8601 date string to a more readable format.
-     * <p>
-     * This method takes in a date string formatted as ISO 8601 and converts it to the format
+     *
+     * <p>This method takes in a date string formatted as ISO 8601 and converts it to the format
      * {@code hh:mm a dd/MM/yyyy}, making it easier to read for users. This is also the form
-     * accepted by the API.
-     * </p>
+     * accepted by the API.</p>
      *
      * @param dateString The ISO 8601 formatted date string.
      * @return A formatted string representing the date in a readable format.
@@ -557,11 +552,10 @@ public class CreateSignups implements Command {
 
     /**
      * Serializes the current instance of the sign-up data to a file.
-     * <p>
-     * This method serialises the state of the current sign-up process to a file. It is used to
+     *
+     * <p>This method serialises the state of the current sign-up process to a file. It is used to
      * persist the sign-up state between restarts of the bot, ensuring that the sign-up information
-     * is not lost.
-     * </p>
+     * is not lost.</p>
      */
     private void writeObject() {
 
@@ -577,11 +571,10 @@ public class CreateSignups implements Command {
 
     /**
      * Reads and deserialises the saved sign-up state from a file.
-     * <p>
-     * This method loads a previously saved sign-up instance from a file. It is used to restore the
-     * sign-up state after the bot has restarted. If no saved state is found, the method returns
-     * {@code null}.
-     * </p>
+     *
+     * <p>This method loads a previously saved sign-up instance from a file. It is used to restore
+     * the sign-up state after the bot has restarted. If no saved state is found, the method
+     * returns {@code null}.</p>
      *
      * @return The deserialized {@code CreateSignups} instance, or {@code null} if no saved state
      *         exists.
@@ -605,11 +598,10 @@ public class CreateSignups implements Command {
 
     /**
      * Initializes non-serialisable fields.
-     * <p>
-     * This method initializes fields that could not be serialised, such as {@link MessageChannel}
-     * and {@link User}, which require access to the JDA object. It retrieves these fields using the
-     * saved channel ID and user ID.
-     * </p>
+     *
+     * <p>This method initializes fields that could not be serialised, such as
+     * {@link MessageChannel} and {@link User}, which require access to the JDA object. It
+     * retrieves these fields using thesaved channel ID and user ID.</p>
      *
      * @param jda The {@link JDA} instance used to re-initialize non-serializable fields.
      */

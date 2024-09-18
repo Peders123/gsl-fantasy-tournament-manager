@@ -10,10 +10,9 @@ import com.tanukismite.fantasy.bot.handlers.Handler;
  * This class extends {@link ListenerAdapted} and serves as a base class for the other event
  * listeners in the bot. It amangers a reference to the {@link Handler} instance and provides
  * utility methods to simplify event handling.
- * <p>
- * The class contains core functionalities that can be shared across multiple listeners, including
- * the handler references and a utility method to indicate unimplemented features.
- * </p>
+ *
+ * <p>The class contains core functionalities that can be shared across multiple listeners,
+ * including the handler references and a utility method to indicate unimplemented features.</p>
  * 
  * <p><b>Usage:</b> This class is intended to be extended by other listener classes that need to
  * access the {@link Handler} and event handling methods.</p>

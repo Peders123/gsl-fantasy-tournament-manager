@@ -15,19 +15,16 @@ import com.tanukismite.fantasy.bot.signup.TournamentData;
 
 /**
  * Handles the creation of a new tournament within the Tanuki Smite League.
- * <p>
- * This class implements the {@link Command} interface to facilitate the creation of a new tournament.
- * The initial slash command triggers a modal interaction where the user provides details about the
- * tournament such as date, title, and description. The modal interaction is then processed to store
- * the tournament information.
- * </p>
- * 
- * <p>
- * The class utilizes JDA's {@link SlashCommandInteractionEvent} to initiate the creation process and
- * {@link ModalInteractionEvent} to handle the submission of the tournament details. The tournament
- * data is sent to a specified communicator for storage, and a confirmation message with the tournament
- * details is sent back to the user.
- * </p>
+ *
+ * <p>This class implements the {@link Command} interface to facilitate the creation of a new
+ * tournament. The initial slash command triggers a modal interaction where the user provides
+ * details about the tournament such as date, title, and description. The modal interaction is
+ * then processed to store the tournament information.</p>
+ *
+ * <p>The class utilizes JDA's {@link SlashCommandInteractionEvent} to initiate the creation
+ * process and {@link ModalInteractionEvent} to handle the submission of the tournament details.
+ * The tournament data is sent to a specified communicator for storage, and a confirmation message
+ * with the tournament details is sent back to the user.</p>
  *
  * @author Rory Caston
  * @since 1.0
@@ -40,8 +37,6 @@ public class CreateTournament implements Command {
 
     /**
      * Constructs a {@code CreateTournament} command instance.
-     * <p>
-     * </p>
      *
      * @param event The {@link SlashCommandInteractionEvent} representing the user's interaction
      *              that triggered the creation of the tournament.
@@ -52,11 +47,10 @@ public class CreateTournament implements Command {
 
     /**
      * Executes the command by initiating the tournament creation process.
-     * <p>
-     * This method triggers the display of a modal to the user, prompting them to enter details about
-     * the new tournament, including the date, title, and description. The modal fields are configured
-     * and presented to the user to collect the necessary information.
-     * </p>
+     *
+     * <p>This method triggers the display of a modal to the user, prompting them to enter details
+     * about the new tournament, including the date, title, and description. The modal fields are
+     * configured and presented to the user to collect the necessary information.</p>
      *
      * @param handler The {@link Handler} used to manage command execution. It is utilized to set
      *                the context for the tournament creation process.
@@ -95,11 +89,11 @@ public class CreateTournament implements Command {
 
     /**
      * Processes the submission of the tournament creation modal.
-     * <p>
-     * This method handles the data submitted through the modal, constructs a {@link TournamentData}
-     * object with the provided details, and sends it to the database via the communicator. A response
-     * embed with the tournament details is then sent back to the user.
-     * </p>
+     *
+     * <p>This method handles the data submitted through the modal, constructs a
+     * {@link TournamentData} object with the provided details, and sends it to the database via
+     * the communicator. A response embed with the tournament details is then sent back to the
+     * user.</p>
      *
      * @param handler    The {@link Handler} used to manage command execution. It is utilized to get
      *                   the communicator for sending the tournament data.

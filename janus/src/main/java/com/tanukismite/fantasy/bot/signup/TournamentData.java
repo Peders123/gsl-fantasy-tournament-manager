@@ -13,10 +13,10 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
  * the title, description, and scheduled date and time. It implements the {@link PostData} 
  * interface to convert this data into a map and a {@link MessageEmbed} for rich representation 
  * in Discord.
- * 
+ *
  * <p>This class can be used to encapsulate tournament details for displaying or posting 
  * in Discord or other data processing workflows.</p>
- * 
+ *
  * @see PostData
  *
  * @author Rory Caston

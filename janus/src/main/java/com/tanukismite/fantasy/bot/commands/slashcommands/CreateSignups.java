@@ -55,11 +55,9 @@ import com.tanukismite.fantasy.bot.signup.PlayerSignupData;
  * supported by one instance at a time, not a huge issue as the project is still small scale, but
  * will be increated in the future.
  * </p>
- * 
- * <p>
+ *
  * @author Rory Caston
  * @since 1.0
- * </p>
  */
 public class CreateSignups implements Command {
 

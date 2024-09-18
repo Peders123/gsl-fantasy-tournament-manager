@@ -473,9 +473,9 @@ public class CreateSignups implements Command {
      * primary and secondary roles have been selected. After submission, and embed containing the
      * data is also sent to the user and the previous selection menu is deleted.</p>
      *
-     * @param handler
-     * @param userId
-     * @param selectEvent
+     * @param handler     The {@link Handler} which contains the context.
+     * @param userId      The user discord id to submit.
+     * @param selectEvent The {@link StringSelectInteractionEvent} from previous to delete.
      */
     private void submitData(Handler handler, String userId, StringSelectInteractionEvent selectEvent) {
 

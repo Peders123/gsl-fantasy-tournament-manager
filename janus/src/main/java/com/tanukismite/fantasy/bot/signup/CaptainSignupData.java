@@ -28,7 +28,7 @@ public class CaptainSignupData extends SignupData {
     /**
      * Constructs a new instance tied to the current signup session.
      *
-     * @param currentSession
+     * @param currentSession The sign-up session.
      */
     public CaptainSignupData(CreateSignups currentSession) {
         super(currentSession);

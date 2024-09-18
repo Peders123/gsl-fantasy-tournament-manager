@@ -41,7 +41,7 @@ public class PlayerCommunicator extends MercuryCommunicator {
 
     /**
      * Getter for baseUrl.
-     * 
+     *
      * @return The base API endpoint URL for players.
      */
     @Override

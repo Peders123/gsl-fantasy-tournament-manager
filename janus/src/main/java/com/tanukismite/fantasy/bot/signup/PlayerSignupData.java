@@ -30,7 +30,7 @@ public class PlayerSignupData extends SignupData {
     /**
      * Constructs a new instance tied to the current signup session.
      *
-     * @param currentSession
+     * @param currentSession The sign-up session.
      */
     public PlayerSignupData(CreateSignups currentSession) {
         super(currentSession);

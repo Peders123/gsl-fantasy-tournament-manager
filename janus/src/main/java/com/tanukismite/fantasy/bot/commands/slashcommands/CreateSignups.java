@@ -56,8 +56,10 @@ import com.tanukismite.fantasy.bot.signup.PlayerSignupData;
  * will be increated in the future.
  * </p>
  * 
+ * <p>
  * @author Rory Caston
  * @since 1.0
+ * </p>
  */
 public class CreateSignups implements Command {
 

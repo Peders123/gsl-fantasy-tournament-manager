@@ -17,7 +17,7 @@ import com.tanukismite.fantasy.bot.handlers.Handler;
  * 
  * <p><b>Usage:</b> This class is intended to be extended by other listener classes that need to
  * access the {@link Handler} and event handling methods.</p>
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -32,6 +32,7 @@ public class BaseListener extends ListenerAdapter {
 
     /**
      * Constructor with a {@link Handler} reference.
+     *
      * @param handler The {@link Handler} current app handler.
      */
     public BaseListener(Handler handler) {
@@ -40,6 +41,7 @@ public class BaseListener extends ListenerAdapter {
 
     /**
      * Getter for the handler.
+     *
      * @return The current app {@link Handler} instance.
      */
     public Handler getHandler() {
@@ -48,6 +50,7 @@ public class BaseListener extends ListenerAdapter {
 
     /**
      * Setter for the handler.
+     *
      * @param handler The new {@link Handler} instance.
      */
     public void setHandler(Handler handler) {
@@ -56,6 +59,7 @@ public class BaseListener extends ListenerAdapter {
 
     /**
      * Sends a message if a user attempts to use a feature that is currently not implemented.
+     *
      * @param channel The {@link MessageChannel} where the message will be sent.
      */
     protected static void notImplemented(MessageChannel channel) {

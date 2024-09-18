@@ -12,7 +12,7 @@ import com.tanukismite.fantasy.bot.handlers.Handler;
  * This class implements the {@link Command} interface and provides a basic implementation that
  * replies to the user command with the message "Pong!".
  * </p>
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -22,7 +22,7 @@ public class Ping implements Command {
 
     /**
      * Constructs a {@code Ping} command instace.
-     * 
+     *
      * @param event The {@link SlashCommandInteractionEvent} representing the user interaction that
      *              triggered this command. The event is used to reply to the user command.
      * @see com.tanukismite.fantasy.bot.listeners.SlashCommandListener
@@ -33,7 +33,7 @@ public class Ping implements Command {
 
     /**
      * Sends an async reply to the event to show the bot is working.
-     * 
+     *
      * @param handler The {@link Handler} used to manage command execution. It is unused in this
      *                method but is required by the {@link Command} interface.
      */

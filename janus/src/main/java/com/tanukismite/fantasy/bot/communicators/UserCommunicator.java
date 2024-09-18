@@ -13,7 +13,7 @@ import com.tanukismite.fantasy.bot.signup.UserSignupData;
 
 /**
  * Implementation of {@link MercuryCommunicator} for interactions related to "users".
- * 
+ *
  * @see MercuryCommunicator
  * @author Rory Caston
  * @since 1.0
@@ -38,6 +38,8 @@ public class UserCommunicator extends MercuryCommunicator {
     }
 
     /**
+     * Getter for baseUrl.
+     *
      * @return The base API endpoint URL for users.
      */
     @Override
@@ -47,7 +49,7 @@ public class UserCommunicator extends MercuryCommunicator {
 
     /**
      * Retrieves all user data from the API.
-     * 
+     *
      * @return A {@link JsonNode} containing all user data.
      * @throws IOException if the GET request fails.
      */
@@ -58,7 +60,7 @@ public class UserCommunicator extends MercuryCommunicator {
 
     /**
      * Writes a new user signup to the API. Validates the provided data is of the correct type.
-     * 
+     *
      * @param data The {@link PostData} containing user sign-up details.
      * @return {@code true} if the POST is successful, {@code false} if otherwise.
      * @throws IOException if the POST request fails.
@@ -74,7 +76,7 @@ public class UserCommunicator extends MercuryCommunicator {
 
     /**
      * Retrieves data relating to a specific user from the API.
-     * 
+     *
      * @param <T>    The type of the userId, expected Long.
      * @param userId The user's ID.
      * @return A {@link JsonNode} containing the user data.
@@ -92,7 +94,7 @@ public class UserCommunicator extends MercuryCommunicator {
 
     /**
      * Deletes a specific user from the API.
-     * 
+     *
      * @param <T>    The type of the userId, expected Long.
      * @param userId The user's ID.
      * @return {@code true} if the DELETE is successful, {@code false} if otherwise.
@@ -110,7 +112,7 @@ public class UserCommunicator extends MercuryCommunicator {
 
     /**
      * Replaces a specific user from the API.
-     * 
+     *
      * @param <T>    The type of the userId, expected Long.
      * @param userId The user's ID.
      * @param data   The {@link PostData} containing user data.

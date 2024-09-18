@@ -17,7 +17,7 @@ import com.tanukismite.fantasy.bot.handlers.Handler;
  * classes to handle the bot's functionality for each command.</p>
  * 
  * @see BaseListener
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -25,6 +25,7 @@ public class SlashCommandListener extends BaseListener {
 
     /**
      * Constructor with a {@link Handler} reference.
+     *
      * @param handler The {@link Handler} current app handler.
      */
     public SlashCommandListener(Handler handler) {
@@ -34,7 +35,7 @@ public class SlashCommandListener extends BaseListener {
     /**
      * Handles the {@link SlashCommandInteractionEvent} when a slash command is used in Discord.
      * Based on the command name, it executes the corresponding command class.
-     * 
+     *
      * @param event The {@link SlashCommandInteractionEvent} representing the slash command interaction.
      */
     @Override

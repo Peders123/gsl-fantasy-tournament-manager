@@ -16,7 +16,7 @@ import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
  * <p>It overrides the methods to convert the captain sign-up data into a Discord embed and a map.</p>
  * 
  * @see SignupData
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -27,6 +27,7 @@ public class CaptainSignupData extends SignupData {
 
     /**
      * Constructs a new instance tied to the current signup session.
+     *
      * @param currentSession
      */
     public CaptainSignupData(CreateSignups currentSession) {
@@ -35,6 +36,7 @@ public class CaptainSignupData extends SignupData {
 
     /**
      * Getter for reason.
+     *
      * @return The current reason.
      */
     public String getReason() {
@@ -43,6 +45,7 @@ public class CaptainSignupData extends SignupData {
 
     /**
      * Setter for reason.
+     *
      * @param reason The new reason.
      */
     public void setReason(String reason) {
@@ -51,6 +54,7 @@ public class CaptainSignupData extends SignupData {
 
     /**
      * Getter for teamName.
+     *
      * @return The current teamName.
      */
     public String getTeamName() {
@@ -59,6 +63,7 @@ public class CaptainSignupData extends SignupData {
 
     /**
      * Setter for teamName.
+     *
      * @param teamName The new teamName.
      */
     public void setTeamName(String teamName) {
@@ -85,7 +90,7 @@ public class CaptainSignupData extends SignupData {
 
     /**
      * Converts the data into a map of key-value pairs, ready for processing.
-     * 
+     *
      * @return A map representing the captain sign-up data.
      */
     @Override

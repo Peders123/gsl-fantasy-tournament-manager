@@ -36,7 +36,7 @@ import com.tanukismite.fantasy.bot.listeners.StringSelectListener;
  * 
  * <p>It reads necessary configuration (such as bot tokens and commands) from external JSON files 
  * and sets up appropriate handlers and communicators for user interactions via the bot.</p>
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -47,7 +47,7 @@ public class App {
 
     /**
      * Returns the appropriate {@link OptionType} based on the provided integer value.
-     * 
+     *
      * @param option The integer value representing the option type.
      * @return The corresponding {@code OptionType}.
      */
@@ -67,7 +67,7 @@ public class App {
     /**
      * Main method to initialize the bot, configure its commands and event listeners, and 
      * start the bot session using the JDA API.
-     * 
+     *
      * @param args Command line arguments (not used in this implementation).
      * @throws IOException if there is an issue reading configuration files.
      */

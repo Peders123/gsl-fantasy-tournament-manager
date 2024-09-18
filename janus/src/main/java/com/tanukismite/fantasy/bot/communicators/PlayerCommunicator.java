@@ -15,7 +15,7 @@ import com.tanukismite.fantasy.bot.signup.PostData;
 
 /**
  * Implementation of {@link MercuryCommunicator} for interactions related to "players".
- * 
+ *
  * @see MercuryCommunicator
  * @author Rory Caston
  * @since 1.0
@@ -40,6 +40,8 @@ public class PlayerCommunicator extends MercuryCommunicator {
     }
 
     /**
+     * Getter for baseUrl.
+     * 
      * @return The base API endpoint URL for players.
      */
     @Override
@@ -49,7 +51,7 @@ public class PlayerCommunicator extends MercuryCommunicator {
 
     /**
      * Retrieves all player data from the API.
-     * 
+     *
      * @return A {@link JsonNode} containing all player data.
      * @throws IOException if the GET request fails.
      */
@@ -60,7 +62,7 @@ public class PlayerCommunicator extends MercuryCommunicator {
 
     /**
      * Writes a new player signup to the API. Validates the provided data is of the correct type.
-     * 
+     *
      * @param data The {@link PostData} containing player sign-up details.
      * @return {@code true} if the POST is successful, {@code false} if otherwise.
      * @throws IOException if the POST request fails.
@@ -76,7 +78,7 @@ public class PlayerCommunicator extends MercuryCommunicator {
 
     /**
      * Retrieves data relating to a specific player from the API.
-     * 
+     *
      * @param <T>      The type of the playerId, expected Integer.
      * @param playerId The player's ID.
      * @return A {@link JsonNode} containing the player data.
@@ -94,7 +96,7 @@ public class PlayerCommunicator extends MercuryCommunicator {
 
     /**
      * Deletes a specific player from the API.
-     * 
+     *
      * @param <T>      The type of the playerId, expected Integer.
      * @param playerId The player's ID.
      * @return {@code true} if the DELETE is successful, {@code false} if otherwise.
@@ -112,7 +114,7 @@ public class PlayerCommunicator extends MercuryCommunicator {
 
     /**
      * Replaces a specific player from the API.
-     * 
+     *
      * @param <T>      The type of the playerId, expected Integer.
      * @param playerId The player's ID.
      * @param data     The {@link PostData} containing player data.
@@ -135,7 +137,7 @@ public class PlayerCommunicator extends MercuryCommunicator {
 
     /**
      * Gets a specific user's respective player from the API.
-     * 
+     *
      * @param userId The user id to get the player for.
      * @return {@link JsonNode} containing the player data.
      * @throws IOException if the GET request fails.
@@ -146,7 +148,7 @@ public class PlayerCommunicator extends MercuryCommunicator {
 
     /**
      * Gets if a specific user has a player in the API.
-     * 
+     *
      * @param userId The user id to check the player for.
      * @return {@code true} if a player exists for the user, {@code false} if otherwise.
      * @throws IOException If the GET request fails.

@@ -15,7 +15,7 @@ import com.tanukismite.fantasy.bot.signup.PostData;
 
 /**
  * Implementation of {@link MercuryCommunicator} for interactions related to "captains".
- * 
+ *
  * @see MercuryCommunicator
  * @author Rory Caston
  * @since 1.0
@@ -40,6 +40,8 @@ public class CaptainCommunicator extends MercuryCommunicator {
     }
 
     /**
+     * Getter for baseUrl.
+     *
      * @return The base API endpoint URL for captains.
      */
     @Override
@@ -49,7 +51,7 @@ public class CaptainCommunicator extends MercuryCommunicator {
 
     /**
      * Retrieves all captain data from the API.
-     * 
+     *
      * @return A {@link JsonNode} containing all captain data.
      * @throws IOException if the GET request fails.
      */
@@ -60,7 +62,7 @@ public class CaptainCommunicator extends MercuryCommunicator {
 
     /**
      * Writes a new captain signup to the API. Validates the provided data is of the correct type.
-     * 
+     *
      * @param data The {@link PostData} containing captain sign-up details.
      * @return {@code true} if the POST is successful, {@code false} if otherwise.
      * @throws IOException if the POST request fails.
@@ -76,7 +78,7 @@ public class CaptainCommunicator extends MercuryCommunicator {
 
     /**
      * Retrieves data relating to a specific captain from the API.
-     * 
+     *
      * @param <T>       The type of the captainId, expected Integer.
      * @param captainId The captain's ID.
      * @return A {@link JsonNode} containing the captain data.
@@ -94,7 +96,7 @@ public class CaptainCommunicator extends MercuryCommunicator {
 
     /**
      * Deletes a specific captain from the API.
-     * 
+     *
      * @param <T>       The type of the captainId, expected Integer.
      * @param captainId The captain's ID.
      * @return {@code true} if the DELETE is successful, {@code false} if otherwise.
@@ -112,7 +114,7 @@ public class CaptainCommunicator extends MercuryCommunicator {
 
     /**
      * Replaces a specific captain from the API.
-     * 
+     *
      * @param <T>       The type of the captainId, expected Integer.
      * @param captainId The captain's ID.
      * @param data      The {@link PostData} containing captain data.
@@ -135,7 +137,7 @@ public class CaptainCommunicator extends MercuryCommunicator {
 
     /**
      * Gets a specific user's respective captain from the API.
-     * 
+     *
      * @param userId The user id to get the captain for.
      * @return {@link JsonNode} containing the captain data.
      * @throws IOException if the GET request fails.
@@ -146,7 +148,7 @@ public class CaptainCommunicator extends MercuryCommunicator {
 
     /**
      * Gets if a specific user has a captain in the API.
-     * 
+     *
      * @param userId The user id to check the captain for.
      * @return {@code true} if a captain exists for the user, {@code false} if otherwise.
      * @throws IOException If the GET request fails.

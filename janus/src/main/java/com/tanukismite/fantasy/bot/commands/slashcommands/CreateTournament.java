@@ -28,7 +28,7 @@ import com.tanukismite.fantasy.bot.signup.TournamentData;
  * data is sent to a specified communicator for storage, and a confirmation message with the tournament
  * details is sent back to the user.
  * </p>
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -42,7 +42,7 @@ public class CreateTournament implements Command {
      * Constructs a {@code CreateTournament} command instance.
      * <p>
      * </p>
-     * 
+     *
      * @param event The {@link SlashCommandInteractionEvent} representing the user's interaction
      *              that triggered the creation of the tournament.
      */
@@ -57,7 +57,7 @@ public class CreateTournament implements Command {
      * the new tournament, including the date, title, and description. The modal fields are configured
      * and presented to the user to collect the necessary information.
      * </p>
-     * 
+     *
      * @param handler The {@link Handler} used to manage command execution. It is utilized to set
      *                the context for the tournament creation process.
      */
@@ -100,7 +100,7 @@ public class CreateTournament implements Command {
      * object with the provided details, and sends it to the database via the communicator. A response
      * embed with the tournament details is then sent back to the user.
      * </p>
-     * 
+     *
      * @param handler    The {@link Handler} used to manage command execution. It is utilized to get
      *                   the communicator for sending the tournament data.
      * @param modalEvent The {@link ModalInteractionEvent} representing the modal submission event

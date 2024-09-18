@@ -19,7 +19,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
  * @see PostData
  * @see MessageEmbed
  * @see EmbedBuilder
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -35,7 +35,7 @@ public class UserSignupData implements PostData {
 
     /**
      * Constructs a new {@code UserSignupData} instance with the specified user ID and Discord username.
-     * 
+     *
      * @param id      The user's ID.
      * @param discord The user's Discord username.
      */
@@ -46,6 +46,7 @@ public class UserSignupData implements PostData {
 
     /**
      * Getter for id.
+     *
      * @return The current id.
      */
     public String getId() {
@@ -54,6 +55,7 @@ public class UserSignupData implements PostData {
 
     /**
      * Setter for id.
+     *
      * @param id The new id.
      */
     public void setId(String id) {
@@ -62,6 +64,7 @@ public class UserSignupData implements PostData {
 
     /**
      * Getter for discord.
+     *
      * @return The current discord.
      */
     public String getDiscord() {
@@ -70,6 +73,7 @@ public class UserSignupData implements PostData {
 
     /**
      * Setter for discord.
+     *
      * @param discord The new discord.
      */
     public void setDiscord(String discord) {
@@ -78,7 +82,7 @@ public class UserSignupData implements PostData {
 
     /**
      * Converts the user signup data into a map of key-value pairs for processing.
-     * 
+     *
      * @return A map representing the user signup data.
      */
     @Override
@@ -94,7 +98,7 @@ public class UserSignupData implements PostData {
 
     /**
      * Converts the user signup data into a rich {@link MessageEmbed} for display in Discord.
-     * 
+     *
      * @return A {@link MessageEmbed} containing the user's signup details.
      */
     @Override

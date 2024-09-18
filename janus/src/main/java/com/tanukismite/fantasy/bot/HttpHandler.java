@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Logger;
  * 
  * @see HttpURLConnection
  * @see ObjectMapper
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -37,7 +37,7 @@ public class HttpHandler {
 
     /**
      * Constructs a new {@code HttpHandler} instance for managing HTTP connections.
-     * 
+     *
      * @param url The URL for the HTTP connection.
      * @param requestMethod The HTTP method to use (e.g., GET, POST).
      * @param headers A map containing HTTP headers.
@@ -57,7 +57,7 @@ public class HttpHandler {
 
     /**
      * Writes a map of key-value pairs to the HTTP connection output stream.
-     * 
+     *
      * @param inputMap A map containing data to be sent.
      * @throws IOException if there is an issue writing data to the connection.
      */
@@ -76,7 +76,7 @@ public class HttpHandler {
 
     /**
      * Retrieves the response code from the HTTP connection.
-     * 
+     *
      * @return The HTTP response code.
      * @throws IOException if there is an issue retrieving the response code.
      */
@@ -86,7 +86,7 @@ public class HttpHandler {
 
     /**
      * Reads the HTTP response and converts it to a {@link JsonNode}.
-     * 
+     *
      * @return The JSON response from the server.
      * @throws IOException if there is an issue reading the response.
      */
@@ -116,7 +116,7 @@ public class HttpHandler {
 
     /**
      * Reads the error stream from the HTTP connection and logs the error.
-     * 
+     *
      * @throws IOException if there is an issue reading the error stream.
      */
     public void readError() throws IOException {
@@ -138,6 +138,7 @@ public class HttpHandler {
 
     /**
      * Getter for conn.
+     *
      * @return The current conn.
      */
     public HttpURLConnection getConn() {

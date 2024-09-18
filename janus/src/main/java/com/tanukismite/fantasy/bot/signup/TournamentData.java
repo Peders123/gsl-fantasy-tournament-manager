@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
  * in Discord or other data processing workflows.</p>
  * 
  * @see PostData
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -35,7 +35,7 @@ public class TournamentData implements PostData {
 
     /**
      * Constructs a new {@code TournamentData} instance with the specified date, title, and description.
-     * 
+     *
      * @param dateTime    The date and time of the tournament.
      * @param title       The title of the tournament.
      * @param description A brief description of the tournament.
@@ -48,7 +48,7 @@ public class TournamentData implements PostData {
 
     /**
      * Converts the tournament data into a map of key-value pairs for processing.
-     * 
+     *
      * @return A map representing the tournament data.
      */
     @Override
@@ -65,7 +65,7 @@ public class TournamentData implements PostData {
 
     /**
      * Converts the tournament data into a rich {@link MessageEmbed} for display in Discord.
-     * 
+     *
      * @return A {@link MessageEmbed} containing the tournament details.
      */
     @Override
@@ -83,6 +83,7 @@ public class TournamentData implements PostData {
 
     /**
      * Getter for dateTime.
+     *
      * @return The current dateTime.
      */
     public String getDateTime() {
@@ -91,6 +92,7 @@ public class TournamentData implements PostData {
 
     /**
      * Setter for dateTime.
+     *
      * @param dateTime The new dateTime.
      */
     public void setDateTime(String dateTime) {
@@ -99,6 +101,7 @@ public class TournamentData implements PostData {
 
     /**
      * Getter for title.
+     *
      * @return The current title.
      */
     public String getTitle() {
@@ -107,6 +110,7 @@ public class TournamentData implements PostData {
 
     /**
      * Setter for title.
+     *
      * @param title The new title.
      */
     public void setTitle(String title) {
@@ -115,6 +119,7 @@ public class TournamentData implements PostData {
 
     /**
      * Getter for description.
+     *
      * @return The current description.
      */
     public String getDescription() {
@@ -123,6 +128,7 @@ public class TournamentData implements PostData {
 
     /**
      * Setter for description.
+     *
      * @param description The new description.
      */
     public void setDescription(String description) {

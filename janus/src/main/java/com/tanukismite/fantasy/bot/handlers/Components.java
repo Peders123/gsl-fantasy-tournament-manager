@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
  * files to dynamically build options based on pre-defined values.
  * </p>
  * <p><b>Note:</b> This class is not intended to be instantiated.</p>
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -37,7 +37,7 @@ public class Components {
     /**
      * Creates a {@link SelectOption} from the given {@link JsonNode} data. The data is expected to
      * contain fields for the option's label, value, default status, description, and emoji.
-     * 
+     *
      * @param data A {@link JsonNode} containing the option's details.
      * @return A constructed {@link SelectOption} based on the provided JSON data.
      */
@@ -53,7 +53,7 @@ public class Components {
     /**
      * Reads a JSON config file containing select options and returns an array of
      * {@link SelectOptions} for the specified key.
-     * 
+     *
      * @param key The key for which select options should be retrieved.
      * @return An array of {@link SelectOption} objects, or {@code null} if an error occurs.
      */
@@ -85,7 +85,7 @@ public class Components {
     /**
      * Creates a {@link StringSelectMenu} with the given ID and an array of {@link SelectOption}.
      * This menu allows users to select from pre-defined options for a Discord interaction.
-     * 
+     *
      * @param id      The ID of the select menu.
      * @param options The list of {@link SelectOption} to be included in the menu.
      * @return A constructed {@link StringSelectMenu} object.
@@ -99,7 +99,7 @@ public class Components {
     /**
      * Creates a {@link Modal} with the given ID, title, and input fields. The modal can be used
      * to collect text inputs from users during Discord interactions.
-     * 
+     *
      * @param id     The unique ID of the modal.
      * @param title  The title of the modal.
      * @param inputs The {@link TextInput} fields to include in the modal.

@@ -14,14 +14,14 @@ import com.tanukismite.fantasy.bot.handlers.Handler;
  * Commands are dealt with by the {@link Handler} which provides the necessary context and
  * resources for executing the command.
  * </p>
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
 public interface Command {
     /**
      * Executes the main logic of the command.
-     * 
+     *
      * @param handler The {@link Handler} used to manage the execution context.
      * @see com.tanukismite.fantasy.bot.listeners.SlashCommandListener
      */

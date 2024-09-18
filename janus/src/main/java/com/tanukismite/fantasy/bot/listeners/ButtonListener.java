@@ -21,7 +21,7 @@ import com.tanukismite.fantasy.bot.signup.UserSignupData;
  * <p><b>Usage:</b> This class is automatically triggered when a button is clicked in Discord, and
  * it processes the event based on the type of button clicked (e.g., player signup, captain
  * signup).</p>
- * 
+ *
  * @see BaseListener
  * 
  * @author Rory Caston
@@ -33,6 +33,7 @@ public class ButtonListener extends BaseListener {
 
     /**
      * Constructor with a {@link Handler} reference.
+     *
      * @param handler The {@link Handler} current app handler.
      */
     public ButtonListener(Handler handler) {
@@ -42,7 +43,7 @@ public class ButtonListener extends BaseListener {
     /**
      * Handles the {@link ButtonInteractionEvent} when a button is clicked in Discord. Depending on
      * the button's id, different actions are taken.
-     * 
+     *
      * @param event The {@link ButtonInteractionEvent} representing the button blick.
      */
     @Override
@@ -76,7 +77,7 @@ public class ButtonListener extends BaseListener {
      * Processes user signup when a button interaction event is triggered for signup actions.
      * The method differentiates between player and captain signups and communicates with
      * appropriate communicators to verify or create user signups.
-     * 
+     *
      * @param event   The {@link ButtonInteractionEvent} triggered by a user click.
      * @param captain Indicates whether the signup is for a captain.
      */
@@ -130,7 +131,7 @@ public class ButtonListener extends BaseListener {
     /**
      * Processes user signout when a button interaction event is triggered for signout actions.
      * The method verifies whether the user is already signed up and removes them if necessary.
-     * 
+     *
      * @param event The {@link ButtonInteractionEvent} triggered by a user click.
      */
     private void signout(ButtonInteractionEvent event) {

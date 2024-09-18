@@ -15,7 +15,7 @@ import com.tanukismite.fantasy.bot.handlers.Handler;
  * selections during signup sessions.</p>
  * 
  * @see BaseListener
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -23,6 +23,7 @@ public class StringSelectListener extends BaseListener {
 
     /**
      * Constructor with a {@link Handler} reference.
+     *
      * @param handler The {@link Handler} current app handler.
      */
     public StringSelectListener(Handler handler) {
@@ -33,7 +34,7 @@ public class StringSelectListener extends BaseListener {
      * Handles the {@link StringSelectInteractionEvent} when a string select menu interaction 
      * occurs in Discord. Depending on the menu's component ID, it calls the corresponding method 
      * in the {@link CreateSignups} class to handle role selection.
-     * 
+     *
      * @param event The {@link StringSelectInteractionEvent} representing the string select interaction.
      */
     @Override

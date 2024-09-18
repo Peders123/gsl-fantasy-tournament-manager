@@ -28,7 +28,7 @@ import com.tanukismite.fantasy.bot.signup.PostData;
  * the configuration files: {@code config.json} and {@code secrets.json} at run time. It also
  * handles the process of obtaining an authentication token.
  * </p>
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -69,7 +69,7 @@ public abstract class MercuryCommunicator {
 
     /**
      * Initialises the communicator by performing an API login to obtaina session token.
-     * 
+     *
      * @throws IOException If the authentication request fails.
      */
     public void initialise() throws IOException {
@@ -92,7 +92,7 @@ public abstract class MercuryCommunicator {
 
     /**
      * Creates a new {@link HttpHandler} for making HTTP requests to the API.
-     * 
+     *
      * @param url      The target URL for the request.
      * @param method   The HTTP request method to use.
      * @param inputMap A map of data to include in the request body (optional).
@@ -116,7 +116,7 @@ public abstract class MercuryCommunicator {
 
     /**
      * Sends a generic GET request to the specified URL.
-     * 
+     *
      * @param url The target URL for the GET request.
      * @return A {@link JsonNode} containing the response data.
      * @throws IOException if the GET request fails.
@@ -135,12 +135,12 @@ public abstract class MercuryCommunicator {
     }
 
     /**
-     * Sends a 
-     * 
-     * @param url
-     * @param inputMap
-     * @return
-     * @throws IOException
+     * Sends a generic POST request to the specified URL.
+     *
+     * @param url      The target URL for the request.
+     * @param inputMap The POST data.
+     * @return {@code true} if successful, {@code false} if otherwise.
+     * @throws IOException if the POST request fails.
      */
     protected boolean genericPost(URL url, Map<String, Object> inputMap) throws IOException {
 
@@ -154,6 +154,13 @@ public abstract class MercuryCommunicator {
         return true;
     }
 
+    /**
+     * Sends a generic GET request to the specified URL.
+     *
+     * @param url The target URL for the GET request.
+     * @return A {@link JsonNode} containing the response data.
+     * @throws IOException if the GET request fails.
+     */
     protected JsonNode genericDetailedGet(URL url) throws IOException {
 
         HttpHandler getter = createHttpHandler(url, "GET", null);
@@ -168,23 +175,34 @@ public abstract class MercuryCommunicator {
 
     }
 
+    /**
+     * Sends a generic DELETE request to the specified URL.
+     *
+     * @param url The target URL for the DELETE request.
+     * @return {@code true} if successful, {@code false} if otherwise.
+     * @throws IOException if the DELETE request fails.
+     */
     protected boolean genericDelete(URL url) throws IOException {
-
         HttpHandler deleter = createHttpHandler(url, "DELETE", null);
         return deleter.getResponseCode() == HttpURLConnection.HTTP_NO_CONTENT;
-
     }
 
+    /**
+     * Sends a generic PUT request to the specified URL.
+     *
+     * @param url      The target URL for the PUT request.
+     * @param inputMap The PUT data.
+     * @return {@code true} if successful, {@code false} if otherwise.
+     * @throws IOException if the PUT request fails.
+     */
     protected boolean genericPut(URL url, Map<String, Object> inputMap) throws IOException {
-
         HttpHandler putter = createHttpHandler(url, "PUT", inputMap);
         return putter.getResponseCode() == HttpURLConnection.HTTP_CREATED;
-
     }
 
     /**
      * Retrieves a list of resources from the API. Subclasses must implement.
-     * 
+     *
      * @return A {@link JsonNode} containing the retrieved data.
      * @throws IOException if the GET request fails.
      */
@@ -192,7 +210,7 @@ public abstract class MercuryCommunicator {
 
     /**
      * Writes a resource to the API. Subclasses must implement.
-     * 
+     *
      * @param data The {@link PostData} to write.
      * @return A {@link JsonNode} containing the response data.
      * @throws IOException if the POST request fails.
@@ -201,7 +219,7 @@ public abstract class MercuryCommunicator {
 
     /**
      * Gets a specific resource from the API. Subclasses must implement.
-     * 
+     *
      * @param <T> The type of the ID.
      * @param id  The ID of the resource to get.
      * @return A {@link JsonNode} containing the retrieved data.
@@ -211,7 +229,7 @@ public abstract class MercuryCommunicator {
 
     /**
      * Deletes a specific resource from the API. Subclasses must implement.
-     * 
+     *
      * @param <T> The type of the ID.
      * @param id  The ID of the resource to delete.
      * @return A {@link JsonNode} containing the response data.
@@ -221,7 +239,7 @@ public abstract class MercuryCommunicator {
 
     /**
      * Replaces a specific resource from the API. Subclasses must implement.
-     * 
+     *
      * @param <T>  The type of the ID.
      * @param id   The ID of the resource to delete.
      * @param data The {@link PostData} to replace with.
@@ -232,12 +250,14 @@ public abstract class MercuryCommunicator {
 
     /**
      * Abstract getter for the specific API endpoint base.
+     *
      * @return The base url.
      */
     protected abstract String getBaseEndpoint();
 
     /**
      * Getter for the authentication token.
+     *
      * @return The authentication token.
      */
     public String getToken() {

@@ -18,7 +18,7 @@ import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
  * <p>This class can be extended to create specific types of signup data like player signups.</p>
  * 
  * @see PostData
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -39,7 +39,7 @@ public abstract class SignupData implements PostData {
 
     /**
      * Constructs a new {@code SignupData} instance tied to the current signup session.
-     * 
+     *
      * @param currentSession The current {@link CreateSignups} session.
      */
     protected SignupData(CreateSignups currentSession) {
@@ -53,6 +53,7 @@ public abstract class SignupData implements PostData {
 
     /**
      * Getter for sign-up id.
+     *
      * @return The current sign-up id.
      */
     public String getId() {
@@ -61,6 +62,7 @@ public abstract class SignupData implements PostData {
 
     /**
      * Setter for sign-up id.
+     *
      * @param id The new sign-up id.
      */
     public void setId(String id) {
@@ -69,6 +71,7 @@ public abstract class SignupData implements PostData {
 
     /**
      * Getter for tournamentId.
+     *
      * @return The current tournamentId.
      */
     public int getTournamentId() {
@@ -77,6 +80,7 @@ public abstract class SignupData implements PostData {
 
     /**
      * Setter for tournamentId.
+     *
      * @param tournamentId The new tournamentId.
      */
     public void setTournamentId(int tournamentId) {
@@ -85,6 +89,7 @@ public abstract class SignupData implements PostData {
 
     /**
      * Getter for ign.
+     *
      * @return The current ign.
      */
     public String getIgn() {
@@ -93,6 +98,7 @@ public abstract class SignupData implements PostData {
 
     /**
      * Setter for ign.
+     *
      * @param ign The new ign.
      */
     public void setIgn(String ign) {
@@ -100,7 +106,8 @@ public abstract class SignupData implements PostData {
     }
 
     /**
-     * Getter for signupRoot
+     * Getter for signupRoot.
+     *
      * @return The current signupRoot.
      */
     public CreateSignups getSignupRoot() {
@@ -109,6 +116,7 @@ public abstract class SignupData implements PostData {
 
     /**
      * Getter for signupSession.
+     *
      * @return The current signupSession.
      */
     public GenericComponentInteractionCreateEvent getSignupSession() {
@@ -117,6 +125,7 @@ public abstract class SignupData implements PostData {
 
     /**
      * Setter for signupSession.
+     *
      * @param signupSession The new signupSession.
      */
     public void setSignupSession(GenericComponentInteractionCreateEvent signupSession) {
@@ -125,6 +134,7 @@ public abstract class SignupData implements PostData {
 
     /**
      * The string representation is just the signup Root.
+     *
      * @return The string representation for sign-up data.
      */
     @Override
@@ -134,6 +144,7 @@ public abstract class SignupData implements PostData {
 
     /**
      * Converts the data into a map of key-value pairs, ready for processing.
+     *
      * @return A map representing the sign-up data.
      */
     @Override

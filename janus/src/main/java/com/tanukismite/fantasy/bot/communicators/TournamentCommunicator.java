@@ -13,7 +13,7 @@ import com.tanukismite.fantasy.bot.signup.TournamentData;
 
 /**
  * Implementation of {@link MercuryCommunicator} for interactions related to "tournaments".
- * 
+ *
  * @see MercuryCommunicator
  * @author Rory Caston
  * @since 1.0
@@ -38,6 +38,8 @@ public class TournamentCommunicator extends MercuryCommunicator {
     }
 
     /**
+     * Getter for baseUrl.
+     *
      * @return The base API endpoint URL for tournaments.
      */
     @Override
@@ -47,7 +49,7 @@ public class TournamentCommunicator extends MercuryCommunicator {
 
     /**
      * Retrieves all tournament data from the API.
-     * 
+     *
      * @return A {@link JsonNode} containing all tournament data.
      * @throws IOException if the GET request fails.
      */
@@ -58,7 +60,7 @@ public class TournamentCommunicator extends MercuryCommunicator {
 
     /**
      * Writes a new tournament signup to the API. Validates the provided data is of the correct type.
-     * 
+     *
      * @param data The {@link PostData} containing tournament sign-up details.
      * @return {@code true} if the POST is successful, {@code false} if otherwise.
      * @throws IOException if the POST request fails.
@@ -74,7 +76,7 @@ public class TournamentCommunicator extends MercuryCommunicator {
 
     /**
      * Retrieves data relating to a specific tournament from the API.
-     * 
+     *
      * @param <T>          The type of the tournamentId, expected Integer.
      * @param tournamentId The tournament's ID.
      * @return A {@link JsonNode} containing the tournament data.
@@ -92,7 +94,7 @@ public class TournamentCommunicator extends MercuryCommunicator {
 
     /**
      * Deletes a specific tournament from the API.
-     * 
+     *
      * @param <T>          The type of the tournamentId, expected Integer.
      * @param tournamentId The tournament's ID.
      * @return {@code true} if the DELETE is successful, {@code false} if otherwise.
@@ -110,7 +112,7 @@ public class TournamentCommunicator extends MercuryCommunicator {
 
     /**
      * Replaces a specific tournament from the API.
-     * 
+     *
      * @param <T>          The type of the tournamentId, expected Integer.
      * @param tournamentId The tournament's ID.
      * @param data         The {@link PostData} containing tournament data.

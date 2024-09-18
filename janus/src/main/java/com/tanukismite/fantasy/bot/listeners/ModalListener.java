@@ -14,7 +14,7 @@ import com.tanukismite.fantasy.bot.handlers.Handler;
  * and it processes the event based on the modal type (e.g., signup modal, tournament modal).</p>
  * 
  * @see BaseListener
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -22,6 +22,7 @@ public class ModalListener extends BaseListener {
 
     /**
      * Constructor with a {@link Handler} reference.
+     *
      * @param handler The {@link Handler} current app handler.
      */
     public ModalListener(Handler handler) {
@@ -31,7 +32,7 @@ public class ModalListener extends BaseListener {
     /**
      * Handles the {@link ModalInteractionEvent} when a modal is submitted in Discord. Depending on 
      * the modal's ID, different actions are taken.
-     * 
+     *
      * @param event The {@link ModalInteractionEvent} representing the modal submission.
      */
     @Override

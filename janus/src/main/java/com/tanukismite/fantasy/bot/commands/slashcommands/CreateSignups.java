@@ -82,7 +82,7 @@ public class CreateSignups implements Command {
      * tournamentId are the only ones loaded as they are the only ones serialisable. The other
      * attributes are derived and assigned elsewhere.
      * </p>
-     * 
+     *
      * @param channelId    The channel where sign ups are managed.
      * @param userId       The id of the user who initiated the sign up process.
      * @param tournamentId The tournament for which users are signing up.
@@ -105,7 +105,7 @@ public class CreateSignups implements Command {
      * necessary information, such as the tournamentId or the message channel, is extracted from
      * this event.
      * </p>
-     * 
+     *
      * @param event The {@link SlashCommandInteractionEvent} representing the user interaction that
      *              triggered the creation of a sign up event.
      * @see com.tanukismite.fantasy.bot.listeners.SlashCommandListener
@@ -132,7 +132,7 @@ public class CreateSignups implements Command {
      * class as this will be used in other parts of the program to ensure the methods are being
      * executed on this specific sign up instance. After creation, the details are serialised.
      * </p>
-     * 
+     *
      * @param handler The {@link Handler} used to manage command execution. Here it is used to
      *                gather tounament information, as well as track the state of the signup.
      */
@@ -187,7 +187,7 @@ public class CreateSignups implements Command {
      * state for the user in the current {@link Context}, allowing the data to be sent between
      * different methods.
      * </p>
-     * 
+     *
      * @param context     The {@link Context} used to retain data for the sign up process.
      * @param buttonEvent The {@link ButtonInteractionEvent} representing the button press that
      *                    triggered a sign up request.
@@ -264,7 +264,7 @@ public class CreateSignups implements Command {
 
     /**
      * Sends an error for if the user tries to sign up multiple times.
-     * 
+     *
      * @param buttonEvent The {@link ButtonInteractionEvent} that caused this error.
      */
     public void alreadySignedUp(ButtonInteractionEvent buttonEvent) {
@@ -284,7 +284,7 @@ public class CreateSignups implements Command {
      * make API calls. A response is made to the user to let them know if the deletion was
      * successful.
      * </p>
-     * 
+     *
      * @param handler     The current {@link Handler} which provides the communicators to make
      *                    calls to the API.
      * @param buttonEvent The {@link ButtonInteractionEvent} representing the button press that
@@ -350,7 +350,7 @@ public class CreateSignups implements Command {
      * a player. If the user is a captain, the steps are finished and the data is send to the API
      * via a POST and written to the database. If the user is signing up as a player, the modal
      * data is saved and the method builds a select menu which is used for the next step.
-     * 
+     *
      * @param handler    The {@link Handler} used to managed the state of the Commands. Here it is
      *                   used to retrieve the Context for the sign up data, as well as communciate
      *                   with the API.
@@ -415,7 +415,7 @@ public class CreateSignups implements Command {
      * that information in the context and sends another selection menu to select the player's
      * secondary role. When the message is sent, the original selection message is deleted.
      * </p>
-     * 
+     *
      * @param context     The {@link Context} which stores the user's current sign up data.
      * @param selectEvent The {@link StringSelectInteractionEvent} triggered by the user selecting
      *                    their primary role.
@@ -447,7 +447,7 @@ public class CreateSignups implements Command {
      * context and finalises the sign up process. It sends the data to the method to finish the
      * data submission.
      * </p>
-     * 
+     *
      * @param handler     The {@link Handler} which contains the context. Forwarded on to the final
      *                    submission method.
      * @param selectEvent The {@link StringSelectInteractionEvent} triggered by the user selecting
@@ -475,7 +475,7 @@ public class CreateSignups implements Command {
      * and secondary roles have been selected. After submission, and embed containing the data is
      * also sent to the user and the previous selection menu is deleted.
      * </p>
-     * 
+     *
      * @param handler
      * @param userId
      * @param selectEvent
@@ -508,7 +508,7 @@ public class CreateSignups implements Command {
      * external class in reference to the user sign-up process so its scope falls within this
      * class. The method sends a query to the API with the user ID to see if the record exists.
      * </p>
-     * 
+     *
      * @param communicator The {@link MercuryCommunicator} for a user to communicate with the API.
      * @param userId       The ID of the user to check in the database.
      * @return {@code true} if the user exists, otherwise {@code false}.
@@ -542,7 +542,7 @@ public class CreateSignups implements Command {
      * {@code hh:mm a dd/MM/yyyy}, making it easier to read for users. This is also the form
      * accepted by the API.
      * </p>
-     * 
+     *
      * @param dateString The ISO 8601 formatted date string.
      * @return A formatted string representing the date in a readable format.
      */
@@ -582,7 +582,7 @@ public class CreateSignups implements Command {
      * sign-up state after the bot has restarted. If no saved state is found, the method returns
      * {@code null}.
      * </p>
-     * 
+     *
      * @return The deserialized {@code CreateSignups} instance, or {@code null} if no saved state
      *         exists.
      */
@@ -610,7 +610,7 @@ public class CreateSignups implements Command {
      * and {@link User}, which require access to the JDA object. It retrieves these fields using the
      * saved channel ID and user ID.
      * </p>
-     * 
+     *
      * @param jda The {@link JDA} instance used to re-initialize non-serializable fields.
      */
     public void initialiseNonSerializedFields(JDA jda) {
@@ -622,6 +622,7 @@ public class CreateSignups implements Command {
 
     /**
      * Getter for tournamentId.
+     *
      * @return tournamentId.
      */
     public int getTournamentId() {
@@ -630,6 +631,7 @@ public class CreateSignups implements Command {
 
     /**
      * Getter for channelId.
+     *
      * @return channelId.
      */
     public String getChannelId() {
@@ -638,6 +640,7 @@ public class CreateSignups implements Command {
 
     /**
      * Getter for userId.
+     *
      * @return userId.
      */
     public String getUserId() {

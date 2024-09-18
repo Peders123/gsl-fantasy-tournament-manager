@@ -17,7 +17,7 @@ import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
  * <p>It overrides the methods to convert the player sign-up data into a Discord embed and a map.</p>
  * 
  * @see SignupData
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -29,6 +29,7 @@ public class PlayerSignupData extends SignupData {
 
     /**
      * Constructs a new instance tied to the current signup session.
+     *
      * @param currentSession
      */
     public PlayerSignupData(CreateSignups currentSession) {
@@ -37,6 +38,7 @@ public class PlayerSignupData extends SignupData {
 
     /**
      * Getter for smiteGuru.
+     *
      * @return The current smiteGuru.
      */
     public String getSmiteGuru() {
@@ -45,6 +47,7 @@ public class PlayerSignupData extends SignupData {
 
     /**
      * Setter for smiteGuru.
+     *
      * @param smiteGuru The new smiteGuru.
      */
     public void setSmiteGuru(String smiteGuru) {
@@ -53,6 +56,7 @@ public class PlayerSignupData extends SignupData {
 
     /**
      * Getter for role1.
+     *
      * @return The current role1.
      */
     public Role getRole1() {
@@ -61,6 +65,7 @@ public class PlayerSignupData extends SignupData {
 
     /**
      * Setter for role1.
+     *
      * @param role1 The new role1.
      */
     public void setRole1(Role role1) {
@@ -69,6 +74,7 @@ public class PlayerSignupData extends SignupData {
 
     /**
      * Getter for role2.
+     *
      * @return The current role2
      */
     public Role getRole2() {
@@ -77,6 +83,7 @@ public class PlayerSignupData extends SignupData {
 
     /**
      * Setter for role2.
+     *
      * @param role2 The new role2.
      */
     public void setRole2(Role role2) {
@@ -105,7 +112,7 @@ public class PlayerSignupData extends SignupData {
 
     /**
      * Converts the data into a map of key-value pairs, ready for processing.
-     * 
+     *
      * @return A map representing the player sign-up data.
      */
     @Override

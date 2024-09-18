@@ -14,7 +14,7 @@ import com.tanukismite.fantasy.bot.communicators.MercuryCommunicator;
  * and coordinating interactions with various {@link MercuryCommunicator} instances. It holds the
  * application context and a registry of communicators that facilitate API interactions with
  * external services. It acts as a central manager for all command execution.
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -26,7 +26,7 @@ public class Handler {
     /**
      * Constructs a {@code Handler} and intialises the application {@link Context} along with an
      * empty set of {@link MercuryCommunicator} instances.
-     * 
+     *
      * @param jda The current {@link JDA} instance the bot is running on.
      */
     public Handler(JDA jda) {
@@ -37,7 +37,7 @@ public class Handler {
     /**
      * Executes a {@link Command} and passes this handler instance to it, enabling the command to
      * interact with the application's state.
-     * 
+     *
      * @param command The {@link Command} object to be executed.
      */
     public void execute(Command command) {
@@ -46,6 +46,7 @@ public class Handler {
 
     /**
      * Getter for the app context.
+     *
      * @return The current app {@link Context}.
      */
     public Context getContext() {
@@ -54,7 +55,7 @@ public class Handler {
 
     /**
      * Adds a new communicator type to the handler.
-     * 
+     *
      * @param type         The type of communicator. Eg. "captain", "player", etc.
      * @param communicator The {@link MercuryCommunicator} instance.
      */
@@ -64,6 +65,7 @@ public class Handler {
 
     /**
      * Gets a specific communicator.
+     *
      * @param type The type of communicator to get.
      * @return The {@link MercuryCommunicator} instance.
      */

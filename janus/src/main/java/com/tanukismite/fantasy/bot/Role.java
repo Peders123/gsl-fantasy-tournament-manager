@@ -18,7 +18,7 @@ package com.tanukismite.fantasy.bot;
  *     <li>{@link #SOLO} - The Warrior role, usually in the solo lane.</li>
  *     <li>{@link #FILL} - A flexible role to fill in for any position.</li>
  * </ul>
- * 
+ *
  * @author Rory Caston
  * @since 1.0
  */
@@ -36,7 +36,7 @@ public enum Role {
 
     /**
      * Constructs a {@code Role} with the specified emote ID and name.
-     * 
+     *
      * @param emoteId The Discord emote ID for the role.
      * @param emoteName The name of the emote.
      */
@@ -47,6 +47,7 @@ public enum Role {
 
     /**
      * Getter for emoteId.
+     *
      * @return The current emoteId.
      */
     public String getEmoteId() {
@@ -55,6 +56,7 @@ public enum Role {
 
     /**
      * Getter for emoteName.
+     *
      * @return The current emoteName.
      */
     public String getEmoteName() {
@@ -64,6 +66,7 @@ public enum Role {
     /**
      * Returns the emote in a format to be used in discord messages. The format is:
      * {@code <emote_name:emote_id>}, which allows rendering of custom emotes.
+     *
      * @return The formatted emote as a {@link String}.
      */
     public String getFormattedEmote() {

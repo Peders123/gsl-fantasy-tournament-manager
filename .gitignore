@@ -12,6 +12,7 @@ secrets.json
 .pylintrc
 .ser
 .log
+.VSCodeCounter
 environment.sh
 
 migrations

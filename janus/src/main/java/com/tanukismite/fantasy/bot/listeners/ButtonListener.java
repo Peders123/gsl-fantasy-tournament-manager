@@ -2,27 +2,50 @@ package com.tanukismite.fantasy.bot.listeners;
 
 import java.io.IOException;
 
-import com.tanukismite.fantasy.bot.commands.slash_commands.CreateSignups;
-import com.tanukismite.fantasy.bot.commands.slash_commands.Edit;
-import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
-import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
-import com.tanukismite.fantasy.bot.communicators.UserCommunicator;
-import com.tanukismite.fantasy.bot.handlers.Handler;
-import com.tanukismite.fantasy.bot.signup.UserSignupData;
-
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.tanukismite.fantasy.bot.commands.slashcommands.CreateSignups;
+import com.tanukismite.fantasy.bot.communicators.CaptainCommunicator;
+import com.tanukismite.fantasy.bot.communicators.PlayerCommunicator;
+import com.tanukismite.fantasy.bot.handlers.Handler;
+import com.tanukismite.fantasy.bot.signup.UserSignupData;
+
+
+/**
+ * The {@code ButtonListener} class extends {@link BaseListener} and handles interactions 
+ * triggered by button clicks within Discord. It manages signups and signouts based on 
+ * user button interactions.
+ *
+ * <p><b>Usage:</b> This class is automatically triggered when a button is clicked in Discord, and
+ * it processes the event based on the type of button clicked (e.g., player signup, captain
+ * signup).</p>
+ *
+ * @see BaseListener
+ * 
+ * @author Rory Caston
+ * @since 1.0
+ */
 public class ButtonListener extends BaseListener {
 
     private static final Logger logger = LogManager.getLogger("ConsoleLogger");
 
+    /**
+     * Constructor with a {@link Handler} reference.
+     *
+     * @param handler The {@link Handler} current app handler.
+     */
     public ButtonListener(Handler handler) {
         super(handler);
     }
 
+    /**
+     * Handles the {@link ButtonInteractionEvent} when a button is clicked in Discord. Depending on
+     * the button's id, different actions are taken.
+     *
+     * @param event The {@link ButtonInteractionEvent} representing the button blick.
+     */
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
 
@@ -30,22 +53,6 @@ public class ButtonListener extends BaseListener {
         String type = id[1];
 
         switch (type) {
-
-            case "test":
-                logger.info("Testing button.");
-                break;
-
-            case "bad":
-                logger.info("Bad button.");
-                break;
-
-            case "edit":
-                this.edit(event);
-                break;
-
-            case "delete":
-                this.delete(event);
-                break;
 
             case "player-signup":
                 this.signup(event, false);
@@ -66,33 +73,17 @@ public class ButtonListener extends BaseListener {
 
     }
 
-    private void edit(ButtonInteractionEvent event) {
-
-        try {
-            Edit.editMessage(event.getMessageChannel(), event.getMessageId());
-        } catch (Exception error) {
-            logger.error("Error editing message with id {}", event.getMessageId(), error);
-        }
-
-    }
-
-    private void delete(ButtonInteractionEvent event) {
-
-        try {
-            Edit.deleteMessage(event.getMessageChannel(), event.getMessageId());
-        } catch (Exception error) {
-            logger.error("Error deleting message with id {}", event.getMessageId(), error);
-        }
-
-    }
-
+    /**
+     * Processes user signup when a button interaction event is triggered for signup actions.
+     * The method differentiates between player and captain signups and communicates with
+     * appropriate communicators to verify or create user signups.
+     *
+     * @param event   The {@link ButtonInteractionEvent} triggered by a user click.
+     * @param captain Indicates whether the signup is for a captain.
+     */
     private void signup(ButtonInteractionEvent event, boolean captain) {
 
         Long longId = Long.parseLong(event.getUser().getId());
-
-        UserCommunicator userCommunicator = (UserCommunicator) this.handler.getCommunicator("user");
-        boolean exists = CreateSignups.checkUserExists(this.handler, longId);
-        boolean signupExists = false;
 
         PlayerCommunicator playerCommunicator = (PlayerCommunicator) this.handler.getCommunicator("player");
         CaptainCommunicator captainCommunicator = (CaptainCommunicator) this.handler.getCommunicator("captain");
@@ -100,6 +91,7 @@ public class ButtonListener extends BaseListener {
         boolean playerExists;
         boolean captainExists;
 
+        // Determine if the user is signed up.
         try {
             playerExists = playerCommunicator.getPlayerUserExists(longId);
             captainExists = captainCommunicator.getCaptainUserExists(longId);
@@ -111,31 +103,40 @@ public class ButtonListener extends BaseListener {
         logger.debug("Player exists: {}", playerExists);
         logger.debug("Captain exists: {}", captainExists);
 
-        signupExists = playerExists || captainExists;
+        boolean signupExists = playerExists || captainExists;
 
+        // Tell the user if they are already signed up.
         if (signupExists) {
             this.handler.getContext().getSignupRoot().alreadySignedUp(event);
+            return;
         }
 
-        if (!exists) {
+        // Create a new user in the database.
+        if (!CreateSignups.checkUserExists(this.handler.getCommunicator("user"), longId)) {
             try {
-                UserSignupData data = new UserSignupData(event.getUser().getId(), event.getUser().getName());
-                userCommunicator.post(data);
+                this.handler.getCommunicator("user").post(
+                    new UserSignupData(event.getUser().getId(), event.getUser().getName())
+                );
             } catch (IOException e) {
                 logger.error("Error creating user with id: {}", event.getUser().getId());
                 return;
             }
         }
 
-        this.handler.getContext().getSignupRoot().createModal(handler, event, captain);
+        // Continue sign-up execution.
+        this.handler.getContext().getSignupRoot().createModal(this.handler.getContext(), event, captain);
 
     }
 
+    /**
+     * Processes user signout when a button interaction event is triggered for signout actions.
+     * The method verifies whether the user is already signed up and removes them if necessary.
+     *
+     * @param event The {@link ButtonInteractionEvent} triggered by a user click.
+     */
     private void signout(ButtonInteractionEvent event) {
 
         Long longId = Long.parseLong(event.getUser().getId());
-
-        boolean signupExists = false;
 
         PlayerCommunicator playerCommunicator = (PlayerCommunicator) this.handler.getCommunicator("player");
         CaptainCommunicator captainCommunicator = (CaptainCommunicator) this.handler.getCommunicator("captain");
@@ -143,6 +144,7 @@ public class ButtonListener extends BaseListener {
         boolean playerExists;
         boolean captainExists;
 
+        // Determine if player is signed up.
         try {
             playerExists = playerCommunicator.getPlayerUserExists(longId);
             captainExists = captainCommunicator.getCaptainUserExists(longId);
@@ -154,8 +156,9 @@ public class ButtonListener extends BaseListener {
         logger.debug("Player exists: {}", playerExists);
         logger.debug("Captain exists: {}", captainExists);
 
-        signupExists = playerExists || captainExists;
+        boolean signupExists = playerExists || captainExists;
 
+        // Take actions.
         if (!signupExists) {
             event.reply("You are not currently signed up.").setEphemeral(true).queue();
         } else {

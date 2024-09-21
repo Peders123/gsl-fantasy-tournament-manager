@@ -1,0 +1,24 @@
+validate:
+  python: true
+
+linters:
+  python_pylint: true
+  python_flake8: true
+  python_black: true
+  python_bandit: true
+  python_mypy: true
+
+python_pylint_config:
+  max-line-length: 120
+
+python_flake8_config:
+  max-line-length: 120
+
+python_black_config:
+  line-length: 120
+
+python_bandit_config:
+  severity: "medium"
+
+python_mypy_config:
+  ignore-missing-imports: true

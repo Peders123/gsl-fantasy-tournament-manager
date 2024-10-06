@@ -11,3 +11,4 @@ class ScheduledTask(Base):
     scheduled_date = Column(DateTime, nullable=False)
     order_team_id = Column(Integer, nullable=False)
     chaos_team_id = Column(Integer, nullable=False)
+    match_id = Column(Integer, nullable=False)

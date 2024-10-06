@@ -75,6 +75,4 @@ def construct_host_url(db_tech: str) -> str:
         driver: str = "asyncpg"
         connection_information: str = load_postgres_data()
 
-    print(connection_information)
-
     return f"{dialect}+{driver}://{connection_information}"

@@ -21,6 +21,21 @@ services:
     volumes:
       - ../athena/mount:/data/terra/mount
 
+  thoth:
+    build:
+      context: ../
+      dockerfile: docker/thoth/Dockerfile
+      target: thoth
+    entrypoint: uvicorn thoth.main:app --host 0.0.0.0 --port 8000
+    #entrypoint: tail -f /dev/null
+    environment:
+      - BUILD_TYPE=dev
+    image: thoth:1.0
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../athena/mount/thoth:/mount
+
   mercury:
     build:
       context: ../

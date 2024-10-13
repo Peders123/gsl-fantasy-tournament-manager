@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from pydantic import BaseModel, ConfigDict, field_serializer
 
@@ -22,4 +22,6 @@ class MatchCreate(_Match):
     @field_serializer("match_date_time", mode="plain")
     def make_datetime_naive(cls, value: datetime):
         if value and value.tzinfo is not None:
-            return value.replace(tzinfo=None)
+            # Convert to UTC first, then remove tzinfo to make it naive
+            value = value.astimezone(timezone.utc).replace(tzinfo=None)
+        return value

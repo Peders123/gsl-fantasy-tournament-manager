@@ -11,7 +11,7 @@ async def get_all_games(database: AsyncSession) -> list[Game]:
 
 async def create_game(database: AsyncSession, match: GameCreate) -> Game:
 
-    db_match = Game(
+    db_game = Game(
         id=match.id,
         match_id=match.match_id,
         date_time=match.date_time,
@@ -31,8 +31,6 @@ async def create_game(database: AsyncSession, match: GameCreate) -> Game:
         ban_10=match.ban_10,
     )
 
-    database.add(db_match)
-    await database.commit()
-    await database.refresh(db_match)
+    database.add(db_game)
 
-    return db_match
+    return db_game

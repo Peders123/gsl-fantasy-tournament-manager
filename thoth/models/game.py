@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from thoth.utils.database import Base
 
@@ -29,3 +29,4 @@ class Game(Base):
     order_team = relationship("Team", foreign_keys=[order_team_id], back_populates="games_as_order")
     chaos_team = relationship("Team", foreign_keys=[chaos_team_id], back_populates="games_as_chaos")
     winning_team = relationship("Team", foreign_keys=[winning_team_id], back_populates="games_won")
+    total_player_data = relationship("PlayerGameData", back_populates="game")

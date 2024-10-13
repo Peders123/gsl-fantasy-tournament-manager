@@ -13,6 +13,12 @@ class Team(_Team):
     id: int
 
 
+class TeamDisplay(Team):
+
+    franchise_name: str
+    division_name: str
+
+
 class TeamCreate(_Team):
 
     pass

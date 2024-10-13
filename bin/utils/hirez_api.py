@@ -180,7 +180,6 @@ class SmiteAPI(HiRezAPI):
         str_match_ids = ','.join([str(id) for id in match_ids])
         return self.request(self.create_url('getmatchdetails', str_match_ids))
 
-
     def get_league_leaderboard(self, queue, tier, season):
 
         return self.request(self.create_url('getleagueleaderboard', queue, tier, season))

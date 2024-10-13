@@ -19,3 +19,4 @@ class Team(Base):
     games_won = relationship("Game", foreign_keys="[Game.winning_team_id]", back_populates="winning_team")
     matches_as_team1 = relationship("Match", foreign_keys="[Match.team1_id]", back_populates="team1")
     matches_as_team2 = relationship("Match", foreign_keys="[Match.team2_id]", back_populates="team2")
+    users = relationship("User", back_populates="team")

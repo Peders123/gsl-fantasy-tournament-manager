@@ -16,8 +16,47 @@
 {% endif %}
 
 {% block content %}
-    {% for tournament in tournaments %}
-        <p><a href="{% url 'tournament_overview' t_id=tournament.tournament_id %}" class="btn-link">{{ tournament.title }}</a></p>
-    {% endfor %}
+
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Upcoming Matches</h1>
+
+        <div class="mb-5">
+            <h2 class="text-center">Upper Division</h2>
+            <div class="row row-cols-1 row-cols-md-4 g-4">
+                {% for match in matches %}
+                    {{ match.division.division_rank }}
+                    {% if match.team1.division.division_rank == 0 %}
+                        <div class="col">
+                            <div class="card h-100 border border-2 border-dark">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ match }}</h5>
+                                    <p class="card-text">{{ match.read_date }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div>
+            <h2 class="text-center">Lower Division</h2>
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for match in matches %}
+                    {{ match.division.division_rank }}
+                    {% if match.team1.division.division_rank == 1 %}
+                        <div class="col">
+                            <div class="card h-100 border border-2 border-dark">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ match }}</h5>
+                                    <p class="card-text">{{ match.read_date }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
 {% endblock content %}

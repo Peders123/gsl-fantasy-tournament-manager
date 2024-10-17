@@ -1,5 +1,8 @@
 from pydantic import BaseModel, ConfigDict
 
+from thoth.schemas.division import Division
+from thoth.schemas.franchise import Franchise
+
 
 class _Team(BaseModel):
 
@@ -13,10 +16,13 @@ class Team(_Team):
     id: int
 
 
-class TeamDisplay(Team):
+class TeamDisplay(BaseModel):
 
-    franchise_name: str
-    division_name: str
+    model_config = ConfigDict(fromt_attributes=True)
+
+    id: int
+    franchise: Franchise
+    division: Division
 
 
 class TeamCreate(_Team):

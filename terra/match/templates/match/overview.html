@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% load custom_filters %}
+
+{% block head %}
+    <style>
+        .ban-img {
+            height: 40px;
+            width: auto;
+            margin-top: 3px;
+            margin-bottom: 3px;
+        }
+        .card-link {
+            text-decoration: none;
+        }
+        .card-link:hover {
+            text-decoration: none;
+        }
+        .card-link strong {
+            text-decoration: underline;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    TSL {{ match.team1.division}} - {{ match.team1.short_name }} vs {{ match.team2.short_name }}
+{% endblock title %}
+
+{% block main %}
+    <h1 class="text-center mb-5">Tanuki Smite League - {{ match.team1.division.division_name }}</h1>
+    <h2 class="text-center mt-3 mb-2 text-primary">{{ match.team1 }}</h2>
+    <h3>VS</h3>
+    <h2 class="text-center mb-2 mb-3 text-primary">{{ match.team2 }}</h2>
+    <h2 class="text-center mt-3 mb-5">{{ match.result }}</h2>
+    <h5 class="text-center">{{ match.read_date }}</h5>
+{% endblock main %}
+
+{% block content %}
+    {% if match.games %}
+        {% for game in match.games %}
+            {% with order_team=match|get_team:game.order_team_id chaos_team=match|get_team:game.chaos_team_id %}
+                <div class="card mb-4">
+                    <a href="/game/1373905755" class="card-link">
+                        <div class="card-body mb-2">
+                            <h5 class="card-title">Game {{ forloop.counter }} - {{ game.id }}</h5>
+                            <ul class="list-group list-group-flush rounded-1">
+                                <li class="list-group-item">
+                                    <strong>Duration</strong><br />{{ game.duration }}
+                                </li>
+                                <li class="list-group-item"><strong>Result</strong><br /><span class="text-primary">
+                                    {% if game.winning_team_id == order_team.id %}
+                                        {{ order_team.franchise.franchise_name }}
+                                    {% else %}
+                                        {{ chaos_team.franchise.franchise_name }}
+                                    {% endif %}
+                                 - Victory</span></li>
+                                <li class="list-group-item">
+                                    <strong>Bans</strong><br />
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <div class="text-end pe-2" style="border-right: 1px solid #ddd;">
+                                            <strong>{{ order_team.franchise.franchise_name }}</strong>
+                                            <br>
+                                            <strong>{{ chaos_team.franchise.franchise_name }}</strong>
+                                        </div>
+                                        <div class="text-start ps-2">
+                                            <img src="{{ game.ban_1|get_god_image }}" class="img-fluid rounded-1 ban-img" alt="{{ game.ban_1|get_god_name }}-img">
+                                            <img src="{{ game.ban_3|get_god_image }}" class="img-fluid rounded-1 ban-img" alt="{{ game.ban_3|get_god_name }}-img">
+                                            <img src="{{ game.ban_5|get_god_image }}" class="img-fluid rounded-1 ban-img" alt="{{ game.ban_5|get_god_name }}-img">
+                                            <img src="{{ game.ban_8|get_god_image }}" class="img-fluid rounded-1 ban-img" alt="{{ game.ban_8|get_god_name }}-img">
+                                            <img src="{{ game.ban_10|get_god_image }}" class="img-fluid rounded-1 ban-img" alt="{{ game.ban_10|get_god_name }}-img">
+                                            <br>
+                                            <img src="{{ game.ban_2|get_god_image }}" class="img-fluid rounded-1 ban-img" alt="{{ game.ban_2|get_god_name }}-img">
+                                            <img src="{{ game.ban_4|get_god_image }}" class="img-fluid rounded-1 ban-img" alt="{{ game.ban_4|get_god_name }}-img">
+                                            <img src="{{ game.ban_6|get_god_image }}" class="img-fluid rounded-1 ban-img" alt="{{ game.ban_6|get_god_name }}-img">
+                                            <img src="{{ game.ban_7|get_god_image }}" class="img-fluid rounded-1 ban-img" alt="{{ game.ban_7|get_god_name }}-img">
+                                            <img src="{{ game.ban_9|get_god_image }}" class="img-fluid rounded-1 ban-img" alt="{{ game.ban_9|get_god_name }}-img">
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                </li>
+                            </ul>
+                        </div>
+                    </a>
+                </div>
+            {% endwith %}
+        {% endfor %}
+    {% else %}
+        {% if match.is_future %}
+            <h3>Match will be played in {{ match.days_in_future }} days</h3>
+        {% else %}
+            <h3>Game data not updated</h3>
+        {% endif %}
+    {% endif %}
+{% endblock content %}

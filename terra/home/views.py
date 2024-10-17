@@ -3,11 +3,10 @@ import requests
 import json
 import os
 from tournament.models import Tournament
+from match.models import Match, Team
 
 
 def index(request):
-
-    tournaments = Tournament.objects.all()
 
     signed_in = False
     discord_id = ""
@@ -19,10 +18,14 @@ def index(request):
     errno = request.GET.get('errno', None)
     error = request.GET.get('error', None)
 
+    total_match_data = requests.get("http://192.168.64.1:8002/match/display/").json()
+
+    matches = [Match.from_dict(match_data) for match_data in total_match_data]
+
     context = {
         'signed_in': signed_in,
         'discord_id': discord_id,
-        'tournaments': tournaments,
+        'matches': matches,
         'errno': errno,
         'error': error
     }

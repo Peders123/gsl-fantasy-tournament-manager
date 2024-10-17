@@ -13,6 +13,6 @@ class Match(Base):
     team1_id = Column(Integer, ForeignKey("team.id"), nullable=False)
     team2_id = Column(Integer, ForeignKey("team.id"), nullable=False)
 
-    games = relationship("Game", back_populates="match")
+    games = relationship("Game", back_populates="match", order_by="Game.id")
     team1 = relationship("Team", foreign_keys=[team1_id], back_populates="matches_as_team1")
     team2 = relationship("Team", foreign_keys=[team2_id], back_populates="matches_as_team2")

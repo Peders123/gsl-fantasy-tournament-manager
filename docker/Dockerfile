@@ -57,11 +57,13 @@ COPY --from=python-builder /opt/venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"
 
+COPY config/assets/smite /data/assets/smite
 COPY terra/startTerra.sh /data/terra/.
 COPY terra/manage.py /data/terra/.
 COPY terra/static /data/terra/static
 COPY terra/home /data/terra/home
 COPY terra/terra /data/terra/terra
+COPY terra/match /data/terra/match
 COPY terra/tournament /data/terra/tournament
 COPY terra/auction /data/terra/auction
 COPY secrets.json /data/terra/secrets.json

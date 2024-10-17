@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'tournament.apps.TournamentConfig',
     'auction.apps.AuctionConfig',
+    'match.apps.MatchConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -138,6 +139,13 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    }
+}
 
 
 # Internationalization

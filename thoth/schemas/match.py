@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from pydantic import BaseModel, ConfigDict, field_serializer
 
 from thoth.schemas.team import TeamDisplay
+from thoth.schemas.game import Game
 
 
 class _Match(BaseModel):
@@ -28,6 +29,11 @@ class MatchDisplay(BaseModel):
     best_of: int
     team1: TeamDisplay
     team2: TeamDisplay
+
+
+class MatchDetailed(MatchDisplay):
+
+    games: list[Game]
 
 
 class MatchCreate(_Match):

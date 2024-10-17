@@ -33,11 +33,15 @@ async def get_all_matches(database: Annotated[AsyncSession, Depends(get_db_sessi
     return await match_crud.get_all_matches(database)
 
 
+
 @router.get("/match/display/", response_model=list[match_schema.MatchDisplay])
 async def get_matches_for_display(database: Annotated[AsyncSession, Depends(get_db_session)]):
-    result = await match_crud.get_all_matches_display(database)
-    print(result)
-    return result
+    return await match_crud.get_all_matches_display(database)
+
+
+@router.get("/match/{match_id}/", response_model=match_schema.MatchDetailed)
+async def get_match_detailed(match_id: int, database: Annotated[AsyncSession, Depends(get_db_session)]):
+    return await match_crud.get_match(database, match_id)
 
 
 @router.post("/game/")

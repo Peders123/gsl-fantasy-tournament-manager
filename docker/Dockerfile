@@ -57,6 +57,7 @@ COPY --from=python-builder /opt/venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"
 
+COPY config/assets/smite /data/assets/smite
 COPY terra/startTerra.sh /data/terra/.
 COPY terra/manage.py /data/terra/.
 COPY terra/static /data/terra/static

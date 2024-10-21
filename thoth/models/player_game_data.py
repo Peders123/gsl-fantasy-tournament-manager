@@ -30,6 +30,8 @@ class PlayerGameData(Base):
     item_4_id = Column(Integer, nullable=True)
     item_5_id = Column(Integer, nullable=True)
     item_6_id = Column(Integer, nullable=True)
+    team_id = Column(Integer, ForeignKey("team.id"), nullable=False)
 
     game = relationship("Game", back_populates="total_player_data")
     player = relationship("Player", back_populates="total_player_data")
+    team = relationship("Team", back_populates="total_player_data")

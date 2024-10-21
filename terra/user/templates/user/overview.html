@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+    Players
+{% endblock title %}
+
+{% block main %}
+    <h1 class="text-center">Hello World</h1>
+
+    {% if admin %}
+        <h2 class="text-center"><a href="{% url 'user_create' %}">Create Players</a></h2>
+    {% endif %}
+{% endblock main %}
+
+{% block content %}
+{% endblock content %}

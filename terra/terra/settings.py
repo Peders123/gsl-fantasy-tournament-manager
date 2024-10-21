@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     'tournament.apps.TournamentConfig',
     'auction.apps.AuctionConfig',
     'match.apps.MatchConfig',
+    'user.apps.UserConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

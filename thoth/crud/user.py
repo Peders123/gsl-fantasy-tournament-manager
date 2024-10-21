@@ -12,8 +12,7 @@ async def get_all_users(database: AsyncSession) -> list[User]:
 async def create_user(database: AsyncSession, user: UserCreate) -> User:
 
     db_user = User(
-        discord_name=user.discord_name,
-        team_id=user.team_id,
+        discord_name=user.discord_name
     )
 
     database.add(db_user)

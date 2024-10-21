@@ -34,6 +34,7 @@ async def create_player_game_data(database: AsyncSession, player_game_data: Play
         item_4_id=player_game_data.item_4_id,
         item_5_id=player_game_data.item_5_id,
         item_6_id=player_game_data.item_6_id,
+        team_id=player_game_data.team_id,
     )
 
     database.add(db_player_game_data)

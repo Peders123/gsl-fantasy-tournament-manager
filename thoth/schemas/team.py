@@ -2,6 +2,7 @@ from pydantic import BaseModel, ConfigDict
 
 from thoth.schemas.division import Division
 from thoth.schemas.franchise import Franchise
+from thoth.schemas.user_team import UserTeamDetailed
 
 
 class _Team(BaseModel):
@@ -23,6 +24,11 @@ class TeamDisplay(BaseModel):
     id: int
     franchise: Franchise
     division: Division
+
+
+class TeamUsers(TeamDisplay):
+
+    user_teams: list[UserTeamDetailed]
 
 
 class TeamCreate(_Team):

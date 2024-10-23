@@ -14,8 +14,5 @@ async def create_user(database: AsyncSession, user: UserCreate) -> User:
     db_user = User(
         discord_name=user.discord_name
     )
-
     database.add(db_user)
-
     return db_user
-

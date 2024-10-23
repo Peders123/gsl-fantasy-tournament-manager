@@ -2,6 +2,8 @@ from datetime import datetime, timezone
 
 from pydantic import BaseModel, ConfigDict, field_serializer
 
+from thoth.schemas.user import User
+
 
 class _UserTeam(BaseModel):
 
@@ -16,6 +18,11 @@ class UserTeam(_UserTeam):
     model_config = ConfigDict(from_attributes=True)
     id: int
     join_order: int
+
+
+class UserTeamDetailed(UserTeam):
+
+    user: User
 
 
 class UserTeamCreate(_UserTeam):

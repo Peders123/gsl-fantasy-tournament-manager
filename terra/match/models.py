@@ -61,7 +61,7 @@ class Team(models.Model):
 
     def __str__(self):
         return f"{self.franchise} ({self.division})"
-    
+
     @property
     def short_name(self):
         return self.franchise.short_name

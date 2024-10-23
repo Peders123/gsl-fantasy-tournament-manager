@@ -6,14 +6,15 @@ from django.shortcuts import render, redirect
 
 def overview(request: ASGIRequest):
 
+    team_player_data = requests.get("http://192.168.64.1:8002/team/users/")
+
     return render(request, "user/overview.html", context={
-        "admin": request.user.is_superuser
+        "admin": request.user.is_superuser,
+        "teams": team_player_data.json()
     })
 
 
 def create(request: ASGIRequest):
-
-    print(request.POST, flush=True)
 
     if request.POST:
 

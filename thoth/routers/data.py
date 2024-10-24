@@ -53,7 +53,17 @@ async def get_player(database: Annotated[AsyncSession, Depends(get_db_session)])
     return await player_crud.get_all_players(database)
 
 
-@router.post("/player/", status_code=201, response_model=player_schema.PlayerCreate)
+@router.get("/player/unassigned/", response_model=list[player_schema.Player])
+async def get_unassigned_players(database: Annotated[AsyncSession, Depends(get_db_session)]):
+    return await player_crud.get_unassigned_players(database)
+
+
+@router.patch("/player/{player_id}/set_user/", response_model=player_schema.Player)
+async def set_player_user_id(player_id: str, user_id: int, database: Annotated[AsyncSession, Depends(get_db_session)]):
+    return await player_crud.set_player_user(database, player_id, user_id)  
+
+
+@router.post("/player/", status_code=201, response_model=player_schema.Player)
 async def add_player(player_data: player_schema.PlayerCreate, database: Annotated[AsyncSession, Depends(get_db_session)]):
     new_player = await player_crud.create_player(database, player_data)
     await database.commit()

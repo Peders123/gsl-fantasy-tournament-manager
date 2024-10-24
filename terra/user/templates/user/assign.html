@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+    Create new user
+{% endblock title %}
+
+{% block main %}
+
+{% endblock main %}
+
+{% block content %}
+    <form action="{% url 'player_assign' %}" method="post">
+        {% csrf_token %}
+        <div class="row">
+            {% for player in players %}
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="{{ player.id }}">{{ player.player_name }}</label>
+                        <select class="form-control" id="{{ player.id }}" name="user-{{ player.player_name }}">
+                            <option value="" selected> -- select an option -- </option>
+                            {% for user in users %}
+                                <option value="{{ user.id }}">{{ user.discord_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" name="id-{{ player.player_name }}" value="{{ player.id }}">
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <input type="submit" class="btn btn-primary mt-3" value="Submit">
+            </div>
+        </div>
+    </form>
+{% endblock content %}

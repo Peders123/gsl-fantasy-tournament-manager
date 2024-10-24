@@ -1,3 +1,5 @@
+import re
+
 import requests
 
 from django.core.handlers.asgi import ASGIRequest
@@ -41,4 +43,33 @@ def create(request: ASGIRequest):
     return render(request, "user/create.html", context={
         "divisions": divisions,
         "franchises": franchises
+    })
+
+
+def assign(request: ASGIRequest):
+
+    if request.POST:
+
+        data = list(request.POST.items())
+
+        for i in range(1, len(data), 2):
+
+            _, user_id = data[i]
+            _, player_id = data[i + 1]
+
+            if user_id:
+                requests.patch(f"http://192.168.64.1:8002/player/{player_id}/set_user/", json={"user_id": int(user_id)})
+
+    players = requests.get("http://192.168.64.1:8002/player/unassigned/").json()
+    users = requests.get("http://192.168.64.1:8002/user/").json()
+
+    if not request.user.is_superuser:
+        return redirect("player_overview")
+
+    for player in players:
+        player["player_name"] = re.sub(r"\[[^\]]*\]", "", player["player_name"])
+
+    return render(request, "user/assign.html", context={
+        "players": players,
+        "users": users
     })

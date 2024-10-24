@@ -10,7 +10,8 @@
     <h1 class="text-center">Hello World</h1>
 
     {% if admin %}
-        <h2 class="text-center"><a href="{% url 'user_create' %}">Create Players</a></h2>
+        <h2 class="text-center mb-2"><a href="{% url 'user_create' %}">Create Players</a></h2>
+        <h2 class="text-center"><a href="{% url 'player_assign' %}">Assign Players</a></h2>
     {% endif %}
 {% endblock main %}
 

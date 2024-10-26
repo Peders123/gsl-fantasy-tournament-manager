@@ -7,7 +7,6 @@
 {% endblock title %}
 
 {% block main %}
-
     <h1>Tanuki Smite League</h1>
     <h1 class="mb-4">Teams</h1>
 
@@ -15,6 +14,11 @@
 
     <p>Use the buttons to switch between divisions.</p>
 
+    {% if admin %}
+        <h2 class="text-center mb-2"><a href="{% url 'user_create' %}">Create Players</a></h2>
+        <h2 class="text-center"><a href="{% url 'player_assign' %}">Assign Players</a></h2>
+        <h2 class="text-center"><a href="{% url 'user_transfer' %}">Transfer Players</a></h2>
+    {% endif %}
 {% endblock main %}
 
 {% block content %}

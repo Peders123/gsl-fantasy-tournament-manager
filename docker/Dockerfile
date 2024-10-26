@@ -62,6 +62,8 @@ COPY terra/home /data/terra/home
 COPY terra/terra /data/terra/terra
 COPY terra/match /data/terra/match
 COPY terra/user /data/terra/user
+COPY terra/team /data/terra/team
+COPY terra/staff /data/terra/staff
 COPY terra/tournament /data/terra/tournament
 COPY terra/auction /data/terra/auction
 COPY secrets.json /data/terra/secrets.json

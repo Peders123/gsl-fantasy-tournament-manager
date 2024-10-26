@@ -77,6 +77,8 @@ INSTALLED_APPS = [
     'auction.apps.AuctionConfig',
     'match.apps.MatchConfig',
     'user.apps.UserConfig',
+    'team.apps.TeamConfig',
+    'staff.apps.StaffConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

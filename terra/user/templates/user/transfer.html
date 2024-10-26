@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+    Transfer Player
+{% endblock title %}
+
+{% block main %}
+
+{% endblock main %}
+
+{% block content %}
+    <h2>Transfer Player</h2>
+    <form class="card mt-1 px-3 py-2" action="{% url 'user_transfer' %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+        <label for="user" class="form-label">Player</label>
+        <select name="user" id="user">
+            {% for user in users %}
+                <option value="{{ user.id }}">{{ user.discord_name }}</option>
+            {% endfor %}
+        </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="drop" class="form-label">Drop</label>
+            <input type="checkbox" name="drop" id="drop">
+        </div>
+
+        <div class="mb-3">
+            <label for="franchiseSelect" class="form-label">Select Franchise</label>
+            <select class="form-select" name="franchise" id="franchiseSelect" required>
+                <option value="" selected disabled>Select a franchise</option>
+                {% for franchise in franchises %}
+                    <option value="{{ franchise.id }}">{{ franchise.franchise_name }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">
+                Please select a franchise.
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="divisionSelect" class="form-label">Select Division</label>
+            <select class="form-select" name="division" id="divisionSelect" required>
+                <option value="" selected disabled>Select a division</option>
+                {% for division in divisions %}
+                    <option value="{{ division.id }}">{{ division.division_name }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">
+                Please select a division.
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Player</button>
+    </form>
+{% endblock content %}

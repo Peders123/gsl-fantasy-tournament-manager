@@ -43,9 +43,9 @@ async def get_user_team(user_team_data: user_team_schema.UserTeamCreate, databas
     return new_user_team
 
 
-@router.get("/team/users/", response_model=list[team_schema.TeamUsers])
-async def get_team_users(database: Annotated[AsyncSession, Depends(get_db_session)]):
-    return [await team_crud.get_team_users(database, team.id) for team in await team_crud.get_all_teams(database)]
+@router.get("/team/users/{division_id}/", response_model=list[team_schema.TeamUsers])
+async def get_team_users(division_id: int, database: Annotated[AsyncSession, Depends(get_db_session)]):
+    return [await team_crud.get_team_users(database, team.id) for team in await team_crud.get_team_divisions(database, division_id)]
 
 
 @router.get("/player/", response_model=list[player_schema.Player])

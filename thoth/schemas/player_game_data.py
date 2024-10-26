@@ -25,6 +25,7 @@ class _PlayerGameData(BaseModel):
     item_4_id: int | None = None
     item_5_id: int | None = None
     item_6_id: int | None = None
+    team_id: int
 
 
 class PlayerGameData(_PlayerGameData):

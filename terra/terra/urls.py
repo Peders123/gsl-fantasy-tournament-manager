@@ -23,4 +23,7 @@ urlpatterns = [
     path('tournaments/<t_id>/', include('tournament.urls')),
     path('auction/', include('auction.urls')),
     path("match/", include("match.urls")),
+    path("player/", include("user.urls")),
+    path("team/", include("team.urls")),
+    path("staff/", include("staff.urls")),
 ]

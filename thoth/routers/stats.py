@@ -54,7 +54,7 @@ async def add_game_data(
     database: Annotated[AsyncSession, Depends(get_db_session)]
 ):
     
-    match: match_schema.Match = await match_crud.get_match(database, match_id)
+    match: match_schema.Match = await match_crud.get_match_basic(database, match_id)
 
     if not match:
         response.status_code = status.HTTP_404_NOT_FOUND
@@ -87,7 +87,7 @@ async def add_game_data(
 
         case _:
             await write_game(game, players[0], order_team_id, chaos_team_id, match_id, database)
-            created, unknown = await write_player_data(game_id, players, database)
+            created, unknown = await write_player_data(game_id, players, database, match.team1_id, match.team2_id)
             response.status_code = status.HTTP_201_CREATED
 
             await database.commit()

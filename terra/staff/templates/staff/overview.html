@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+    <h1>Use this app for data management purposes</h1>
+
+{% endblock %}
+
+{% block content %}
+
+    <h2 class="text-center mb-2"><a href="{% url 'user_create' %}">Create Players</a></h2>
+    <h2 class="text-center"><a href="{% url 'player_assign' %}">Assign Players</a></h2>
+    <h2 class="text-center"><a href="{% url 'user_transfer' %}">Transfer Players</a></h2>
+
+{% endblock %}

@@ -4,7 +4,6 @@ from pydantic import BaseModel, ConfigDict
 class _User(BaseModel):
 
     discord_name: str
-    team_id: int
 
 
 class User(_User):

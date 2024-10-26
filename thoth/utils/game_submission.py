@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bin.utils.hirez_api import PcSmiteAPI
-from thoth.crud import game as game_crud, player_game_data as player_game_crud, player as player_crud
+from thoth.crud import game as game_crud, player_game_data as player_game_crud, player as player_crud, match as match_crud
 from thoth.models.scheduled import ScheduledTask
 from thoth.schemas import game as game_schema, player_game_data as player_game_schema, player as player_schema
 from thoth.utils.database import DatabaseSessionManager, construct_host_url
@@ -60,7 +60,7 @@ async def write_game(
 
 
 async def write_player_data(
-    game_id: int, total_player_data: list[dict], database: AsyncSession
+    game_id: int, total_player_data: list[dict], database: AsyncSession, order_team_id: int, chaos_team_id: int
 ) -> tuple[list[str], list[int]]:
     
     unknown_players: list[int] = []
@@ -101,6 +101,7 @@ async def write_player_data(
             item_4_id=parse_item_id(player_data["ItemId4"]),
             item_5_id=parse_item_id(player_data["ItemId5"]),
             item_6_id=parse_item_id(player_data["ItemId6"]),
+            team_id=order_team_id if player_data["TaskForce"] == 1 else chaos_team_id
         )
 
         await player_game_crud.create_player_game_data(database, player_game_data)
@@ -139,8 +140,9 @@ async def main():
             api.ping()
             game = api.get_demo_details(task.id)[0]
             players = api.get_match_details(task.id)
+            match = await match_crud.get_match_basic(session, task.match_id)
             await write_game(game, players[0], task.order_team_id, task.chaos_team_id, task.match_id, session)
-            await write_player_data(task.id, players, session)
+            await write_player_data(task.id, players, session, match.team1_id, match.team2_id)
 
         await session.commit()
 

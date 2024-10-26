@@ -12,6 +12,10 @@ async def get_all_matches(database: AsyncSession) -> list[Match]:
     return (await database.scalars(select(Match).order_by(Match.match_date_time))).all()
 
 
+async def get_match_basic(database: AsyncSession, match_id: int) -> match_schema.Match:
+    return (await database.scalars(select(Match).where(Match.id == match_id))).first()
+
+
 async def get_all_matches_display(database: AsyncSession):
     return (await database.scalars(
         select(Match)

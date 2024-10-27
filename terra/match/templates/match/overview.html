@@ -40,7 +40,7 @@
         {% for game in match.games %}
             {% with order_team=match|get_team:game.order_team_id chaos_team=match|get_team:game.chaos_team_id %}
                 <div class="card mb-4">
-                    <a href="/game/1373905755" class="card-link">
+                    <a href="{% url 'game_overview' game_id=game.id %}" class="card-link">
                         <div class="card-body mb-2">
                             <h5 class="card-title">Game {{ forloop.counter }} - {{ game.id }}</h5>
                             <ul class="list-group list-group-flush rounded-1">

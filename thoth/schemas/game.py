@@ -2,6 +2,8 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, field_serializer
 
+from thoth.schemas.player_game_data import PlayerGameDataDetailed
+
 
 class _Game(BaseModel):
 
@@ -27,6 +29,16 @@ class _Game(BaseModel):
 class Game(_Game):
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class GameDetailed(Game):
+    total_player_data: list[PlayerGameDataDetailed]
+
+    def calculate_gpm_for_all_players(self):
+        print("GAME")
+        for player_data in self.total_player_data:
+            print("HELLO WORLD")
+            player_data.gpm = player_data.calculate_gpm(self.match_duration)
 
 
 class GameCreate(_Game):

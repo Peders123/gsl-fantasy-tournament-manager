@@ -5,9 +5,9 @@ from fastapi import APIRouter, Depends, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bin.utils.hirez_api import PcSmiteAPI
-from thoth.crud import match as match_crud
+from thoth.crud import match as match_crud, game as game_crud
 from thoth.dependencies import get_db_session
-from thoth.schemas import match as match_schema
+from thoth.schemas import match as match_schema, game as game_schema
 from thoth.utils.game_submission import schedule_game, write_game, write_player_data
 
 
@@ -33,7 +33,6 @@ async def get_all_matches(database: Annotated[AsyncSession, Depends(get_db_sessi
     return await match_crud.get_all_matches(database)
 
 
-
 @router.get("/match/display/", response_model=list[match_schema.MatchDisplay])
 async def get_matches_for_display(database: Annotated[AsyncSession, Depends(get_db_session)]):
     return await match_crud.get_all_matches_display(database)
@@ -42,6 +41,14 @@ async def get_matches_for_display(database: Annotated[AsyncSession, Depends(get_
 @router.get("/match/{match_id}/", response_model=match_schema.MatchDetailed)
 async def get_match_detailed(match_id: int, database: Annotated[AsyncSession, Depends(get_db_session)]):
     return await match_crud.get_match(database, match_id)
+
+
+@router.get("/game/{game_id}/", response_model=game_schema.GameDetailed)
+async def get_game_details(game_id: int, database: Annotated[AsyncSession, Depends(get_db_session)]):
+    game = game_schema.GameDetailed(**(await game_crud.get_game(database, game_id)).__dict__)
+    print(game)
+    game.calculate_gpm_for_all_players()
+    return game
 
 
 @router.post("/game/")

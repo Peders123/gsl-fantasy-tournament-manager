@@ -5,9 +5,9 @@ from fastapi import APIRouter, Depends, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bin.utils.hirez_api import PcSmiteAPI
-from thoth.crud import match as match_crud, game as game_crud
+from thoth.crud import match as match_crud, game as game_crud, player_game_data as game_data_crud
 from thoth.dependencies import get_db_session
-from thoth.schemas import match as match_schema, game as game_schema
+from thoth.schemas import match as match_schema, game as game_schema, player_game_data as game_data_schema
 from thoth.utils.game_submission import schedule_game, write_game, write_player_data
 
 
@@ -46,9 +46,24 @@ async def get_match_detailed(match_id: int, database: Annotated[AsyncSession, De
 @router.get("/game/{game_id}/", response_model=game_schema.GameDetailed)
 async def get_game_details(game_id: int, database: Annotated[AsyncSession, Depends(get_db_session)]):
     game = game_schema.GameDetailed(**(await game_crud.get_game(database, game_id)).__dict__)
-    print(game)
     game.calculate_gpm_for_all_players()
     return game
+
+
+@router.post("/game/create/", response_model=game_schema.Game)
+async def create_game(game_data: game_schema.GameCreate, database: Annotated[AsyncSession, Depends(get_db_session)]):
+    new_game = await game_crud.create_game(database, game_data)
+    await database.commit()
+    await database.refresh(new_game)
+    return new_game
+
+
+@router.post("/player_game_data/", response_model=game_data_schema.PlayerGameData)
+async def create_player_data(player_game_data: game_data_schema.PlayerGameDataCreate, database: Annotated[AsyncSession, Depends(get_db_session)]):
+    new_player_data = await game_data_crud.create_player_game_data(database, player_game_data)
+    await database.commit()
+    await database.refresh(new_player_data)
+    return new_player_data
 
 
 @router.post("/game/")
@@ -105,7 +120,7 @@ async def add_game_data(
             }
 
 
-@router.post("/check_game_data/")
+@router.get("/check_game_data/")
 async def get_game_data(
     game_id: int
 ):
@@ -118,7 +133,7 @@ async def get_game_data(
     return game
 
 
-@router.post("/check_player_data/")
+@router.get("/check_player_data/")
 async def get_player_data(
     game_id: int
 ):

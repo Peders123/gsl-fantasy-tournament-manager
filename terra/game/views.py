@@ -10,9 +10,13 @@ def overview(request, game_id):
 
     order_team_data = []
     chaos_team_data = []
+    player_ids = []
 
     for player_data in game_details["total_player_data"]:
         order_team_data.append(player_data) if player_data["team_id"] == game_details["order_team_id"] else chaos_team_data.append(player_data)
+        player_ids.append(player_data["player_id"])
+
+    players = requests.post("http://192.168.64.1:8002/player/batch/", json={"ids": player_ids}).json()
 
     del game_details["total_player_data"]
 
@@ -31,4 +35,5 @@ def overview(request, game_id):
         "match": match_details,
         "game": game_details,
         "teams": teams,
+        "players": players
     })

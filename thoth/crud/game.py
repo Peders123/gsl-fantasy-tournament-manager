@@ -1,12 +1,24 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
 from thoth.models import Game
-from thoth.schemas.game import GameCreate
+from thoth.schemas.game import GameCreate, GameDetailed
 
 
 async def get_all_games(database: AsyncSession) -> list[Game]:
     return (await database.scalars(select(Game))).all()
+
+
+async def get_game(database: AsyncSession, game_id: int) -> Game:
+
+    return (await database.scalars(
+        select(Game)
+        .where(Game.id == game_id)
+        .options(
+            joinedload(Game.total_player_data),
+        )
+    )).first()
 
 
 async def create_game(database: AsyncSession, match: GameCreate) -> Game:

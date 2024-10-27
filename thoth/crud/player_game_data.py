@@ -9,6 +9,10 @@ async def get_all_player_game_data(database: AsyncSession) -> list[PlayerGameDat
     return (await database.scalars(select(PlayerGameData))).all()
 
 
+async def get_player_game_data_for_game(database: AsyncSession, game_id: int) -> list[PlayerGameData]:
+    return (await database.scalars(select(PlayerGameData).where(PlayerGameData.game_id == game_id))).all()
+
+
 async def create_player_game_data(database: AsyncSession, player_game_data: PlayerGameDataCreate) -> PlayerGameData:
 
     db_player_game_data = PlayerGameData(

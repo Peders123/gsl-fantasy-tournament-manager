@@ -13,6 +13,11 @@ class Player(_Player):
     model_config = ConfigDict(from_attributes=True)
 
 
+class IdListRequest(BaseModel):
+
+    ids: list[str]
+
+
 class PlayerCreate(_Player):
 
     pass

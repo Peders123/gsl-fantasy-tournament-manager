@@ -66,6 +66,7 @@ COPY terra/team /data/terra/team
 COPY terra/staff /data/terra/staff
 COPY terra/tournament /data/terra/tournament
 COPY terra/auction /data/terra/auction
+COPY terra/game /data/terra/game
 COPY secrets.json /data/terra/secrets.json
 
 EXPOSE 8000

@@ -16,7 +16,7 @@ def get_god_image(god_id):
     god_data = cache.get("god_data")
 
     if god_data is None:
-        with open("/data/assets/smite/data_gods.json", "r", encoding="Windows-1252") as file:
+        with open("/data/assets/smite/data_gods.json", "r") as file:
             god_data = json.load(file)
         cache.set("god_data", god_data, timeout=60*60*24)
 

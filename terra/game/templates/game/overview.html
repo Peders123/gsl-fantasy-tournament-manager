@@ -1,0 +1,372 @@
+{% extends 'base.html' %}
+
+{% load custom_game_filters %}
+
+{% load static %}
+
+{% block head %}
+    <style>
+        :root {
+            --victory: #069b30;
+            --defeat: #a60d0d;
+        }
+        
+        .game-summary {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin: 10px;
+            max-width: 80%;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .victory {
+            border: 8px solid #069b30;
+        }
+        
+        .victory-text {
+            color: #069b30;
+        }
+        
+        .defeat {
+            border: 8px solid #a60d0d;
+        }
+        
+        .defeat-text {
+            color: #a60d0d;
+        }
+        
+        .game-summary:hover {
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .data-container {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .god-icon-container {
+            float: left;
+            width: 25%;
+            align-content: center;
+            text-align: center;
+        }
+        
+        .central-game-container {
+            float: left;
+            width: 50%;
+            align-content: center;
+            text-align: center;
+        }
+        
+        .player-info {
+            align-content: center;
+            text-align: center;
+        }
+        
+        .match-info {
+            float: left;
+            width: 25%;
+            text-align: right;
+            margin: 5px;
+        }
+          
+        .god-icon {
+            border-radius: 5px;
+            width: 120px;
+            height: 120px;
+            margin: 10px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+          
+        .player-name {
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+          
+        .ign {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+            text-transform: uppercase;
+        }
+          
+        .match-length {
+            color: #333;
+            font-size: 14px;
+            margin: 0;
+        }
+          
+        .match-result,
+        .match-id {
+            color: #333;
+            font-size: 14px;
+            margin: 0;
+        }
+          
+        .build {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .no-item,
+        .build img {
+            border-radius: 5px;
+            height: 40px;
+            width: 40px;
+            margin: 0 5px;
+            object-fit: cover;
+        }
+        
+        .no-item {
+            background: black;
+        }
+          
+        .expanded-stats {
+            display: none;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+          
+        .expanded-stats.show {
+            display: block;
+        }
+          
+        .player-damage,
+        .gold-earned {
+            color: #333;
+            font-size: 14px;
+            margin: 0;
+        }
+        
+        .stat-container {
+            width: 25%;
+            text-align: center;
+        }
+        
+        .line {
+            margin-left: auto;
+            margin-right: auto;
+            border-bottom: 3px solid black;
+            width: 98%;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .team {
+            border-radius: 5px;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 20px;
+            width: 90%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .team thead tr {
+            background-color: var(--result);
+            color: #ffffff;
+            text-align: left;
+        }
+        
+        .team th,
+        .team td {
+            padding: 12px 15px;
+        }
+        
+        .team tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+        
+        .team tbody tr:nth-of-type(odd) {
+            background-color: #f1f6f6;
+        }
+        
+        .team tbody tr:nth-of-type(even) {
+            background-color: #ffffff;
+        }
+        
+        .team tbody tr:last-of-type {
+            border-bottom: 2px solid var(--result);
+        }
+        
+        .name-header {
+            width: 30%;
+        }
+        
+        .gold-header {
+            width: 5%;
+        }
+        
+        .kill-header {
+            width: 5%;
+        }
+        
+        .relic-header {
+            align-content: center;
+            width: 15%;
+        }
+        
+        .item-header {
+            align-content: center;
+            width: 35%;
+        }
+        
+        .player-cell {
+            display: flex;
+        }
+        
+        .table-ign {
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            flex-direction: column;
+        }
+
+        .additional-stats {
+            display: flex;
+            justify-content: space-around;
+        }
+    
+        /* Style for each stat item */
+        .stat-item {
+            text-align: center;
+            margin: 10px;
+        }
+    
+        .stat-label {
+            display: block;
+            font-weight: bold;
+            font-size: 0.9em; /* Smaller font size for label */
+        }
+    
+        .stat-value {
+            display: block;
+            font-size: 0.9em; /* Slightly smaller font size for value */
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    TSL {{ match.team1.division}} - {{ match.team1.short_name }} vs {{ match.team2.short_name }}
+{% endblock title %}
+
+{% block main %}
+    <h1 class="text-center mb-5">Tanuki Smite League - {{ match.team1.division.division_name }}</h1>
+    <h2 class="text-center mt-3 mb-2 text-primary">{{ match.team1 }}</h2>
+    <h3>VS</h3>
+    <h2 class="text-center mb-2 mb-3 text-primary">{{ match.team2 }}</h2>
+    <h2 class="text-center mt-3 mb-5">{{ match.result }}</h2>
+    <h5 class="text-center">{{ match.read_date }}</h5>
+{% endblock main %}
+
+{% block content %}
+    {% for team in teams %}
+        <table class="team" style="--result: var({% if team.team_id == game.winning_team_id %}--victory{% else %}--defeat{% endif %});">
+            <thead class="thead-light">
+                <tr class="bg-{% if team.team_id == game.winning_team_id %}success{% else %}failure{% endif %} text-white">
+                    <th scope="col" class="name-header">Player</th>
+                    <th scope="col" class="text-center kill-header">K</th>
+                    <th scope="col" class="text-center kill-header">D</th>
+                    <th scope="col" class="text-center kill-header">A</th>
+                    <th scope="col" class="text-center gold-header">GPM</th>
+                    <th scope="col" class="text-center build-header">Relics</th>
+                    <th scope="col" class="text-center build-header">Items</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in team.team_data %}
+                    <!-- Main Player Row -->
+                    <tr class="player-row" onclick="toggleDetails(this)">
+                        <td class="player-cell d-flex align-items-center">
+                            <div class="build d-flex align-items-center">
+                                <img src="{{ player.god_id|get_god_image }}" class="rounded-circle" style="height: 40px; width: 40px; margin-right: 5px;">
+                            </div>
+                            <div class="table-ign">
+                                <strong>{{ players|get_player_name:player.player_id }}</strong>
+                            </div>
+                        </td>
+                        <td>{{ player.kills }}</td>
+                        <td>{{ player.deaths }}</td>
+                        <td>{{ player.assists }}</td>
+                        <td>{{ player.gpm }}</td>
+                        <td>
+                            <div class="build d-flex justify-content-center">
+                                <img src="{% if player.active_1_id|get_item_image %}{{ player.active_1_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
+                                <img src="{% if player.active_2_id|get_item_image %}{{ player.active_2_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="build d-flex justify-content-center">
+                                <img src="{% if player.item_1_id|get_item_image %}{{ player.item_1_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
+                                <img src="{% if player.item_2_id|get_item_image %}{{ player.item_2_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
+                                <img src="{% if player.item_3_id|get_item_image %}{{ player.item_3_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
+                                <img src="{% if player.item_4_id|get_item_image %}{{ player.item_4_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
+                                <img src="{% if player.item_5_id|get_item_image %}{{ player.item_5_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
+                                <img src="{% if player.item_6_id|get_item_image %}{{ player.item_6_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Hidden Details Row -->
+                    <tr class="details-row" style="display: none;">
+                        <td colspan="7">
+                            <div class="additional-stats d-flex justify-content-around">
+                                <div class="stat-item">
+                                    <span class="stat-label">Damage Dealt</span>
+                                    <span class="stat-value">{{ player.damage_dealt }}</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Damage Taken</span>
+                                    <span class="stat-value">{{ player.damage_taken }}</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Damage Mitigated</span>
+                                    <span class="stat-value">{{ player.damage_mitigated }}</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Structure Damage</span>
+                                    <span class="stat-value">{{ player.structure_damage }}</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Player Healing</span>
+                                    <span class="stat-value">{{ player.player_healing }}</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Wards Place</span>
+                                    <span class="stat-value">{{ player.wards_placed }}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+{% endblock content %}
+
+{% block scripts %}
+    <script>
+        function toggleDetails(row) {
+            const detailsRow = row.nextElementSibling;
+            if (detailsRow && detailsRow.classList.contains('details-row')) {
+                detailsRow.style.display = detailsRow.style.display === 'none' ? 'table-row' : 'none';
+            }
+        }
+    </script>
+{% endblock %}

@@ -58,6 +58,11 @@ async def get_unassigned_players(database: Annotated[AsyncSession, Depends(get_d
     return await player_crud.get_unassigned_players(database)
 
 
+@router.post("/player/batch/")
+async def get_players_batch(player_ids: player_schema.IdListRequest, database: Annotated[AsyncSession, Depends(get_db_session)]):
+    return [await player_crud.get_specific_player(database, player_id) for player_id in player_ids.ids]
+
+
 @router.patch("/player/{player_id}/set_user/", response_model=player_schema.Player)
 async def set_player_user_id(player_id: str, user_id: int, database: Annotated[AsyncSession, Depends(get_db_session)]):
     return await player_crud.set_player_user(database, player_id, user_id)  

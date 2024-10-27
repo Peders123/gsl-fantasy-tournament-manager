@@ -26,4 +26,5 @@ urlpatterns = [
     path("player/", include("user.urls")),
     path("team/", include("team.urls")),
     path("staff/", include("staff.urls")),
+    path("game/", include("game.urls")),
 ]

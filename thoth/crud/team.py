@@ -1,6 +1,6 @@
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import aliased, joinedload, selectinload
+from sqlalchemy.orm import joinedload
 
 from thoth.crud.user_team import get_current_team_users
 from thoth.models import Team, UserTeam, User

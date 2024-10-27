@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, computed_field
 
 
 class _PlayerGameData(BaseModel):
@@ -38,3 +38,11 @@ class PlayerGameData(_PlayerGameData):
 class PlayerGameDataCreate(_PlayerGameData):
 
     pass
+
+
+class PlayerGameDataDetailed(PlayerGameData):
+
+    gpm: int | None = None
+
+    def calculate_gpm(self, match_duration: int) -> int:
+        return int(self.gold_earned / (match_duration / 60))

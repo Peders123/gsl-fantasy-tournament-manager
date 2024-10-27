@@ -101,7 +101,7 @@ def assign(request: ASGIRequest):
             _, player_id = data[i + 1]
 
             if user_id:
-                requests.patch(f"{BASE_URL}/player/{player_id}/set_user/", json={"user_id": int(user_id)})
+                requests.patch(f"{BASE_URL}/player/{player_id}/set_user/?user_id={int(user_id)}")
 
     players = requests.get(f"{BASE_URL}/player/unassigned/").json()
     users = requests.get(f"{BASE_URL}/user/").json()

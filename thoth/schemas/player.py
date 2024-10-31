@@ -15,7 +15,7 @@ class Player(_Player):
 
 class IdListRequest(BaseModel):
 
-    ids: list[str]
+    ids: list[str | None]
 
 
 class PlayerCreate(_Player):

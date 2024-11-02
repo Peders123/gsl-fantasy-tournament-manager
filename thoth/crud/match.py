@@ -1,6 +1,6 @@
 from datetime import timezone
 
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
@@ -17,31 +17,52 @@ async def get_match_basic(database: AsyncSession, match_id: int) -> match_schema
 
 
 async def get_all_matches_display(database: AsyncSession):
-    return (await database.scalars(
-        select(Match)
-        .options(
-            joinedload(Match.team1).joinedload(Team.franchise),
-            joinedload(Match.team1).joinedload(Team.division),
-            joinedload(Match.team2).joinedload(Team.franchise),
-            joinedload(Match.team2).joinedload(Team.division)
+    return (
+        await database.scalars(
+            select(Match)
+            .options(
+                joinedload(Match.team1).joinedload(Team.franchise),
+                joinedload(Match.team1).joinedload(Team.division),
+                joinedload(Match.team2).joinedload(Team.franchise),
+                joinedload(Match.team2).joinedload(Team.division),
+            )
+            .order_by(Match.match_date_time)
         )
-        .order_by(Match.match_date_time)
-    )).all()
+    ).all()
 
 
 async def get_match(database: AsyncSession, match_id: int) -> match_schema.MatchDetailed:
-    return (await database.scalars(
-        select(Match)
-        .options(
-            joinedload(Match.team1).joinedload(Team.franchise),
-            joinedload(Match.team1).joinedload(Team.division),
-            joinedload(Match.team2).joinedload(Team.franchise),
-            joinedload(Match.team2).joinedload(Team.division),
-            joinedload(Match.games)
+    return (
+        await database.scalars(
+            select(Match)
+            .options(
+                joinedload(Match.team1).joinedload(Team.franchise),
+                joinedload(Match.team1).joinedload(Team.division),
+                joinedload(Match.team2).joinedload(Team.franchise),
+                joinedload(Match.team2).joinedload(Team.division),
+                joinedload(Match.games),
+            )
+            .where(Match.id == match_id)
+            .order_by(Match.match_date_time)
         )
-        .where(Match.id == match_id)
-        .order_by(Match.match_date_time)
-    )).first()
+    ).first()
+
+
+async def get_team_matches(database: AsyncSession, team_id: int) -> list[match_schema.MatchDetailed]:
+    return (
+        await database.scalars(
+            select(Match)
+            .options(
+                joinedload(Match.team1).joinedload(Team.franchise),
+                joinedload(Match.team1).joinedload(Team.division),
+                joinedload(Match.team2).joinedload(Team.franchise),
+                joinedload(Match.team2).joinedload(Team.division),
+                joinedload(Match.games),
+            )
+            .where(or_(Match.team1_id == team_id, Match.team2_id == team_id))
+            .order_by(Match.match_date_time.desc())
+        )
+    ).unique()
 
 
 async def create_match(database: AsyncSession, match: match_schema.MatchCreate) -> Match:
@@ -50,10 +71,7 @@ async def create_match(database: AsyncSession, match: match_schema.MatchCreate) 
         match.match_date_time = match.match_date_time.astimezone(timezone.utc).replace(tzinfo=None)
 
     db_match = Match(
-        match_date_time=match.match_date_time,
-        best_of=match.best_of,
-        team1_id=match.team1_id,
-        team2_id=match.team2_id
+        match_date_time=match.match_date_time, best_of=match.best_of, team1_id=match.team1_id, team2_id=match.team2_id
     )
 
     database.add(db_match)

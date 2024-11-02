@@ -2,7 +2,7 @@ import requests
 
 from django.core.handlers.asgi import ASGIRequest
 from django.http import JsonResponse, HttpResponseForbidden
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
 
@@ -13,9 +13,19 @@ def overview(request: ASGIRequest):
 
     divisions = requests.get(f"{BASE_URL}/division/").json()
 
-    return render(request, "user/overview.html", context={
-        "admin": request.user.is_superuser,
+    return render(request, "team/overview.html", context={
         "divisions": divisions
+    })
+
+
+def profile(request: ASGIRequest, team_id: int):
+
+    team = requests.get(f"{BASE_URL}/team/{team_id}/").json()
+    history = requests.get(f"{BASE_URL}/team/{team_id}/history/").json()
+
+    return render(request, "team/profile.html", context={
+        "team": team,
+        "matches": history
     })
 
 

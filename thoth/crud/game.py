@@ -12,13 +12,15 @@ async def get_all_games(database: AsyncSession) -> list[Game]:
 
 async def get_game(database: AsyncSession, game_id: int) -> Game:
 
-    return (await database.scalars(
-        select(Game)
-        .where(Game.id == game_id)
-        .options(
-            joinedload(Game.total_player_data),
+    return (
+        await database.scalars(
+            select(Game)
+            .where(Game.id == game_id)
+            .options(
+                joinedload(Game.total_player_data),
+            )
         )
-    )).first()
+    ).first()
 
 
 async def create_game(database: AsyncSession, match: GameCreate) -> Game:

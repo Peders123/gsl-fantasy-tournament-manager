@@ -42,7 +42,6 @@ class GameDetailed(Game):
 
 
 class GameCreate(_Game):
-
     """@field_serializer("date_time", mode="plain")
     def parse_date_time(cls, value):
         return datetime.strptime(value, "%m/%d/%Y %I:%M:%S %p")"""

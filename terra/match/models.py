@@ -28,13 +28,15 @@ class Franchise(models.Model):
     id: int = models.IntegerField(primary_key=True)
     franchise_name: str = models.CharField(max_length=64)
     franchise_owner: str = models.CharField(max_length=64)
+    data_name: str = models.CharField(max_length=64)
 
     @classmethod
     def from_dict(cls, data: dict):
         return cls(
             id=data["id"],
             franchise_name=data["franchise_name"],
-            franchise_owner=data["franchise_owner"]
+            franchise_owner=data["franchise_owner"],
+            data_name=data["data_name"]
         )
     
     def __str__(self):

@@ -59,7 +59,9 @@ async def create_game(game_data: game_schema.GameCreate, database: Annotated[Asy
 
 
 @router.post("/player_game_data/", response_model=game_data_schema.PlayerGameData)
-async def create_player_data(player_game_data: game_data_schema.PlayerGameDataCreate, database: Annotated[AsyncSession, Depends(get_db_session)]):
+async def create_player_data(
+    player_game_data: game_data_schema.PlayerGameDataCreate, database: Annotated[AsyncSession, Depends(get_db_session)]
+):
     new_player_data = await game_data_crud.create_player_game_data(database, player_game_data)
     await database.commit()
     await database.refresh(new_player_data)
@@ -73,15 +75,15 @@ async def add_game_data(
     chaos_team_id: int,
     match_id: int,
     response: Response,
-    database: Annotated[AsyncSession, Depends(get_db_session)]
+    database: Annotated[AsyncSession, Depends(get_db_session)],
 ):
-    
+
     match: match_schema.Match = await match_crud.get_match_basic(database, match_id)
 
     if not match:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {"error": "Match id not found"}
-    
+
     match_teams = {match.team1_id, match.team2_id}
 
     for team_id in [order_team_id, chaos_team_id]:
@@ -102,7 +104,9 @@ async def add_game_data(
             return {"error": "Game id not found"}
 
         case 1:
-            await schedule_game(game_id, datetime.now() + timedelta(weeks=1), order_team_id, chaos_team_id, match_id, database)
+            await schedule_game(
+                game_id, datetime.now() + timedelta(weeks=1), order_team_id, chaos_team_id, match_id, database
+            )
             response.status_code = status.HTTP_202_ACCEPTED
             await database.commit()
             return {"message": f"Game id {game_id} scheduled for {datetime.now() + timedelta(weeks=1)}"}
@@ -114,17 +118,12 @@ async def add_game_data(
 
             await database.commit()
 
-            return {
-                "created_players": created,
-                "unknown_players": unknown
-            }
+            return {"created_players": created, "unknown_players": unknown}
 
 
 @router.get("/check_game_data/")
-async def get_game_data(
-    game_id: int
-):
-    
+async def get_game_data(game_id: int):
+
     api = PcSmiteAPI()
     api.ping()
 
@@ -134,10 +133,8 @@ async def get_game_data(
 
 
 @router.get("/check_player_data/")
-async def get_player_data(
-    game_id: int
-):
-    
+async def get_player_data(game_id: int):
+
     api = PcSmiteAPI()
     api.ping()
 

@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 from thoth.utils.database import Base
 
 
-
 class PlayerGameData(Base):
     __tablename__ = "player_game_data"
 

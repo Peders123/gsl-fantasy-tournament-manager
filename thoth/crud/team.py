@@ -9,41 +9,42 @@ from thoth.schemas.team import TeamUsers, TeamDisplay
 
 async def get_team_from_values(database: AsyncSession, division_id: int, franchise_id: int) -> Team:
 
-    return (await database.scalars(select(Team).where(Team.division_id == division_id).where(Team.franchise_id == franchise_id))).first()
+    return (
+        await database.scalars(
+            select(Team).where(Team.division_id == division_id).where(Team.franchise_id == franchise_id)
+        )
+    ).first()
 
 
 async def get_team(database: AsyncSession, team_id: int) -> TeamDisplay:
 
-    return (await database.scalars(
-        select(Team)
-        .where(Team.id == team_id)
-        .options(
-            joinedload(Team.franchise),
-            joinedload(Team.division)
+    return (
+        await database.scalars(
+            select(Team).where(Team.id == team_id).options(joinedload(Team.franchise), joinedload(Team.division))
         )
-    )).first()
+    ).first()
 
 
 async def get_team_divisions(database: AsyncSession, division_id: int) -> list[TeamDisplay]:
 
-    return (await database.execute(
-        select(Team)
-        .where(Team.division_id == division_id)
-        .options(
-            joinedload(Team.franchise)
+    return (
+        (
+            await database.execute(
+                select(Team).where(Team.division_id == division_id).options(joinedload(Team.franchise))
+            )
         )
-    )).scalars().all() 
+        .scalars()
+        .all()
+    )
 
 
 async def get_all_teams(database: AsyncSession) -> list[TeamDisplay]:
 
-    return (await database.execute(
-        select(Team)
-        .options(
-            joinedload(Team.franchise),
-            joinedload(Team.division)
-        )
-    )).scalars().all()
+    return (
+        (await database.execute(select(Team).options(joinedload(Team.franchise), joinedload(Team.division))))
+        .scalars()
+        .all()
+    )
 
 
 async def get_team_users(database: AsyncSession, team_id: int) -> Team:

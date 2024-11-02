@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 from thoth.utils.database import Base
 
 
-
 class Game(Base):
     __tablename__ = "game"
 

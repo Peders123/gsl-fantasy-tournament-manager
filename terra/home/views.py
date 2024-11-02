@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import redirect, render
 import requests
 import json
@@ -20,17 +22,24 @@ def index(request):
 
     total_match_data = requests.get("http://192.168.64.1:8002/match/display/").json()
 
-    matches = [Match.from_dict(match_data) for match_data in total_match_data]
+    ud_matches = []
+    ld_matches = []
 
-    context = {
+    for match_data in total_match_data:
+        if datetime.fromisoformat(match_data["match_date_time"]) > datetime.now():
+            if match_data["team1"]["division"]["division_rank"] == 0:
+                ud_matches.append(Match.from_dict(match_data))
+            else:
+                ld_matches.append(Match.from_dict(match_data))
+
+    return render(request, 'home/home.html', context={
         'signed_in': signed_in,
         'discord_id': discord_id,
-        'matches': matches,
+        'ud_matches': ud_matches,
+        "ld_matches": ld_matches,
         'errno': errno,
         'error': error
-    }
-
-    return render(request, 'home/home.html', context)
+    })
 
 
 def login(request):

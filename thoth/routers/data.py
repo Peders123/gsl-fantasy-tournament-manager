@@ -33,6 +33,11 @@ async def get_divisions(database: Annotated[AsyncSession, Depends(get_db_session
     return await division_crud.get_all_divisions(database)
 
 
+@router.get("/division/{division_id}/", response_model=division_schema.Division)
+async def get_division(division_id: int, database: Annotated[AsyncSession, Depends(get_db_session)]):
+    return await division_crud.get_specific_division(database, division_id)
+
+
 @router.get("/franchise/", response_model=list[franchise_schema.Franchise])
 async def get_franchises(database: Annotated[AsyncSession, Depends(get_db_session)]):
     return await franchise_crud.get_all_franchises(database)
@@ -67,6 +72,14 @@ async def get_team_users(division_id: int, database: Annotated[AsyncSession, Dep
         await team_crud.get_team_users(database, team.id)
         for team in await team_crud.get_team_divisions(database, division_id)
     ]
+
+
+@router.get("/divisions/{division_id}/standings/", response_model=list[team_schema.TeamStandingsModel])
+async def get_standings(division_id: int, database: Annotated[AsyncSession, Depends(get_db_session)]):
+    teams = await team_crud.get_team_divisions(database, division_id)
+    standings = [await team_crud.get_team_standing_data(database, team.id) for team in teams]
+    standings.sort(key=lambda x: x.point_difference, reverse=True)
+    return standings
 
 
 @router.get("/team/{team_id}/", response_model=team_schema.TeamUsers)

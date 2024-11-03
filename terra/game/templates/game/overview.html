@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load custom_game_filters %}
+{% load filter_utils %}
 
 {% load static %}
 
@@ -259,20 +260,67 @@
             display: block;
             font-size: 0.9em; /* Slightly smaller font size for value */
         }
+
+        .team-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1rem;
+        }
+        .team-logo {
+            width: 200px; /* Smaller logo size */
+            height: auto;
+        }
+        .team-name {
+            font-size: 1.25rem;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+        .small-vs {
+            font-size: 1.5rem; /* Reduce the size of the VS text */
+            margin: 0;
+        }
     </style>
 {% endblock %}
 
 {% block title %}
-    TSL {{ match.team1.division}} - {{ match.team1.short_name }} vs {{ match.team2.short_name }}
+    {{ match.team1.franchise.franchise_name|shorten }} vs {{ match.team2.franchise.franchise_name|shorten }} - {{ match.team1.division.division_name|shorten }} Game {{ number }}
 {% endblock title %}
 
 {% block main %}
-    <h1 class="text-center mb-5">Tanuki Smite League - {{ match.team1.division.division_name }}</h1>
-    <h2 class="text-center mt-3 mb-2 text-primary">{{ match.team1 }}</h2>
-    <h3>VS</h3>
-    <h2 class="text-center mb-2 mb-3 text-primary">{{ match.team2 }}</h2>
-    <h2 class="text-center mt-3 mb-5">{{ match.result }}</h2>
-    <h5 class="text-center">{{ match.read_date }}</h5>
+    <a href="{% url 'match_overview' match_id=match.id %}"><h1 class="text-center">{{ match.team1.division.division_name }} - Match {{ match.id }}</h1></a>
+    <div class="container text-center">
+        <div class="row align-items-center">
+            <div class="col-5">
+                <a href={% url 'team_profile' team_id=match.team1.id %} class="text-decoration-none">
+                    <div class="team-container">
+                        <img src="{% static 'assets/teams/' %}{{ match.team1.franchise.data_name }}.png" class="team-logo mb-2" alt="{{ match.team1.franchise.franchise_name }} Logo">
+                        <h2 class="text-primary text-wrap team-name">{{ match.team1.franchise.franchise_name }}</h2>
+                    </div>
+                </a>
+            </div>
+            <div class="col-2">
+                <h3 class="fw-bold small-vs">VS</h3>
+            </div>
+            <div class="col-5">
+                <a href={% url 'team_profile' team_id=match.team1.id %} class="text-decoration-none">
+                    <div class="team-container">
+                        <img src="{% static 'assets/teams/' %}{{ match.team2.franchise.data_name }}.png" class="team-logo mb-2" alt="{{ match.team2.franchise.franchise_name }} Logo">
+                        <h2 class="text-primary text-wrap team-name">{{ match.team2.franchise.franchise_name }}</h2>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <h2 class="text-center mt-3 mb-2">Game {{ number }}</h2>
+    <h5 class="text-center">
+        {% if match.team1.id == game.winning_team_id %}
+            {{ match.team1.franchise.franchise_name }} - Victory
+        {% else %}
+            {{ match.team2.franchise.franchise_name }} - Victory
+        {% endif %}
+    </h5>
 {% endblock main %}
 
 {% block content %}
@@ -281,8 +329,8 @@
             <thead class="thead-light">
                 <tr class="bg-{% if team.team_id == game.winning_team_id %}success{% else %}failure{% endif %} text-white">
                     <th scope="col" class="name-header">Player</th>
-                    <th scope="col" class="text-center kill-header">K</th>
-                    <th scope="col" class="text-center kill-header">D</th>
+                    <th scope="col" class="text-center kill-header">{{ team.team_id }}</th>
+                    <th scope="col" class="text-center kill-header">{{ game.winning_team_id }}</th>
                     <th scope="col" class="text-center kill-header">A</th>
                     <th scope="col" class="text-center gold-header">GPM</th>
                     <th scope="col" class="text-center build-header">Relics</th>

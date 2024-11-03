@@ -3,7 +3,7 @@
 {% load filter_utils %}
 {% load static %}
 
-{% block title %}{{ team.franchise.franchise_name|shorten }} - {{ team.division.division_name|shorten }}{% endblock %}
+{% block title %}{{ team.franchise.franchise_name }} - {{ team.division.division_name|shorten }}{% endblock %}
 
 {% block head %}
     <style>
@@ -21,9 +21,15 @@
 
 {% block main %}
 
-    <h1 class="mb-3">{{ team.franchise.franchise_name }} - {{ team.division.division_name|shorten }}</h1>
+    <h1 class="mb-3">{{ team.franchise.franchise_name }} - {{ team.division.division_name }}</h1>
 
     <img src="{% static 'assets/teams/' %}{{ team.franchise.data_name }}.png" class="team-logo mb-2" alt="{{ team.franchise.franchise_name }} Logo">
+
+    <h5 class="mt-3">Current Record</h5>
+    Wins: {{ standing.wins }}<br>
+    Losses: {{ standing.losses }}<br>
+    Matches: {{ standing.matches }}<br>
+    Current rank: {{ rank }}
 
 {% endblock %}
 

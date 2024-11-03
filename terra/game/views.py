@@ -6,7 +6,13 @@ from django.shortcuts import render
 def overview(request, game_id):
 
     game_details = requests.get(f"http://192.168.64.1:8002/game/{game_id}/").json()
-    match_details = requests.get(f"http://192.168.64.1:8002/match/{game_details['match_id']}/")
+    match_details = requests.get(f"http://192.168.64.1:8002/match/{game_details['match_id']}/").json()
+
+    game_number = 0
+    for count, game in enumerate(match_details["games"]):
+        if game_id == game["id"]:
+            game_number = count + 1
+            break
 
     order_team_data = []
     chaos_team_data = []
@@ -35,5 +41,6 @@ def overview(request, game_id):
         "match": match_details,
         "game": game_details,
         "teams": teams,
-        "players": players
+        "players": players,
+        "number": game_number,
     })

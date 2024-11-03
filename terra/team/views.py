@@ -23,9 +23,33 @@ def profile(request: ASGIRequest, team_id: int):
     team = requests.get(f"{BASE_URL}/team/{team_id}/").json()
     history = requests.get(f"{BASE_URL}/team/{team_id}/history/").json()
 
+    standings = requests.get(f"{BASE_URL}/divisions/{team['division']['id']}/standings/").json()
+
+    standing_data = []
+    rank = 0
+
+    for count, team_data in enumerate(standings):
+        if team_data["id"] == team["id"]:
+            standing_data = team_data
+            rank = count
+            break
+
     return render(request, "team/profile.html", context={
         "team": team,
-        "matches": history
+        "matches": history,
+        "standing": standing_data,
+        "rank": rank,
+    })
+
+
+def standings(request: ASGIRequest, division_id: int):
+
+    division = requests.get(f"{BASE_URL}/division/{division_id}/").json()
+    standings = requests.get(f"{BASE_URL}/divisions/{division_id}/standings/").json()
+
+    return render(request, "team/standings.html", context={
+        "division": division,
+        "standings": standings,
     })
 
 

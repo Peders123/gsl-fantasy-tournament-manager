@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% load custom_filters %}
 
 {% block title %}
@@ -29,12 +30,14 @@
             {% endfor %}
         </div>
     </div>
-    <div id="division-content" class="row row-cols-1 row-cols-md-4 g-4 text-center">
+    <div id="division-content" data-url-template="{% url 'team_profile' team_id=0 %}" team-logo-template="{% static 'assets/teams/PLACEHOLDER.png' %}" class="row row-cols-1 row-cols-md-4 g-4 text-center">
     </div>
 
     <script>
         function loadDivision(divisionRank) {
             const divisionContent = document.getElementById("division-content");
+            const urlTemplate = divisionContent.getAttribute("data-url-template");
+            const logoTemplate = divisionContent.getAttribute("team-logo-template");
 
             fetch(`/player/division/${divisionRank}`, {
                 headers: {
@@ -63,13 +66,21 @@
                         // Create a card for each team
                         const container = document.createElement("div");
                         container.className = "col"
+                        const link = document.createElement("a");
+                        link.href = urlTemplate.replace("0", team.id);
+                        link.className = "text-decoration-none";
                         const card = document.createElement("div");
                         card.className = "card border border-1 border-dark";
+
+                        const logoUrl = logoTemplate.replace("PLACEHOLDER", team.franchise.data_name);
         
                         // Render the team header with franchise name and owner
                         card.innerHTML = `
-                            <div class="card-header">
+                            <div class="card-headers text-decoration-underline">
                                 <strong>${team.franchise.franchise_name}</strong>
+                                <div>
+                                    <img src="${logoUrl}" alt="${team.franchise.franchise_name} Logo" class="me-2" style="width: 100px; height: 100px;">
+                                </div>
                             </div>
                             <div class="card-body">
                                 <ul class="list-group">
@@ -77,7 +88,9 @@
                                 </ul>
                             </div>
                         `;
-                        container.appendChild(card);
+
+                        link.appendChild(card);
+                        container.appendChild(link);
                         divisionContent.appendChild(container);
                     });
                 } else {

@@ -30,4 +30,6 @@ COPY bin/utils/hirez_api.py /data/bin/utils/hirez_api.py
 COPY thoth /data/thoth
 COPY secrets.json /data/thoth/secrets.json
 
+EXPOSE 8002
+
 ENTRYPOINT ["uvicorn", "thoth.main:app", "--host", "0.0.0.0", "--port", "8002"]

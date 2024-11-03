@@ -16,7 +16,7 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '5ee08adc-e6fd-49eb-b9bf-d64904df3a1d'
+  dockerRegistryServiceConnection: '2f618bf9-8efd-442b-acd4-5efdef70024f'
 
 
   # Agent VM image name

@@ -23,9 +23,16 @@ def get_result(match):
         else:
             wins[1] += 1
 
+    if wins[0] > wins[1]:
+        winner = team_1_id
+    elif wins[1] > wins[0]:
+        winner = team_2_id
+    else:
+        winner = None
+
     return {
         "result": f"{wins[0]} - {wins[1]}",
-        "winner": team_1_id if wins[0] > wins[1] else team_2_id
+        "winner": winner
     }
 
 

@@ -2,11 +2,9 @@ import re
 
 import requests
 
+from django.conf import settings
 from django.core.handlers.asgi import ASGIRequest
 from django.shortcuts import render, redirect
-
-
-BASE_URL = "http://192.168.64.1:8002"
 
 
 def is_admin(func):
@@ -29,21 +27,36 @@ def create(request: ASGIRequest):
     if request.POST:
 
         data = request.POST
-        team_response = requests.get(f"{BASE_URL}/team/{data['division']}/{data['franchise']}")
+        team_response = requests.get(
+            f"{settings.BASE_URL}/team/{data['division']}/{data['franchise']}",
+            headers=settings.HEADERS
+        )
 
-        player_response = requests.post(f"{BASE_URL}/user/", json={
-            "discord_name": data["name"]
-        })
+        player_response = requests.post(
+            f"{settings.BASE_URL}/user/",
+            headers=settings.HEADERS,
+            json={"discord_name": data["name"]}
+        )
 
-        requests.post(f"{BASE_URL}/user/team/", json={
-            "user_id": player_response.json()["id"],
-            "team_id": team_response.json()["id"],
-            "join_date": None,
-            "leave_date": None,
-        })
+        requests.post(
+            f"{settings.BASE_URL}/user/team/",
+            headers=settings.HEADERS,
+            json={
+                "user_id": player_response.json()["id"],
+                "team_id": team_response.json()["id"],
+                "join_date": None,
+                "leave_date": None,
+            }
+        )
 
-    divisions = requests.get(f"{BASE_URL}/division/").json()
-    franchises = requests.get(f"{BASE_URL}/franchise/").json()
+    divisions = requests.get(
+        f"{settings.BASE_URL}/division/",
+        headers=settings.HEADERS
+    ).json()
+    franchises = requests.get(
+        f"{settings.BASE_URL}/franchise/",
+        headers=settings.HEADERS
+    ).json()
 
     if not request.user.is_superuser:
         return redirect("player_overview")
@@ -64,19 +77,35 @@ def transfer(request: ASGIRequest):
             team_id = None
 
         else:
-            team_response = requests.get(f"{BASE_URL}/team/{data['division']}/{data['franchise']}")
+            team_response = requests.get(
+                f"{settings.BASE_URL}/team/{data['division']}/{data['franchise']}",
+                headers=settings.HEADERS
+            )
             team_id = team_response.json()["id"]
 
-        requests.post(f"{BASE_URL}/user/team/", json={
-            "user_id": data["user"],
-            "team_id": team_id,
-            "join_date": None,
-            "leave_date": None,
-        })
+        requests.post(
+            f"{settings.BASE_URL}/user/team/",
+            headers=settings.HEADERS,
+            json={
+                "user_id": data["user"],
+                "team_id": team_id,
+                "join_date": None,
+                "leave_date": None,
+            }
+        )
 
-    divisions = requests.get(f"{BASE_URL}/division/").json()
-    franchises = requests.get(f"{BASE_URL}/franchise/").json()
-    users = requests.get(f"{BASE_URL}/user/").json()
+    divisions = requests.get(
+        f"{settings.BASE_URL}/division/",
+        headers=settings.HEADERS
+    ).json()
+    franchises = requests.get(
+        f"{settings.BASE_URL}/franchise/",
+        headers=settings.HEADERS
+    ).json()
+    users = requests.get(
+        f"{settings.BASE_URL}/user/",
+        headers=settings.HEADERS
+    ).json()
 
     if not request.user.is_superuser:
         return redirect("player_overview")
@@ -101,10 +130,10 @@ def assign(request: ASGIRequest):
             _, player_id = data[i + 1]
 
             if user_id:
-                requests.patch(f"{BASE_URL}/player/{player_id}/set_user/?user_id={int(user_id)}")
+                requests.patch(f"{settings.BASE_URL}/player/{player_id}/set_user/?user_id={int(user_id)}")
 
-    players = requests.get(f"{BASE_URL}/player/unassigned/").json()
-    users = requests.get(f"{BASE_URL}/user/").json()
+    players = requests.get(f"{settings.BASE_URL}/player/unassigned/").json()
+    users = requests.get(f"{settings.BASE_URL}/user/").json()
 
     if not request.user.is_superuser:
         return redirect("player_overview")

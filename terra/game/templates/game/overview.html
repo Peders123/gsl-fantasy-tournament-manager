@@ -304,7 +304,7 @@
                 <h3 class="fw-bold small-vs">VS</h3>
             </div>
             <div class="col-5">
-                <a href={% url 'team_profile' team_id=match.team1.id %} class="text-decoration-none">
+                <a href={% url 'team_profile' team_id=match.team2.id %} class="text-decoration-none">
                     <div class="team-container">
                         <img src="{% static 'assets/teams/' %}{{ match.team2.franchise.data_name }}.png" class="team-logo mb-2" alt="{{ match.team2.franchise.franchise_name }} Logo">
                         <h2 class="text-primary text-wrap team-name">{{ match.team2.franchise.franchise_name }}</h2>
@@ -324,88 +324,92 @@
 {% endblock main %}
 
 {% block content %}
-    {% for team in teams %}
-        <table class="team" style="--result: var({% if team.team_id == game.winning_team_id %}--victory{% else %}--defeat{% endif %});">
-            <thead class="thead-light">
-                <tr class="bg-{% if team.team_id == game.winning_team_id %}success{% else %}failure{% endif %} text-white">
-                    <th scope="col" class="name-header">Player</th>
-                    <th scope="col" class="text-center kill-header">{{ team.team_id }}</th>
-                    <th scope="col" class="text-center kill-header">{{ game.winning_team_id }}</th>
-                    <th scope="col" class="text-center kill-header">A</th>
-                    <th scope="col" class="text-center gold-header">GPM</th>
-                    <th scope="col" class="text-center build-header">Relics</th>
-                    <th scope="col" class="text-center build-header">Items</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for player in team.team_data %}
-                    <!-- Main Player Row -->
-                    <tr class="player-row" onclick="toggleDetails(this)">
-                        <td class="player-cell d-flex align-items-center">
-                            <div class="build d-flex align-items-center">
-                                <img src="{{ player.god_id|get_god_image }}" class="rounded-circle" style="height: 40px; width: 40px; margin-right: 5px;">
-                            </div>
-                            <div class="table-ign">
-                                <strong>{{ players|get_player_name:player.player_id }}</strong>
-                            </div>
-                        </td>
-                        <td>{{ player.kills }}</td>
-                        <td>{{ player.deaths }}</td>
-                        <td>{{ player.assists }}</td>
-                        <td>{{ player.gpm }}</td>
-                        <td>
-                            <div class="build d-flex justify-content-center">
-                                <img src="{% if player.active_1_id|get_item_image %}{{ player.active_1_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
-                                <img src="{% if player.active_2_id|get_item_image %}{{ player.active_2_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="build d-flex justify-content-center">
-                                <img src="{% if player.item_1_id|get_item_image %}{{ player.item_1_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
-                                <img src="{% if player.item_2_id|get_item_image %}{{ player.item_2_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
-                                <img src="{% if player.item_3_id|get_item_image %}{{ player.item_3_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
-                                <img src="{% if player.item_4_id|get_item_image %}{{ player.item_4_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
-                                <img src="{% if player.item_5_id|get_item_image %}{{ player.item_5_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
-                                <img src="{% if player.item_6_id|get_item_image %}{{ player.item_6_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
-                            </div>
-                        </td>
+    {% if players %}
+        {% for team in teams %}
+            <table class="team" style="--result: var({% if team.team_id == game.winning_team_id %}--victory{% else %}--defeat{% endif %});">
+                <thead class="thead-light">
+                    <tr class="bg-{% if team.team_id == game.winning_team_id %}success{% else %}failure{% endif %} text-white">
+                        <th scope="col" class="name-header">Player</th>
+                        <th scope="col" class="text-center kill-header">K</th>
+                        <th scope="col" class="text-center kill-header">D</th>
+                        <th scope="col" class="text-center kill-header">A</th>
+                        <th scope="col" class="text-center gold-header">GPM</th>
+                        <th scope="col" class="text-center build-header">Relics</th>
+                        <th scope="col" class="text-center build-header">Items</th>
                     </tr>
+                </thead>
+                <tbody>
+                    {% for player in team.team_data %}
+                        <!-- Main Player Row -->
+                        <tr class="player-row" onclick="toggleDetails(this)">
+                            <td class="player-cell d-flex align-items-center">
+                                <div class="build d-flex align-items-center">
+                                    <img src="{{ player.god_id|get_god_image }}" class="rounded-circle" style="height: 40px; width: 40px; margin-right: 5px;">
+                                </div>
+                                <div class="table-ign">
+                                    <strong>{{ players|get_player_name:player.player_id }}</strong>
+                                </div>
+                            </td>
+                            <td>{{ player.kills }}</td>
+                            <td>{{ player.deaths }}</td>
+                            <td>{{ player.assists }}</td>
+                            <td>{{ player.gpm }}</td>
+                            <td>
+                                <div class="build d-flex justify-content-center">
+                                    <img src="{% if player.active_1_id|get_item_image %}{{ player.active_1_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
+                                    <img src="{% if player.active_2_id|get_item_image %}{{ player.active_2_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="build d-flex justify-content-center">
+                                    <img src="{% if player.item_1_id|get_item_image %}{{ player.item_1_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
+                                    <img src="{% if player.item_2_id|get_item_image %}{{ player.item_2_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
+                                    <img src="{% if player.item_3_id|get_item_image %}{{ player.item_3_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
+                                    <img src="{% if player.item_4_id|get_item_image %}{{ player.item_4_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
+                                    <img src="{% if player.item_5_id|get_item_image %}{{ player.item_5_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
+                                    <img src="{% if player.item_6_id|get_item_image %}{{ player.item_6_id|get_item_image }}{% else %}{% static 'assets/black.png' %}{% endif %}" class="rounded" style="height: 40px; width: 40px; margin: 0 5px;">
+                                </div>
+                            </td>
+                        </tr>
 
-                    <!-- Hidden Details Row -->
-                    <tr class="details-row" style="display: none;">
-                        <td colspan="7">
-                            <div class="additional-stats d-flex justify-content-around">
-                                <div class="stat-item">
-                                    <span class="stat-label">Damage Dealt</span>
-                                    <span class="stat-value">{{ player.damage_dealt }}</span>
+                        <!-- Hidden Details Row -->
+                        <tr class="details-row" style="display: none;">
+                            <td colspan="7">
+                                <div class="additional-stats d-flex justify-content-around">
+                                    <div class="stat-item">
+                                        <span class="stat-label">Damage Dealt</span>
+                                        <span class="stat-value">{{ player.damage_dealt }}</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-label">Damage Taken</span>
+                                        <span class="stat-value">{{ player.damage_taken }}</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-label">Damage Mitigated</span>
+                                        <span class="stat-value">{{ player.damage_mitigated }}</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-label">Structure Damage</span>
+                                        <span class="stat-value">{{ player.structure_damage }}</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-label">Player Healing</span>
+                                        <span class="stat-value">{{ player.player_healing }}</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-label">Wards Place</span>
+                                        <span class="stat-value">{{ player.wards_placed }}</span>
+                                    </div>
                                 </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Damage Taken</span>
-                                    <span class="stat-value">{{ player.damage_taken }}</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Damage Mitigated</span>
-                                    <span class="stat-value">{{ player.damage_mitigated }}</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Structure Damage</span>
-                                    <span class="stat-value">{{ player.structure_damage }}</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Player Healing</span>
-                                    <span class="stat-value">{{ player.player_healing }}</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span class="stat-label">Wards Place</span>
-                                    <span class="stat-value">{{ player.wards_placed }}</span>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    {% else %}
+        <h1>Game data not found</h1>
+    {% endif %}
 {% endblock content %}
 
 {% block scripts %}

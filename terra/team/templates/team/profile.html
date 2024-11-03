@@ -54,7 +54,7 @@
     {% for match in matches %}
         {% with result=match|get_result %}
             <a href="{% url 'match_overview' match_id=match.id %}" class="text-decoration-none">
-                <div class="card my-3" style="border: 2px solid {% if result.winner == team.id %}green{% else %}red{% endif %};">
+                <div class="card my-3" style="border: 2px solid {% if result.winner == team.id %}green{% elif result.winner == None %}black{% else %}red{% endif %};">
                     <ul class="list-group list-group-flush rounded-1">
                         <li class="list-group-item">
                             <div class="card-body">
@@ -67,8 +67,10 @@
                                         <h5 class="card-title mb-1">
                                             {% if result.winner == match.team1.id %}
                                                 {{ match.team1.franchise.franchise_name }} - Victory
-                                            {% else %}
+                                            {% elif result.winner == match.team2.id %}
                                                 {{ match.team2.franchise.franchise_name }} - Victory
+                                            {% else %}
+                                                Match not yet played.
                                             {% endif %}
                                         </h5>
                                         <h5 class="card-text">{{ result.result }}</h5>

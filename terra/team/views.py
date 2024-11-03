@@ -1,17 +1,18 @@
 import requests
 
+from django.conf import settings
 from django.core.handlers.asgi import ASGIRequest
 from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
 
-BASE_URL = "http://192.168.64.1:8002"
-
-
 def overview(request: ASGIRequest):
 
-    divisions = requests.get(f"{BASE_URL}/division/").json()
+    divisions = requests.get(
+        f"{settings.BASE_URL}/division/",
+        headers=settings.HEADERS
+    ).json()
 
     return render(request, "team/overview.html", context={
         "divisions": divisions
@@ -20,10 +21,19 @@ def overview(request: ASGIRequest):
 
 def profile(request: ASGIRequest, team_id: int):
 
-    team = requests.get(f"{BASE_URL}/team/{team_id}/").json()
-    history = requests.get(f"{BASE_URL}/team/{team_id}/history/").json()
+    team = requests.get(
+        f"{settings.BASE_URL}/team/{team_id}/",
+        headers=settings.HEADERS
+    ).json()
+    history = requests.get(
+        f"{settings.BASE_URL}/team/{team_id}/history/",
+        headers=settings.HEADERS
+    ).json()
 
-    standings = requests.get(f"{BASE_URL}/divisions/{team['division']['id']}/standings/").json()
+    standings = requests.get(
+        f"{settings.BASE_URL}/divisions/{team['division']['id']}/standings/",
+        headers=settings.HEADERS
+    ).json()
 
     standing_data = []
     rank = 0
@@ -44,8 +54,14 @@ def profile(request: ASGIRequest, team_id: int):
 
 def standings(request: ASGIRequest, division_id: int):
 
-    division = requests.get(f"{BASE_URL}/division/{division_id}/").json()
-    standings = requests.get(f"{BASE_URL}/divisions/{division_id}/standings/").json()
+    division = requests.get(
+        f"{settings.BASE_URL}/division/{division_id}/",
+        headers=settings.HEADERS
+    ).json()
+    standings = requests.get(
+        f"{settings.BASE_URL}/divisions/{division_id}/standings/",
+        headers=settings.HEADERS
+    ).json()
 
     return render(request, "team/standings.html", context={
         "division": division,
@@ -58,6 +74,6 @@ def division_teams(request: ASGIRequest, division_id):
     if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
         return HttpResponseForbidden("Forbidden: This endpoint can only be accessed by internal requests.")
 
-    response = requests.get(f"{BASE_URL}/team/users/{division_id}/").json()
+    response = requests.get(f"{settings.BASE_URL}/team/users/{division_id}/").json()
     
     return JsonResponse({"teams": response})

@@ -23,28 +23,52 @@ async def get_game(database: AsyncSession, game_id: int) -> Game:
     ).first()
 
 
-async def create_game(database: AsyncSession, match: GameCreate) -> Game:
+async def create_game(database: AsyncSession, game: GameCreate) -> Game:
 
     db_game = Game(
-        id=match.id,
-        match_id=match.match_id,
-        date_time=match.date_time,
-        order_team_id=match.order_team_id,
-        chaos_team_id=match.chaos_team_id,
-        winning_team_id=match.winning_team_id,
-        match_duration=match.match_duration,
-        ban_1=match.ban_1,
-        ban_2=match.ban_2,
-        ban_3=match.ban_3,
-        ban_4=match.ban_4,
-        ban_5=match.ban_5,
-        ban_6=match.ban_6,
-        ban_7=match.ban_7,
-        ban_8=match.ban_8,
-        ban_9=match.ban_9,
-        ban_10=match.ban_10,
+        id=game.id,
+        match_id=game.match_id,
+        date_time=game.date_time,
+        order_team_id=game.order_team_id,
+        chaos_team_id=game.chaos_team_id,
+        winning_team_id=game.winning_team_id,
+        match_duration=game.match_duration,
+        ban_1=game.ban_1,
+        ban_2=game.ban_2,
+        ban_3=game.ban_3,
+        ban_4=game.ban_4,
+        ban_5=game.ban_5,
+        ban_6=game.ban_6,
+        ban_7=game.ban_7,
+        ban_8=game.ban_8,
+        ban_9=game.ban_9,
+        ban_10=game.ban_10,
     )
 
     database.add(db_game)
+
+    return db_game
+
+
+async def update_game(database: AsyncSession, game_id: int, game: GameCreate) -> Game:
+
+    db_game = await database.get(Game, game_id)
+
+    db_game.match_id = game.match_id
+    db_game.date_time = game.date_time
+    db_game.order_team_id = game.order_team_id
+    db_game.chaos_team_id = game.chaos_team_id
+    db_game.winning_team_id = game.winning_team_id
+    db_game.match_duration = game.match_duration
+    db_game.ban_1 = game.ban_1
+    db_game.ban_2 = game.ban_2
+    db_game.ban_3 = game.ban_3
+    db_game.ban_4 = game.ban_4
+    db_game.ban_5 = game.ban_5
+    db_game.ban_6 = game.ban_6
+    db_game.ban_7 = game.ban_7
+    db_game.ban_8 = game.ban_8
+    db_game.ban_9 = game.ban_9
+    db_game.ban_10 = game.ban_10
 
     return db_game

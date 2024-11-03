@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.shortcuts import redirect, render
+from django.conf import settings
 import requests
 import json
 import os
@@ -20,7 +21,10 @@ def index(request):
     errno = request.GET.get('errno', None)
     error = request.GET.get('error', None)
 
-    total_match_data = requests.get("http://192.168.64.1:8002/match/display/").json()
+    total_match_data = requests.get(
+        f"{settings.BASE_URL}/match/display/",
+        headers=settings.HEADERS
+    ).json()
 
     ud_matches = []
     ld_matches = []

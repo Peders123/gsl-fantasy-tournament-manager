@@ -39,6 +39,7 @@ async def schedule_game(
 async def write_game(
     game: dict, ban_data: dict, order_team_id: int, chaos_team_id: int, match_id: int, database: AsyncSession
 ):
+
     winning_team_id = order_team_id if game["Winning_Team"] == 1 else chaos_team_id
 
     game_data = game_schema.GameCreate(
@@ -61,12 +62,18 @@ async def write_game(
         ban_10=ban_data["Ban10Id"],
     )
 
-    await game_crud.create_game(database, game_data)
+    if await game_crud.get_game(database, game["Match"]):
+        await game_crud.update_game(database, game["Match"], game_data)
+
+    else:
+        await game_crud.create_game(database, game_data)
 
 
 async def write_player_data(
     game_id: int, total_player_data: list[dict], database: AsyncSession, order_team_id: int, chaos_team_id: int
 ) -> tuple[list[str], list[int]]:
+    
+    await database.commit()
 
     unknown_players: list[int] = []
     created_players: list[str] = []

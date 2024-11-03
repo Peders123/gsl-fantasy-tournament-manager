@@ -26,7 +26,6 @@ services:
       context: ../
       dockerfile: docker/thoth/Dockerfile
       target: thoth
-    entrypoint: uvicorn thoth.main:app --host 0.0.0.0 --port 8002
     environment:
       - BUILD_TYPE=dev
     image: thoth:1.0

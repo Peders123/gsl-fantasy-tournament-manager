@@ -42,7 +42,7 @@ stages:
     - task: DockerCompose@1
       inputs:
         containerregistrytype: 'Azure Container Registry'
-        azureSubscription: 'Azure subscription 1(7)(73d53848-bb3c-4d47-a43d-8ed52ad3956d)'
+        azureSubscription: 'Azure Subscription Connection'
         azureContainerRegistry: '{"loginServer":"tanukismiteleague.azurecr.io", "id" : "/subscriptions/73d53848-bb3c-4d47-a43d-8ed52ad3956d/resourceGroups/Django/providers/Microsoft.ContainerRegistry/registries/TanukiSmiteLeague"}'
         dockerComposeFile: '**/docker/docker-compose.yml'
         projectName: 'ttsl'
@@ -51,7 +51,7 @@ stages:
     - task: DockerCompose@1
       inputs:
         containerregistrytype: 'Azure Container Registry'
-        azureSubscription: 'Azure subscription 1(5)(73d53848-bb3c-4d47-a43d-8ed52ad3956d)'
+        azureSubscription: 'Azure Subscription Connection'
         azureContainerRegistry: '{"loginServer":"tanukismiteleague.azurecr.io", "id" : "/subscriptions/73d53848-bb3c-4d47-a43d-8ed52ad3956d/resourceGroups/Django/providers/Microsoft.ContainerRegistry/registries/TanukiSmiteLeague"}'
         dockerComposeFile: '**/docker/docker-compose.yml'
         projectName: 'ttsl'

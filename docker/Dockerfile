@@ -46,10 +46,7 @@ RUN pip install -r requirements.txt
 
 FROM python:3.12-slim-bookworm AS terra
 
-RUN apt-get update && apt-get install -y dos2unix chromium chromium-driver wget unzip
-
-ENV CHROME_BIN=/usr/bin/chromium \
-    CHROME_DRIVE=/usr/bin/chromedriver
+RUN apt-get update && apt-get install -y dos2unix
 
 RUN mkdir -p /data/terra
 
@@ -57,13 +54,19 @@ COPY --from=python-builder /opt/venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"
 
+COPY config/assets/smite /data/assets/smite
 COPY terra/startTerra.sh /data/terra/.
 COPY terra/manage.py /data/terra/.
 COPY terra/static /data/terra/static
 COPY terra/home /data/terra/home
 COPY terra/terra /data/terra/terra
+COPY terra/match /data/terra/match
+COPY terra/user /data/terra/user
+COPY terra/team /data/terra/team
+COPY terra/staff /data/terra/staff
 COPY terra/tournament /data/terra/tournament
 COPY terra/auction /data/terra/auction
+COPY terra/game /data/terra/game
 COPY secrets.json /data/terra/secrets.json
 
 EXPOSE 8000
@@ -77,7 +80,6 @@ ENTRYPOINT ["./startTerra.sh"]
 
 FROM python:3.12-slim-bookworm AS mercury
 
-RUN mkdir -p /data/mercury
 
 RUN apt-get update
 RUN apt-get install -y expect
@@ -86,11 +88,8 @@ COPY --from=python-builder /opt/venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"
 
+COPY mercury /data/mercury
 COPY mercury/startMercury.sh /data/mercury
-COPY mercury/mercury /data/mercury/mercury
-COPY mercury/talaria /data/mercury/talaria
-COPY mercury/manage.py /data/mercury/.
-COPY mercury/dData.json /data/mercury/.
 COPY secrets.json /data/mercury/secrets.json
 
 EXPOSE 80 2222

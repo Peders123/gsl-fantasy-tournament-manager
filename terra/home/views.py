@@ -1,13 +1,15 @@
+from datetime import datetime
+
 from django.shortcuts import redirect, render
+from django.conf import settings
 import requests
 import json
 import os
 from tournament.models import Tournament
+from match.models import Match, Team
 
 
 def index(request):
-
-    tournaments = Tournament.objects.all()
 
     signed_in = False
     discord_id = ""
@@ -19,15 +21,29 @@ def index(request):
     errno = request.GET.get('errno', None)
     error = request.GET.get('error', None)
 
-    context = {
+    total_match_data = requests.get(
+        f"{settings.BASE_URL}/match/display/",
+        headers=settings.HEADERS
+    ).json()
+
+    ud_matches = []
+    ld_matches = []
+
+    for match_data in total_match_data:
+        if datetime.fromisoformat(match_data["match_date_time"]) > datetime.now():
+            if match_data["team1"]["division"]["division_rank"] == 0:
+                ud_matches.append(Match.from_dict(match_data))
+            else:
+                ld_matches.append(Match.from_dict(match_data))
+
+    return render(request, 'home/home.html', context={
         'signed_in': signed_in,
         'discord_id': discord_id,
-        'tournaments': tournaments,
+        'ud_matches': ud_matches,
+        "ld_matches": ld_matches,
         'errno': errno,
         'error': error
-    }
-
-    return render(request, 'home/home.html', context)
+    })
 
 
 def login(request):

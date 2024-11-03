@@ -1,23 +1,114 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
 
+{% load static %}
+{% load filter_utils %}
+
 {% block title %}
     Tanuki Smite League
 {% endblock title %}
 
+{% block head %}
+    <style>
+        .small-logo {
+            width: 100px;
+            height: auto;
+        }
+    </style>
+{% endblock %}
+
 {% block main%}
 <h1>Welcome to Tanuki Smite League!</h1>
 
-<p>Check out the links below to get started!</p>
-<p>This website is still under construction, so if some things don't work please bare with us. </p>{% endblock main %}
+<p>Check out the upcoming matches below!</p>
+<p>This website is still under construction, some features may not work as intended</p>
+<p>All feedback is greatly appreciated</p>
+<p>Join us in the <a href="https://discord.gg/JxkXcM3Qc2">Tanuki Smite League Discord!</a></p>
+
+{% endblock main %}
 
 {% if errno %}
     <p style="color:red;">{{ errno }}: {{ error }}</p>
 {% endif %}
 
 {% block content %}
-    {% for tournament in tournaments %}
-        <p><a href="{% url 'tournament_overview' t_id=tournament.tournament_id %}" class="btn-link">{{ tournament.title }}</a></p>
-    {% endfor %}
+
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Upcoming Matches</h1>
+
+        <div class="mb-5">
+            <h2 class="text-center">Upper Division</h2>
+            {% if ud_matches %}
+                {% for match in ud_matches %}
+                    <a href="{% url 'match_overview' match_id=match.id %}" class="text-decoration-none">
+                        <div class="card my-3 border border-2 border-dark">
+                            <ul class="list-group list-group-flush rounded-1">
+                                <li class="list-group-item">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-3 text-center">
+                                                <img src="{% static 'assets/teams/' %}{{ match.team1.franchise.data_name }}.png" class="small-logo mb-2" alt="{{ match.team1.franchise.franchise_name }} Logo">
+                                            </div>
+
+                                            <div class="col-6 text-center">
+                                                <h5 class="card-title mb-1">
+                                                    {{ match.team1.franchise.franchise_name }} vs {{ match.team2.franchise.franchise_name }}
+                                                </h5>
+                                                <h5 class="card-text">{{ result.result }}</h5>
+                                                <p class="card-text">{{ match.match_date_time }}</p>
+                                            </div>
+
+                                            <div class="col-3 text-center">
+                                                <img src="{% static 'assets/teams/' %}{{ match.team2.franchise.data_name }}.png" class="small-logo mb-2" alt="{{ match.team2.franchise.franchise_name }} Logo">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </a>
+                {% endfor %}
+            {% else %}
+                <h4 class="text-center text-primary">No upcoming UD matches scheduled yet</h4>
+            {% endif %}
+        </div>
+
+        <div>
+            <h2 class="text-center">Lower Division</h2>
+            {% if ld_matches %}
+                {% for match in ld_matches %}
+                    <a href="{% url 'match_overview' match_id=match.id %}" class="text-decoration-none">
+                        <div class="card my-3 border border-2 border-dark">
+                            <ul class="list-group list-group-flush rounded-1">
+                                <li class="list-group-item">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-3 text-center">
+                                                <img src="{% static 'assets/teams/' %}{{ match.team1.franchise.data_name }}.png" class="small-logo mb-2" alt="{{ match.team1.franchise.franchise_name }} Logo">
+                                            </div>
+
+                                            <div class="col-6 text-center">
+                                                <h5 class="card-title mb-1">
+                                                    {{ match.team1.franchise.franchise_name }} vs {{ match.team2.franchise.franchise_name }}
+                                                </h5>
+                                                <h5 class="card-text">{{ result.result }}</h5>
+                                                <p class="card-text">{{ match.match_date_time }}</p>
+                                            </div>
+
+                                            <div class="col-3 text-center">
+                                                <img src="{% static 'assets/teams/' %}{{ match.team2.franchise.data_name }}.png" class="small-logo mb-2" alt="{{ match.team2.franchise.franchise_name }} Logo">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </a>
+                {% endfor %}
+            {% else %}
+                <h4 class="text-center text-primary">No upcoming LD matches scheduled yet</h4>
+            {% endif %}
+        </div>
+    </div>
 
 {% endblock content %}

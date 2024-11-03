@@ -1,0 +1,190 @@
+{
+    "435": [{
+        "queue_name": "Arena",
+        "competitive": true
+    }],
+    "448": [{
+        "queue_name": "Joust",
+        "competitive": true
+    }],
+    "426": [{
+        "queue_name": "Conquest",
+        "competitive": true     
+    }],
+    "445": [{
+        "queue_name": "Assault",
+        "competitive": true    
+    }],
+    "466": [{
+        "queue_name": "Clash",
+        "competitive": true    
+    }],
+    "495": [{
+        "queue_name": "Adventures - Horde",
+        "competitive": false    
+    }],
+    "451": [{
+        "queue_name": "Ranked Conquest",
+        "competitive": true    
+    }],
+    "434": [{
+        "queue_name": "MOTD",
+        "competitive": false    
+    }],
+    "459": [{
+        "queue_name": "Siege",
+        "competitive": true    
+    }],
+    "450": [{
+        "queue_name": "Ranked Joust",
+        "competitive": true    
+    }],
+    "440": [{
+        "queue_name": "Ranked Duel",
+        "competitive": true    
+    }],
+    "441": [{
+        "queue_name": "Custom Joust",
+        "competitive": false    
+    }],
+    "457": [{
+        "queue_name": "Arena Coop (Easy)",
+        "competitive": false    
+    }],
+    "468": [{
+        "queue_name": "Arena Coop (Medium)",
+        "competitive": false    
+    }],
+    "436": [{
+        "queue_name": "Tutorial",
+        "competitive": false    
+    }],
+    "438": [{
+        "queue_name": "Custom Arena",
+        "competitive": false    
+    }],
+    "429": [{
+        "queue_name": "Custom Conquest",
+        "competitive": false    
+    }],
+    "482": [{
+        "queue_name": "Training Joust",
+        "competitive": false    
+    }],
+    "462": [{
+        "queue_name": "Tutorial Arena",
+        "competitive": false    
+    }],
+    "483": [{
+        "queue_name": "Training Arena",
+        "competitive": false    
+    }],
+    "474": [{
+        "queue_name": "Joust Coop (Easy)",
+        "competitive": false    
+    }],
+    "456": [{
+        "queue_name": "Joust Coop (Medium)",
+        "competitive": false    
+    }],
+    "478": [{
+        "queue_name": "Clash Coop (Easy)",
+        "competitive": false    
+    }],
+    "469": [{
+        "queue_name": "Clash Coop (Medium)",
+        "competitive": false    
+    }],
+    "472": [{
+        "queue_name": "Arena Practice (Medium)",
+        "competitive": false    
+    }],
+    "481": [{
+        "queue_name": "Assault Coop (Easy)",
+        "competitive": false    
+    }],
+    "476": [{
+        "queue_name": "Conquest Coop (Easy)",
+        "competitive": false    
+    }],
+    "471": [{
+        "queue_name": "Tutorial Clash",
+        "competitive": false    
+    }],
+    "473": [{
+        "queue_name": "Joust Practice (Medium)",
+        "competitive": false    
+    }],
+    "446": [{
+        "queue_name": "Custom Assault",
+        "competitive": false    
+    }],
+    "454": [{
+        "queue_name": "Assault Coop (Medium)",
+        "competitive": false    
+    }],
+    "443": [{
+        "queue_name": "Arena Practice (Easy)",
+        "competitive": false    
+    }],
+    "467": [{
+        "queue_name": "Custom Clash",
+        "competitive": false    
+    }],
+    "461": [{
+        "queue_name": "Conquest Coop (Medium)",
+        "competitive": false    
+    }],
+    "464": [{
+        "queue_name": "Joust Practice (Easy)",
+        "competitive": false    
+    }],
+    "477": [{
+        "queue_name": "Clash Practice (Medium)",
+        "competitive": false    
+    }],
+    "460": [{
+        "queue_name": "Custom Siege",
+        "competitive": false    
+    }],
+    "480": [{
+        "queue_name": "Assault Practice (Medium)",
+        "competitive": false    
+    }],
+    "463": [{
+        "queue_name": "Tutorial Conquest",
+        "competitive": false    
+    }],
+    "470": [{
+        "queue_name": "Clash Practice (Easy)",
+        "competitive": false    
+    }],
+    "479": [{
+        "queue_name": "Assault Practice (Easy)",
+        "competitive": false    
+    }],
+    "475": [{
+        "queue_name": "Conquest Practice (Medium)",
+        "competitive": false    
+    }],
+    "458": [{
+        "queue_name": "Conquest Practice (Easy)",
+        "competitive": false    
+    }],
+    "444": [{
+        "queue_name": "Jungle Practice",
+        "competitive": false    
+    }],
+    "496": [{
+        "queue_name": "Jungle Practice (Preselection)",
+        "competitive": false    
+    }],
+    "10189": [{
+        "queue_name": "Slash",
+        "competitive": true
+    }],
+    "10190": [{
+        "queue_name": "Custom Duel",
+        "competitive": false
+    }]
+}

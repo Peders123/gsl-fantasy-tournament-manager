@@ -8,8 +8,6 @@ python3 manage.py migrate auction
 python3 manage.py makemigrations home
 python3 manage.py migrate home
 
-python3 manage.py makemigrations
-python3 manage.py migrate
 python3 manage.py collectstatic --noinput
 
 export DJANGO_SETTINGS_MODULE=terra.settings

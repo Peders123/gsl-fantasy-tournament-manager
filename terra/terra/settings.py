@@ -42,6 +42,11 @@ DEBUG = False if os.environ['BUILD_TYPE'] == "ops" else True
 
 ALLOWED_HOSTS = ['*']
 
+BASE_URL = "http://192.168.64.1:8002" if os.environ["BUILD_TYPE"] == "dev" else "https://thoth.tanukismiteleague.com"
+HEADERS = {
+    "Authorization": CREDENTIALS['tokens']['secret-key']['thoth']
+}
+
 DATABASE_SETUPS = {
     'dev': {
         'default': {
@@ -73,8 +78,13 @@ DATABASE_SETUPS = {
 INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'home.apps.HomeConfig',
+    'game.apps.GameConfig',
     'tournament.apps.TournamentConfig',
     'auction.apps.AuctionConfig',
+    'match.apps.MatchConfig',
+    'user.apps.UserConfig',
+    'team.apps.TeamConfig',
+    'staff.apps.StaffConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -140,6 +150,13 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    }
+}
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -158,7 +175,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static'),
 )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 

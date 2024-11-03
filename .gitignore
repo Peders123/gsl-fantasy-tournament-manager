@@ -1,6 +1,7 @@
 *.pyc
 db.sqlite3
 __pycache__
+*.db
 
 janus/target/*
 
@@ -9,6 +10,9 @@ secrets.json
 .vscode
 .venv
 .pylintrc
+.ser
+.log
+.VSCodeCounter
 environment.sh
 
 migrations

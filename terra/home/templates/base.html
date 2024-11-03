@@ -19,6 +19,12 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
         <title>{% block title %}{% endblock %}</title>
+        {% block head %}{% endblock %}
+        <style>
+            .nav-item.dropdown:hover .dropdown-menu {
+                display: block;
+            }
+        </style>
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -31,12 +37,27 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'home' %}">Home</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'team_overview' %}">Teams</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="standingsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Standings</a>
+                            <ul class="dropdown-menu" aria-labelledby="standingsDropdown">
+                                <li><a class="dropdown-item" href="{% url 'standings' division_id=1 %}">Upper Division</a></li>
+                                <li><a class="dropdown-item" href="{% url 'standings' division_id=2 %}">Lower Division</a></li>
+                            </ul>
+                        </li>
+                        {% if user.is_superuser %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'staff_home' %}">Staff</a>
+                            </li>
+                        {% endif %}
                         {% block nav %}
                         {% endblock nav %}
                         {% if signed_in %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}" >Sign Out</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'logout' %}" >Sign Out</a>
+                            </li>
                          {% else %}
                             <li class="nav-item">
                                 <a id="log-in-link" class="nav-link" href="{% url 'login' %}">Log In</a>
@@ -50,7 +71,7 @@
         <header class="masthead">
             <div class="container px-4 px-lg-5 h-100">
                 <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
-                    <div class="col-lg-8 align-self-start">
+                    <div class="col-lg-12 align-self-start">
                         <div class="container pt-2">
                 
                         {# Enable Django's "messages" system #}
@@ -65,14 +86,8 @@
         </header>
         <!-- About-->
         <section class="page-section bg-primary" id="about">
-            <div class="container px-4 px-lg-5">
-                <div class="row gx-4 gx-lg-5 justify-content-center">
-                    <div class="col-lg-8 text-center">
-                        {% block content %}
-                        
-                         {% endblock content %} 
-                    </div>
-                </div>
+            <div class="container px-2 px-lg-2 justify-content-center text-center">
+                {% block content %}{% endblock content %} 
             </div>
         </section>
         <!-- Footer-->
@@ -87,5 +102,6 @@
         <script src="{% static 'js/scripts.js' %}"></script>
 
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        {% block scripts %}{% endblock scripts %}
     </body>
 </html>

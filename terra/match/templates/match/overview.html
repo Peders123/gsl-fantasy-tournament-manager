@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% load custom_filters %}
+{% load static %}
+
+{% block head %}
+    <style>
+        .ban-img {
+            height: 40px;
+            width: auto;
+            margin-top: 3px;
+            margin-bottom: 3px;
+        }
+        .card-link {
+            text-decoration: none;
+        }
+        .card-link:hover {
+            text-decoration: none;
+        }
+        .card-link strong {
+            text-decoration: underline;
+        }
+        .team-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1rem;
+        }
+        .team-logo {
+            width: 200px; /* Smaller logo size */
+            height: auto;
+        }
+        .team-name {
+            font-size: 1.25rem;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+        .small-vs {
+            font-size: 1.5rem; /* Reduce the size of the VS text */
+            margin: 0;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    TSL {{ match.team1.division}} - {{ match.team1.short_name }} vs {{ match.team2.short_name }}
+{% endblock title %}
+
+{% block main %}
+    <h1 class="text-center mb-2">Tanuki Smite League - {{ match.team1.division.division_name }}</h1>
+    <div class="container text-center my-4">
+        <div class="row align-items-center">
+            <div class="col-5">
+                <a href={% url 'team_profile' team_id=match.team1.id %} class="text-decoration-none">
+                    <div class="team-container">
+                        <img src="{% static 'assets/teams/' %}{{ match.team1.franchise.data_name }}.png" class="team-logo mb-2" alt="{{ match.team1 }} Logo">
+                        <h2 class="text-primary text-wrap team-name">{{ match.team1 }}</h2>
+                    </div>
+                </a>
+            </div>
+            <div class="col-2">
+                <h3 class="fw-bold small-vs">VS</h3>
+            </div>
+            <div class="col-5">
+                <a href={% url 'team_profile' team_id=match.team2.id %} class="text-decoration-none">
+                    <div class="team-container">
+                        <img src="{% static 'assets/teams/' %}{{ match.team2.franchise.data_name }}.png" class="team-logo mb-2" alt="{{ match.team2 }} Logo">
+                        <h2 class="text-primary text-wrap team-name">{{ match.team2 }}</h2>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <h2 class="text-center mt-2 mb-2">{{ match.result }}</h2>
+    <h5 class="text-center">{{ match.read_date }}</h5>
+{% endblock main %}
+
+{% block content %}
+    {% if match.games %}
+        {% for game in match.games %}
+            {% with order_team=match|get_team:game.order_team_id chaos_team=match|get_team:game.chaos_team_id %}
+                <div class="card mb-4">
+                    <a href="{% url 'game_overview' game_id=game.id %}" class="card-link">
+                        <div class="card-body mb-2">
+                            <h5 class="card-title">Game {{ forloop.counter }} - {{ game.id }}</h5>
+                            <ul class="list-group list-group-flush rounded-1">
+                                <li class="list-group-item">
+                                    <strong>Duration</strong><br />{% if game.duration %}{{ game.duration }}{% else %}Forfeit{% endif %}
+                                </li>
+                                <li class="list-group-item"><strong>Result</strong><br /><span class="text-primary">
+                                    {% if game.winning_team_id == match.team1.id %}
+                                        {{ match.team1.franchise.franchise_name }}
+                                    {% else %}
+                                        {{ match.team2.franchise.franchise_name }}
+                                    {% endif %}
+                                 - Victory</span></li>
+                                <li class="list-group-item">
+                                    <strong>Bans</strong><br />
+                                    {% if game.no_bans %}
+                                        <p class="text-center">No ban data found</p>
+                                    {% else %}
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <div class="text-end pe-2" style="border-right: 1px solid #ddd;">
+                                                <strong>{{ order_team.franchise.franchise_name }}</strong>
+                                                <br>
+                                                <strong>{{ chaos_team.franchise.franchise_name }}</strong>
+                                            </div>
+                                            <div class="text-start ps-2">
+                                                {% for ban in game.bans.order %}
+                                                    <img src="{{ ban|get_god_image }}" class="img-fluid rounded-1 ban-img" alt="{{ ban|get_god_name }}-img">
+                                                {% endfor %}
+                                                <br>
+                                                {% for ban in game.bans.chaos %}
+                                                    <img src="{{ ban|get_god_image }}" class="img-fluid rounded-1 ban-img" alt="{{ ban|get_god_name }}-img">
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                    </a>
+                </div>
+            {% endwith %}
+        {% endfor %}
+    {% else %}
+        {% if match.is_future %}
+            <h3>Match will be played in {{ match.days_in_future }} days</h3>
+        {% else %}
+            <h3>Game data not updated</h3>
+        {% endif %}
+    {% endif %}
+{% endblock content %}

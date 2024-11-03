@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}
+    TSL - Teams
+{% endblock title %}
+
+{% block main %}
+    <h1>Tanuki Smite League</h1>
+    <h1 class="mb-4">Teams</h1>
+
+    <p>Check out the teams for our first season below!</p>
+
+    <p>Use the buttons to switch between divisions.</p>
+
+    {% if admin %}
+        <h2 class="text-center mb-2"><a href="{% url 'user_create' %}">Create Players</a></h2>
+        <h2 class="text-center"><a href="{% url 'player_assign' %}">Assign Players</a></h2>
+        <h2 class="text-center"><a href="{% url 'user_transfer' %}">Transfer Players</a></h2>
+    {% endif %}
+{% endblock main %}
+
+{% block content %}
+    <div class="text-center mb-4">
+        <div class="btn-group" aria-label="Division selection">
+            {% for division in divisions %}
+                <button class="btn btn-primary btn-block btn-lg m-2" onclick="loadDivision({{ division.id }})">{{ division.division_name }}</button>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="division-content" data-url-template="{% url 'team_profile' team_id=0 %}" team-logo-template="{% static 'assets/teams/PLACEHOLDER.png' %}" class="row row-cols-1 row-cols-md-4 g-4 text-center">
+    </div>
+
+    <script>
+        function loadDivision(divisionRank) {
+            const divisionContent = document.getElementById("division-content");
+            const urlTemplate = divisionContent.getAttribute("data-url-template");
+            const logoTemplate = divisionContent.getAttribute("team-logo-template");
+
+            fetch(`/player/division/${divisionRank}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'  // Add custom header to restrict access
+                }
+            })
+            .then(response => {
+                if (response.status === 403) {
+                    console.error("Access forbidden: Only internal requests allowed.");
+                    divisionContent.innerHTML = "<p>Access forbidden.</p>";
+                    return;
+                }
+                return response.json();
+            })
+            .then(returnData => {
+                // Clear previous content and prepare to render new data
+                console.log(returnData);
+
+                data = returnData.teams;
+
+                divisionContent.innerHTML = '';
+        
+                // Check if there are teams in the division
+                if (data.length > 0) {
+                    data.forEach(team => {
+                        // Create a card for each team
+                        const container = document.createElement("div");
+                        container.className = "col"
+                        const link = document.createElement("a");
+                        link.href = urlTemplate.replace("0", team.id);
+                        link.className = "text-decoration-none";
+                        const card = document.createElement("div");
+                        card.className = "card border border-1 border-dark";
+
+                        const logoUrl = logoTemplate.replace("PLACEHOLDER", team.franchise.data_name);
+        
+                        // Render the team header with franchise name and owner
+                        card.innerHTML = `
+                            <div class="card-headers text-decoration-underline">
+                                <strong>${team.franchise.franchise_name}</strong>
+                                <div>
+                                    <img src="${logoUrl}" alt="${team.franchise.franchise_name} Logo" class="me-2" style="width: 100px; height: 100px;">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    ${team.users.length > 0 ? team.users.map(user => `<li class="list-group-item">${user.discord_name}</li>`).join('') : "<li class='list-group-item'>No users found</li>"}
+                                </ul>
+                            </div>
+                        `;
+
+                        link.appendChild(card);
+                        container.appendChild(link);
+                        divisionContent.appendChild(container);
+                    });
+                } else {
+                    // If no teams, show a message
+                    divisionContent.innerHTML = "<p>No teams found for this division.</p>";
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching division teams:", error);
+                divisionContent.innerHTML = "<p>Failed to load teams.</p>";
+            });
+        }
+
+        loadDivision(1);
+    </script>
+{% endblock content %}

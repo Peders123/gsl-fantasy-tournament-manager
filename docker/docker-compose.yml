@@ -21,6 +21,19 @@ services:
     volumes:
       - ../athena/mount:/data/terra/mount
 
+  thoth:
+    build:
+      context: ../
+      dockerfile: docker/thoth/Dockerfile
+      target: thoth
+    environment:
+      - BUILD_TYPE=dev
+    image: thoth:1.0
+    ports:
+      - "8002:8002"
+    volumes:
+      - ../athena/mount/thoth:/mount
+
   mercury:
     build:
       context: ../
@@ -46,6 +59,7 @@ services:
     image: janus:1.0
     volumes:
       - ../athena/mount:/data/janus/mount
+      - ../athena/logs:/data/janus/logs
 
 volumes:
   mercury-athena:

@@ -15,19 +15,22 @@ async def get_user_teams(database: AsyncSession, user_id: int) -> list[UserTeam]
 
 async def get_current_team_users(database: AsyncSession, team_id: int) -> list[User]:
 
-    return (await database.scalars(
-        select(User)
-        .join(UserTeam)
-        .filter(
-            UserTeam.team_id == team_id,
-            UserTeam.join_order == (
-                select(func.max(UserTeam.join_order))
-                .where(UserTeam.user_id == User.id)
-                .correlate(User)
-                .scalar_subquery()
+    return (
+        await database.scalars(
+            select(User)
+            .join(UserTeam)
+            .filter(
+                UserTeam.team_id == team_id,
+                UserTeam.join_order
+                == (
+                    select(func.max(UserTeam.join_order))
+                    .where(UserTeam.user_id == User.id)
+                    .correlate(User)
+                    .scalar_subquery()
+                ),
             )
         )
-    )).all()
+    ).all()
 
 
 async def create_user_team(database: AsyncSession, user_team: UserTeamCreate) -> UserTeam:

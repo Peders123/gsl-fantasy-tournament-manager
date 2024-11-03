@@ -1,12 +1,25 @@
 import requests
 
+from django.conf import settings
 from django.shortcuts import render
 
 
 def overview(request, game_id):
 
-    game_details = requests.get(f"http://192.168.64.1:8002/game/{game_id}/").json()
-    match_details = requests.get(f"http://192.168.64.1:8002/match/{game_details['match_id']}/")
+    game_details = requests.get(
+        f"{settings.BASE_URL}/game/{game_id}/",
+        headers=settings.HEADERS
+    ).json()
+    match_details = requests.get(
+        f"{settings.BASE_URL}/match/{game_details['match_id']}/",
+        headers=settings.HEADERS
+    ).json()
+
+    game_number = 0
+    for count, game in enumerate(match_details["games"]):
+        if game_id == game["id"]:
+            game_number = count + 1
+            break
 
     order_team_data = []
     chaos_team_data = []
@@ -16,7 +29,11 @@ def overview(request, game_id):
         order_team_data.append(player_data) if player_data["team_id"] == game_details["order_team_id"] else chaos_team_data.append(player_data)
         player_ids.append(player_data["player_id"])
 
-    players = requests.post("http://192.168.64.1:8002/player/batch/", json={"ids": player_ids}).json()
+    players = requests.post(
+        f"{settings.BASE_URL}/player/batch/",
+        headers=settings.HEADERS,
+        json={"ids": player_ids}
+    ).json()
 
     del game_details["total_player_data"]
 
@@ -35,5 +52,6 @@ def overview(request, game_id):
         "match": match_details,
         "game": game_details,
         "teams": teams,
-        "players": players
+        "players": players,
+        "number": game_number,
     })

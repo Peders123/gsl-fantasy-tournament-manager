@@ -56,14 +56,14 @@ class DatabaseSessionManager:
 
 def load_postgres_data() -> str:
 
-    with open('/data/thoth/secrets.json', 'r', encoding='utf8') as file:
+    with open("/data/thoth/secrets.json", "r", encoding="utf8") as file:
         secrets = json.load(file)
 
     username: str = "Cadueceus"
     host: str = "djehuty.postgres.database.azure.com"
     service_name: str = "stats"
 
-    password: str = secrets['passwords']['djehuty'][username]
+    password: str = secrets["passwords"]["djehuty"][username]
 
     return f"{username}:{password}@{host}/{service_name}"
 

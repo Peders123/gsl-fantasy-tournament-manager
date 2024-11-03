@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% load filter_utils %}
+
+{% block title %}Standings - {{ standings.0.division.division_name }}{% endblock %}
+
+{% block head %}
+    <style>
+        .team {
+            border-radius: 5px;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 20px;
+            width: 90%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .team thead tr {
+            background-color: var(--result);
+            color: #ffffff;
+            text-align: left;
+        }
+        
+        .team th,
+        .team td {
+            padding: 12px 15px;
+        }
+        
+        .team tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+        
+        .team tbody tr:nth-of-type(odd) {
+            background-color: #f1f6f6;
+        }
+        
+        .team tbody tr:nth-of-type(even) {
+            background-color: #ffffff;
+        }
+        
+        .team tbody tr:last-of-type {
+            border-bottom: 2px solid var(--result);
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+
+    <h1 class="mb-5">Standings - {{ division.division_name }}</h1>
+    <p>Find below the current standings for Tanuki Smite League {{ division.division_name|shorten }}.</p>
+
+    <p>Wins and Losses are judged by the individual game</p>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle text-center team">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col" class="text-end"></th>
+                        <th scope="col"></th>
+                        <th scope="col" class="text-start">Team</th>
+                        <th scope="col" class="text-center">Wins</th>
+                        <th scope="col" class="text-center">Losses</th>
+                        <th scope="col" class="text-center">Matches</th>
+                        <th scope="col" class="text-center">W/L</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for team in standings %}
+                        <tr onclick="window.location='{% url 'team_profile' team_id=team.id %}';" style="cursor: pointer;">
+                            <td class="text-end">{{ forloop.counter }}</td>
+                            <td class="text-center">
+                                <img src="{% static 'assets/teams/' %}{{ team.franchise.data_name }}.png" alt="{{ team.franchise.franchise_name }} Logo" class="img-fluid" style="width: 50px; height: 50px">
+                            </td>
+                            <td class="text-start">
+                                <a href="{% url 'team_profile' team_id=team.id %}">{{ team.franchise.franchise_name }}</a>
+                            </td>
+                            <td>{{ team.wins }}</td>
+                            <td>{{ team.losses }}</td>
+                            <td>{{ team.matches }}</td>
+                            <td>{{ team.point_difference }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

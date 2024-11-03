@@ -28,13 +28,15 @@ class Franchise(models.Model):
     id: int = models.IntegerField(primary_key=True)
     franchise_name: str = models.CharField(max_length=64)
     franchise_owner: str = models.CharField(max_length=64)
+    data_name: str = models.CharField(max_length=64)
 
     @classmethod
     def from_dict(cls, data: dict):
         return cls(
             id=data["id"],
             franchise_name=data["franchise_name"],
-            franchise_owner=data["franchise_owner"]
+            franchise_owner=data["franchise_owner"],
+            data_name=data["data_name"]
         )
     
     def __str__(self):
@@ -151,7 +153,7 @@ class Game(models.Model):
         return cls(
             id=data["id"],
             match_id=match,
-            date_time=datetime.strptime(data["date_time"], "%Y-%m-%dT%H:%M:%S"),
+            date_time=datetime.strptime(data["date_time"], "%Y-%m-%dT%H:%M:%S") if data["date_time"] else None,
             order_team_id=data["order_team_id"],
             chaos_team_id=data["chaos_team_id"],
             winning_team_id=data["winning_team_id"],
@@ -171,3 +173,26 @@ class Game(models.Model):
     @property
     def duration(self):
         return f"{self.match_duration // 60}m {self.match_duration % 60}s"
+    
+    @property
+    def no_bans(self):
+        return all(getattr(self, f"ban_{i}") is None or getattr(self, f"ban_{i}") == 0 for i in range(1, 11))
+    
+    @property
+    def bans(self):
+        return {
+            "order": [
+                self.ban_1,
+                self.ban_3,
+                self.ban_5,
+                self.ban_8,
+                self.ban_10
+            ],
+            "chaos": [
+                self.ban_2,
+                self.ban_4,
+                self.ban_6,
+                self.ban_7,
+                self.ban_9
+            ]
+        }

@@ -11,5 +11,6 @@ class Franchise(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     franchise_name = Column(String, nullable=False)
     franchise_owner = Column(String, nullable=False)
+    data_name = Column(String, nullable=False)
 
     teams = relationship("Team", back_populates="franchise")

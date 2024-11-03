@@ -5,6 +5,7 @@ class _Franchise(BaseModel):
 
     franchise_name: str
     franchise_owner: str
+    data_name: str
 
 
 class Franchise(_Franchise):

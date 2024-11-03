@@ -6,7 +6,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bin.utils.hirez_api import PcSmiteAPI
-from thoth.crud import game as game_crud, player_game_data as player_game_crud, player as player_crud, match as match_crud
+from thoth.crud import (
+    game as game_crud,
+    player_game_data as player_game_crud,
+    player as player_crud,
+    match as match_crud,
+)
 from thoth.models.scheduled import ScheduledTask
 from thoth.schemas import game as game_schema, player_game_data as player_game_schema, player as player_schema
 from thoth.utils.database import DatabaseSessionManager, construct_host_url
@@ -18,14 +23,14 @@ async def schedule_game(
     order_team_id: int,
     chaos_team_id: int,
     match_id: int,
-    database: AsyncSession
+    database: AsyncSession,
 ):
     task = ScheduledTask(
         id=game_id,
         scheduled_date=scheduled_date,
         order_team_id=order_team_id,
         chaos_team_id=chaos_team_id,
-        match_id=match_id
+        match_id=match_id,
     )
     database.add(task)
     await database.commit()
@@ -34,6 +39,7 @@ async def schedule_game(
 async def write_game(
     game: dict, ban_data: dict, order_team_id: int, chaos_team_id: int, match_id: int, database: AsyncSession
 ):
+
     winning_team_id = order_team_id if game["Winning_Team"] == 1 else chaos_team_id
 
     game_data = game_schema.GameCreate(
@@ -56,13 +62,19 @@ async def write_game(
         ban_10=ban_data["Ban10Id"],
     )
 
-    await game_crud.create_game(database, game_data)
+    if await game_crud.get_game(database, game["Match"]):
+        await game_crud.update_game(database, game["Match"], game_data)
+
+    else:
+        await game_crud.create_game(database, game_data)
 
 
 async def write_player_data(
     game_id: int, total_player_data: list[dict], database: AsyncSession, order_team_id: int, chaos_team_id: int
 ) -> tuple[list[str], list[int]]:
     
+    await database.commit()
+
     unknown_players: list[int] = []
     created_players: list[str] = []
 
@@ -101,7 +113,7 @@ async def write_player_data(
             item_4_id=parse_item_id(player_data["ItemId4"]),
             item_5_id=parse_item_id(player_data["ItemId5"]),
             item_6_id=parse_item_id(player_data["ItemId6"]),
-            team_id=order_team_id if player_data["TaskForce"] == 1 else chaos_team_id
+            team_id=order_team_id if player_data["TaskForce"] == 1 else chaos_team_id,
         )
 
         await player_game_crud.create_player_game_data(database, player_game_data)
@@ -113,10 +125,7 @@ async def create_player(player_id: str, player_name: str, database: AsyncSession
 
     if not await player_crud.get_specific_player(database, player_id):
 
-        player = player_schema.PlayerCreate(
-            id=player_id,
-            player_name=player_name
-        )
+        player = player_schema.PlayerCreate(id=player_id, player_name=player_name)
 
         await player_crud.create_player(database, player)
 
@@ -133,7 +142,9 @@ async def main():
 
         now = datetime.now() + timedelta(weeks=2)
 
-        tasks: list[ScheduledTask] = (await session.execute(select(ScheduledTask).where(ScheduledTask.scheduled_date < now))).all()[0]
+        tasks: list[ScheduledTask] = (
+            await session.execute(select(ScheduledTask).where(ScheduledTask.scheduled_date < now))
+        ).all()[0]
 
         for task in tasks:
             api = PcSmiteAPI()

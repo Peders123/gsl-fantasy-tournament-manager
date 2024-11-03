@@ -20,8 +20,6 @@ with open(os.path.join('secrets.json')) as secrets:
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-os.environ['BUILD_TYPE'] = "dev"
-
 # Define the path to your custom migrations
 MIGRATIONS_PATH = Path("/data/terra/mount/terra/migrations")
 
@@ -43,6 +41,11 @@ SECRET_KEY = CREDENTIALS['tokens']['secret-key']['terra']
 DEBUG = False if os.environ['BUILD_TYPE'] == "ops" else True
 
 ALLOWED_HOSTS = ['*']
+
+BASE_URL = "http://192.168.64.1:8002" if os.environ["BUILD_TYPE"] == "dev" else "https://thoth.tanukismiteleague.com"
+HEADERS = {
+    "Authorization": CREDENTIALS['tokens']['secret-key']['thoth']
+}
 
 DATABASE_SETUPS = {
     'dev': {

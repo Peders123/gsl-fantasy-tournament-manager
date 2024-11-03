@@ -20,10 +20,7 @@ async def get_unassigned_players(database: AsyncSession) -> list[Player]:
 async def set_player_user(database: AsyncSession, player_id: str, user_id: int) -> Player:
 
     player = await database.scalars(
-        update(Player)
-        .where(Player.id == player_id)
-        .values(user_id=user_id)
-        .returning(Player)
+        update(Player).where(Player.id == player_id).values(user_id=user_id).returning(Player)
     )
 
     await database.commit()

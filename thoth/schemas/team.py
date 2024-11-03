@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, computed_field
 
 from thoth.schemas.division import Division
 from thoth.schemas.franchise import Franchise
@@ -31,6 +31,14 @@ class TeamUsers(TeamDisplay):
 
     users: list[User]
 
+
+class TeamStandingsModel(TeamDisplay):
+
+    matches: int
+    wins: int
+    losses: int
+    point_difference: int
+    
 
 class TeamCreate(_Team):
 

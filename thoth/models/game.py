@@ -3,17 +3,16 @@ from sqlalchemy.orm import relationship
 from thoth.utils.database import Base
 
 
-
 class Game(Base):
     __tablename__ = "game"
 
     id = Column(Integer, primary_key=True, nullable=False)
     match_id = Column(Integer, ForeignKey("match.id"), nullable=False)
-    date_time = Column(DateTime, nullable=False)
-    order_team_id = Column(Integer, ForeignKey("team.id"), nullable=False)
-    chaos_team_id = Column(Integer, ForeignKey("team.id"), nullable=False)
+    date_time = Column(DateTime, nullable=True)
+    order_team_id = Column(Integer, ForeignKey("team.id"), nullable=True)
+    chaos_team_id = Column(Integer, ForeignKey("team.id"), nullable=True)
     winning_team_id = Column(Integer, ForeignKey("team.id"), nullable=True)
-    match_duration = Column(Integer, nullable=False)
+    match_duration = Column(Integer, nullable=True)
     ban_1 = Column(Integer, nullable=True)
     ban_2 = Column(Integer, nullable=True)
     ban_3 = Column(Integer, nullable=True)
